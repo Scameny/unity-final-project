@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2988f3c9956b5ae4aa5d57fb051ee8cd, type: 3}
+  m_Name: MageProgession
+  m_EditorClassIdentifier: 
+  progression:
+  - health:
+      type: 0
+      value: 8
+    strength:
+      type: 0
+      value: 1
+    agility:
+      type: 0
+      value: 1
+    defense:
+      type: 0
+      value: 1
+    intelect:
+      type: 0
+      value: 3
+    abilities:
+    - {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
+    expNextLevel: 0
+  - health:
+      type: 0
+      value: 12
+    strength:
+      type: 0
+      value: 1
+    agility:
+      type: 0
+      value: 1
+    defense:
+      type: 0
+      value: 2
+    intelect:
+      type: 0
+      value: 4
+    abilities: []
+    expNextLevel: 10
+  - health:
+      type: 0
+      value: 16
+    strength:
+      type: 0
+      value: 1
+    agility:
+      type: 0
+      value: 2
+    defense:
+      type: 0
+      value: 2
+    intelect:
+      type: 0
+      value: 5
+    abilities:
+    - {fileID: 11400000, guid: c6700592cd772a34d8951e6166cba9f6, type: 2}
+    expNextLevel: 30
