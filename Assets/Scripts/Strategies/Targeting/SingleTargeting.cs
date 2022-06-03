@@ -1,4 +1,3 @@
-using Character.Abilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,24 +11,25 @@ namespace Strategies.TargetingStrategies
     [CreateAssetMenu(fileName = "Targeting", menuName = "Strategy/TargetingSelection/SingleSelection", order = 1)]
     public class SingleTargeting : TargetingStrategy
     {
-        public override void AbilityTargeting(GameObject user, IEnumerable<GameObject> enemies, Action<IEnumerable<GameObject>> effectAction)
+        public override void AbilityTargeting(GameObject user, IEnumerable<GameObject> enemies, Action<IEnumerable<GameObject>, bool> effectAction)
         {
             HeroCombat heroCombat = user.GetComponent<HeroCombat>();
             heroCombat.StartCoroutine(Targeting(user, enemies, effectAction));
         }
 
-        private IEnumerator Targeting(GameObject user, IEnumerable<GameObject> enemies, Action<IEnumerable<GameObject>> effectAction)
+        private IEnumerator Targeting(GameObject user, IEnumerable<GameObject> enemies, Action<IEnumerable<GameObject>, bool> effectAction)
         {
             PlayerControllerPC playerController = user.GetComponent<PlayerControllerPC>();
             List<GameObject> toRet = new List<GameObject>();
 
-            UIManager.manager.EnableSelectorInTargets(enemies, true);
-            
+            UIManager.manager.ActivateCombatUI(false);
+            UIManager.manager.ChangeSceneToSelection(enemies, true);
             while (true)
             {
                 if (playerController.CancelAction())
                 {
-                    effectAction.Invoke(toRet);
+                    effectAction.Invoke(toRet, false);
+                    UIManager.manager.ActivateCombatUI(true);
                     break;
                 }
                 else
@@ -38,14 +38,13 @@ namespace Strategies.TargetingStrategies
                     if (characterSelected != null)
                     {
                         toRet.Add(characterSelected);
-                        effectAction.Invoke(toRet);
+                        effectAction.Invoke(toRet, true);
                         break;
                     }
                     yield return null;
                 }
             }
-
-            UIManager.manager.EnableSelectorInTargets(enemies, false);
+            UIManager.manager.ChangeSceneToSelection(enemies, false);
         }
 
     }

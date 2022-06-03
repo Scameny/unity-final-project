@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aa2d2704902bdb46bc6e870866eab1c, type: 3}
   m_Name: AprenticeRobe
   m_EditorClassIdentifier: 
-  type: 1
-  maxQuantity: 1
+  sprite: {fileID: 21300000, guid: d659f7396cd57754eba78763cf986c51, type: 3}
   slot: 1
   attackDamage:
     minimAttack: 0
@@ -21,10 +20,10 @@ MonoBehaviour:
     scalingStat: 0
     scaleCoef: 0
     damageType: 0
-    ability: {fileID: 0}
+    basicAttack:
+      usable: {fileID: 0}
+      quantity: 0
   stats:
   - statType: 3
     amount: 2
-  secondaryStats:
-  - statType: 0
-    amount: 3
+  secondaryStats: []

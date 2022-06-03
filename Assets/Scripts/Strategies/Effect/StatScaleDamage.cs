@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Character.Stats;
-using Combat;
 using Character.Character;
-using Character.Abilities;
 
 namespace Strategies.EffectStrategies
 { 

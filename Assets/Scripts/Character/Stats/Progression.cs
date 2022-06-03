@@ -1,7 +1,6 @@
-using Character.Abilities;
-using NaughtyAttributes;
+using Abilities.ability;
+using CardSystem;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Character.Stats
@@ -16,17 +15,27 @@ namespace Character.Stats
             return progression[level - 1].GetStatistic(statType);
         }
 
-        public Ability[] GetAbilitiesOnLevel(int level)
+        public int GetExpNeeded(int level)
+        {
+            return progression[level - 1].expNextLevel;
+        }
+
+        public int GetMaxCardsHand(int level)
+        {
+            return progression[level - 1].maxCardsInHand;
+        }
+
+        public AbilityCard[] GetAbilitiesOnLevel(int level)
         {
             return progression[level - 1].abilities;
         }
 
-        public List<Ability> GetAllAbilitesAvaliable(int level)
+        public List<AbilityCard> GetAllAbilitesAvaliable(int level)
         {
-            List<Ability> abilities = new List<Ability>();
-            foreach (var prog in progression)
+            List<AbilityCard> abilities = new List<AbilityCard>();
+            for (int i = 0; i < level; i++)
             {
-                foreach (var ability in prog.abilities)
+                foreach (var ability in progression[i].abilities)
                 {
                     abilities.Add(ability);
                 }
@@ -42,8 +51,9 @@ namespace Character.Stats
             public Statistic agility = new Statistic(StatType.Agility);
             public Statistic defense = new Statistic(StatType.Defense);
             public Statistic intelect = new Statistic(StatType.Intelect);
-            public Ability[] abilities;
-            public float expNextLevel;
+            public AbilityCard[] abilities;
+            public int maxCardsInHand;
+            public int expNextLevel;
 
             public float GetStatistic(StatType type)
             {
@@ -78,5 +88,4 @@ namespace Character.Stats
         }
     }
 
-    
 }

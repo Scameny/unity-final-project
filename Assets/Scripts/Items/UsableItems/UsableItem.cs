@@ -1,4 +1,6 @@
+using CardSystem;
 using Combat;
+using NaughtyAttributes;
 using Strategies.EffectStrategies;
 using Strategies.FilterStrategies;
 using Strategies.TargetingStrategies;
@@ -8,36 +10,54 @@ using UnityEngine;
 namespace Items
 {
     [CreateAssetMenu(fileName = "UsableItem", menuName = "Items/Type of items/UsableItem", order = 1)]
-    public class UsableItem : Item
+    public class UsableItem : Item, IUsable
     {
+        ItemType type = ItemType.Consumable;
+
         [SerializeField] TargetingStrategy targetingStrategy;
         [SerializeField] FilterStrategy[] filterStrategies;
         [SerializeField] EffectStrategy[] effectStrategies;
 
-        public void Use(GameObject user, IEnumerable<GameObject> targets)
+        public CardType GetCardType()
         {
-            Debug.Log(user.name + ": Preparing " + name);
-            user.GetComponent<TurnCombat>().TurnPreparationStop();
+            return CardType.Item;
+        }
+
+        public override ItemType GetItemType()
+        {
+            return type;
+        }
+
+        public void Use(GameObject user, IEnumerable<GameObject> targets, Card card)
+        {
+            user.GetComponent<TurnCombat>().TurnPreparationPause();
             foreach (var filterStrategy in filterStrategies)
             {
                 targets = filterStrategy.Filter(targets);
             }
             targetingStrategy.AbilityTargeting(user, targets,
-                (IEnumerable<GameObject> targets) =>
+                (IEnumerable<GameObject> targets, bool targetAquired) =>
                 {
-                    TargetAquired(user, targets);
+                    if (targetAquired)
+                    {
+                        TargetAquired(user, targets, card);
+                        card.CardEffectFinished();
+                    }
+                    else
+                        card.CancelCardUse();
                 });
         }
 
-        private void TargetAquired(GameObject user, IEnumerable<GameObject> targets)
+        private void TargetAquired(GameObject user, IEnumerable<GameObject> targets, Card card)
         {
             foreach (var effectStrategy in effectStrategies)
             {
                 effectStrategy.StartEffect(user, targets);
             }
-            Debug.Log(user.name + ": Used " + name);
             user.GetComponent<TurnCombat>().TurnPreparationResume();
         }
+
+
     }
 
 }

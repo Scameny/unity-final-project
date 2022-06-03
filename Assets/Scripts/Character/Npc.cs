@@ -1,20 +1,21 @@
-using System.Linq;
 using Character.Stats;
-using Character.Abilities;
-using UnityEngine;
+using Character.Reward;
+using System.Collections.Generic;
+using Items;
+using CardSystem;
 
 namespace Character.Character
 {
     public class Npc : DefaultCharacter {
 
+        public NpcReward reward;
+
         public bool isDead { get; private set; }
 
         private void Start()
         {
-            abilitiesAvaliable.AddRange(characterClass.GetAllAbilitesAvaliable(level).Select(a => 
-            {
-                return new AbilityUsable(a);
-            }));
+            currentHealth = GetStatistic(StatType.Health);
+            maxHealth = currentHealth;
         }
 
         override public float GetStatistic(StatType type)
@@ -27,6 +28,16 @@ namespace Character.Character
         {
             // Falta añadir traits
             return gear.GetAdditiveModifier(type);
+        }
+
+        public int GetRewardExp()
+        {
+            return reward.exp;
+        }
+
+        public List<Item> GetRewardItems()
+        {
+            return reward.GetLoot();
         }
     }
 }

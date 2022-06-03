@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa2d2704902bdb46bc6e870866eab1c, type: 3}
+  m_Name: GoblinClaw
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: 719c2201c2f5f6c4aafffaeb5abdf5f9, type: 3}
+  slot: 6
+  attackDamage:
+    minimAttack: 1
+    maxAttack: 3
+    scalingStat: 0
+    scaleCoef: 0
+    damageType: 0
+    basicAttack:
+      usable: {fileID: 11400000, guid: f736ab6ad8b6881478c9640bab9c5168, type: 2}
+      quantity: 5
+  stats: []
+  secondaryStats: []

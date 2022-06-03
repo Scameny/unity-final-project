@@ -466,6 +466,7 @@ GameObject:
   - component: {fileID: 7464714204298317735}
   - component: {fileID: 8396067962981423519}
   - component: {fileID: 8470452032725425942}
+  - component: {fileID: 1215592110}
   m_Layer: 3
   m_Name: Wizard
   m_TagString: Player
@@ -585,18 +586,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterClass: {fileID: 11400000, guid: 945e505cd888ee447aeb99ba209064f4, type: 2}
-  abilitiesAvaliable:
-  - ability: {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
-    currentSlots: 3
   gear:
     head:
       item: {fileID: 11400000, guid: 4236a0a1559e47d4a824a96ab047980f, type: 2}
     chest:
-      item: {fileID: 0}
+      item: {fileID: 11400000, guid: 2639b113b22e4c0419512234df9771b6, type: 2}
     legs:
       item: {fileID: 0}
     weapon:
-      item: {fileID: 0}
+      item: {fileID: 11400000, guid: 2a4c9449ed902b542abf0426116adaa9, type: 2}
     gloves:
       item: {fileID: 0}
     firstRing:
@@ -604,89 +602,26 @@ MonoBehaviour:
     secondRing:
       item: {fileID: 0}
   traits: {fileID: 0}
+  currentHealth: 20
+  maxHealth: 20
   level: 1
-  currentHealth: 0
-  maxHealth: 0
   exp: 0
   inventory:
     gearItems:
-      reorderableList:
-        canAdd: 0
-        canRemove: 0
-        draggable: 0
-        expandable: 0
-        multipleSelection: 0
-        isExpanded: 0
-        label:
-          m_Text: 
-          m_Image: {fileID: 0}
-          m_Tooltip: 
-        headerHeight: 0
-        footerHeight: 0
-        slideEasing: 0
-        verticalSpacing: 0
-        showDefaultBackground: 0
-        elementDisplayType: 0
-        elementNameProperty: 
-        elementNameOverride: 
-        elementIcon: {fileID: 0}
-      reqReferences: {fileID: 0}
-      isExpanded: 0
-      _keyValues: []
-      _keys: []
-      _values: 
-    consumablesItems:
-      reorderableList:
-        canAdd: 0
-        canRemove: 0
-        draggable: 0
-        expandable: 0
-        multipleSelection: 0
-        isExpanded: 0
-        label:
-          m_Text: 
-          m_Image: {fileID: 0}
-          m_Tooltip: 
-        headerHeight: 0
-        footerHeight: 0
-        slideEasing: 0
-        verticalSpacing: 0
-        showDefaultBackground: 0
-        elementDisplayType: 0
-        elementNameProperty: 
-        elementNameOverride: 
-        elementIcon: {fileID: 0}
-      reqReferences: {fileID: 0}
-      isExpanded: 0
-      _keyValues: []
-      _keys: []
-      _values: 
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     keyItems:
-      reorderableList:
-        canAdd: 0
-        canRemove: 0
-        draggable: 0
-        expandable: 0
-        multipleSelection: 0
-        isExpanded: 0
-        label:
-          m_Text: 
-          m_Image: {fileID: 0}
-          m_Tooltip: 
-        headerHeight: 0
-        footerHeight: 0
-        slideEasing: 0
-        verticalSpacing: 0
-        showDefaultBackground: 0
-        elementDisplayType: 0
-        elementNameProperty: 
-        elementNameOverride: 
-        elementIcon: {fileID: 0}
-      reqReferences: {fileID: 0}
-      isExpanded: 0
-      _keyValues: []
-      _keys: []
-      _values: 
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  extraAbiilities: []
 --- !u!114 &8396067962981423519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,15 +629,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2747068662712124995}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b20079795608df4f8458b107c9bafab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: {fileID: 0}
+  hand: {fileID: 0}
+  stack: {fileID: 0}
+  cardPrefab: {fileID: 3908558191448106145, guid: 6dfda3565cfcbf34195cf36b91ca5e3a, type: 3}
   healthBar: {fileID: 265492442}
   selector: {fileID: 381265739}
-  traitRow: {fileID: 0}
-  character: {fileID: 0}
+  traitRow: {fileID: 5625946462065356137, guid: 917eaf9cf5d211642b13323e13236c25, type: 3}
   targetIndex: 0
 --- !u!114 &8470452032725425942
 MonoBehaviour:
@@ -716,8 +654,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95cdee51b2d41640b38f0e967aeadb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  traitMenu: {fileID: 0}
-  traitUI: {fileID: 0}
   currentTraits:
     reorderableList:
       canAdd: 1
@@ -725,7 +661,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 0
+      isExpanded: 1
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -739,11 +675,25 @@ MonoBehaviour:
       elementNameProperty: 
       elementNameOverride: 
       elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
+    reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
+    isExpanded: 1
     _keyValues: []
     _keys: []
     _values: []
+  traitMenu: {fileID: 0}
+  traitUI: {fileID: 5625946462065356137, guid: 917eaf9cf5d211642b13323e13236c25, type: 3}
+--- !u!114 &1215592110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2747068662712124995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9e9ea6746517e4ebb5e10399aeac05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5960741814693381676
 GameObject:
   m_ObjectHideFlags: 0

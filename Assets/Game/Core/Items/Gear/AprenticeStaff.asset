@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aa2d2704902bdb46bc6e870866eab1c, type: 3}
   m_Name: AprenticeStaff
   m_EditorClassIdentifier: 
-  type: 1
-  maxQuantity: 1
+  sprite: {fileID: 21300000, guid: c51afa706b02a044694b30f33f81d239, type: 3}
   slot: 6
   attackDamage:
     minimAttack: 2
@@ -21,7 +20,9 @@ MonoBehaviour:
     scalingStat: 0
     scaleCoef: 0.2
     damageType: 0
-    ability: {fileID: 11400000, guid: a92e468c60b344840a2ea060e1d4b584, type: 2}
+    basicAttack:
+      usable: {fileID: 11400000, guid: f8984e8055c9dec4f82a30f7c383c6a9, type: 2}
+      quantity: 2
   stats:
   - statType: 3
     amount: 1

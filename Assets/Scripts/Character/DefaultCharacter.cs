@@ -1,32 +1,79 @@
 using System;
 using Character.Classes;
 using Character.Stats;
-using Character.Abilities;
 using Character.Trait;
-using System.Collections.Generic;
 using UnityEngine;
 using Utils;
 using Items;
+using CardSystem;
+using System.Collections.Generic;
+using Abilities.ability;
 
 namespace Character.Character 
 {
     public class DefaultCharacter : MonoBehaviour
     {
         public CharacterClass characterClass;
-        public List<AbilityUsable> abilitiesAvaliable = new List<AbilityUsable>();
-        public Gear gear;
-        public Traits traits;
-        public int level;
+        
+        [Header("Modifiers")]
+        [SerializeField] protected Gear gear;
+        [SerializeField] protected Traits traits;
+
 
         [Header("heal")]
-        public float currentHealth;
-        public float maxHealth;
+        [SerializeField] protected float currentHealth;
+        [SerializeField] protected float maxHealth;
+
+
+        [Header("Level")]
+        [SerializeField] protected int level;
+
         bool isDead;
 
         private void Awake()
         {
             traits = GetComponent<Traits>();
         }
+
+        #region Abilities operations
+        public List<AbilityCard> GetAllClassAbilitiesAvaliable()
+        {
+            return characterClass.GetAllAbilitesAvaliable(level);
+        }
+        #endregion
+
+
+        #region Gear operations
+        /// <summary>
+        /// Return item in the specified slot
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public GearItem GetItemBySlot(GearSlot slot)
+        {
+            return gear.GetItemBySlot(slot);
+        }
+        #endregion
+
+        #region Traits operations
+        public void ReduceTurnInTemporaryTraits()
+        {
+            traits.ReduceTurnInTemporaryTraits();
+        }
+
+        public void AddNewTrait(BaseTrait trait)
+        {
+            traits.NewTrait(trait);
+        }
+
+        #endregion
+
+        #region Stats operations
+        public int GetMaxCardsInHand()
+        {
+            return characterClass.GetMaxCardsHand(level);
+        }
+
 
         public virtual float GetStatistic(StatType type)
         {
@@ -36,18 +83,6 @@ namespace Character.Character
         public virtual float GetSecondaryStatistic(DamageTypeStat type)
         {
             throw new NotImplementedException();
-        }
-
-        public GearItem GetWeapon()
-        {
-            if (gear.weapon != null)
-            {
-                return gear.weapon.item;
-            }
-            else
-            {
-                throw new MissingRequiredParameterException(gear.weapon.ToString(), this.ToString());
-            }
         }
 
         protected float GetOffensiveStatViaDamageType(DamageType damageType)
@@ -103,6 +138,7 @@ namespace Character.Character
         {
             return damage + GetOffensiveStatViaDamageType(damageType);
         }
+        #endregion
 
         #region health operations
         public bool IsDead()
@@ -133,6 +169,16 @@ namespace Character.Character
             isDead = true;
             GameDebug.Instance.Log(Color.red, gameObject.name + " dies");
             // Animation
+        }
+
+        public float GetCurrentHealth()
+        {
+            return currentHealth;
+        }
+
+        public float GetMaxHealth()
+        {
+            return maxHealth;
         }
         #endregion
 

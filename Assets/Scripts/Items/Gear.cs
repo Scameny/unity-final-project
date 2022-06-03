@@ -1,4 +1,6 @@
-using Character.Stats;  
+using Abilities.BasicAttack;
+using Character.Stats;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Items
@@ -7,22 +9,25 @@ namespace Items
     public class Gear
     {
 
-        public GearItemSlots head = new GearItemSlots(GearPiece.Helm);
-        public GearItemSlots chest = new GearItemSlots(GearPiece.Chest);
-        public GearItemSlots legs = new GearItemSlots(GearPiece.Legs);
-        public GearItemSlots weapon = new GearItemSlots(GearPiece.Weapon);
-        public GearItemSlots gloves = new GearItemSlots(GearPiece.Gloves);
-        public GearItemSlots firstRing = new GearItemSlots(GearPiece.Ring);
-        public GearItemSlots secondRing=  new GearItemSlots(GearPiece.Ring);
+        [SerializeField] GearItemSlots head = new GearItemSlots(GearPiece.Helm);
+        [SerializeField] GearItemSlots chest = new GearItemSlots(GearPiece.Chest);
+        [SerializeField] GearItemSlots legs = new GearItemSlots(GearPiece.Legs);
+        [SerializeField] GearItemSlots weapon = new GearItemSlots(GearPiece.Weapon);
+        [SerializeField] GearItemSlots gloves = new GearItemSlots(GearPiece.Gloves);
+        [SerializeField] GearItemSlots firstRing = new GearItemSlots(GearPiece.Ring);
+        [SerializeField] GearItemSlots secondRing=  new GearItemSlots(GearPiece.Ring);
 
+        /// <summary>
+        /// Return the value given by gear of the specific stat
+        /// </summary>
         public float GetAdditiveModifier(StatType stat)
         {
             GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
             float value = 0;
             foreach (var slot in items)
             {
-                if (slot.item != null) { 
-                    foreach (var statValue in slot.item.GetAdditiveModifier(stat))
+                if (slot.GetItem() != null) { 
+                    foreach (var statValue in slot.GetItem().GetAdditiveModifier(stat))
                     {
                          value += statValue;
                     }
@@ -31,15 +36,18 @@ namespace Items
             return value;
         }
 
+        /// <summary>
+        /// Return the value given by gear of the specific stat
+        /// </summary
         public float GetAdditiveModifier(DamageTypeStat stat)
         {
             GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
             float value = 0;
             foreach (var slot in items)
             {
-                if (slot.item != null)
+                if (slot.GetItem() != null)
                 {
-                    foreach (var statValue in slot.item.GetAdditiveModifier(stat))
+                    foreach (var statValue in slot.GetItem().GetAdditiveModifier(stat))
                     {
                         value += statValue;
                     }
@@ -48,34 +56,106 @@ namespace Items
             return value;
         }
 
+        /// <summary>
+        /// Return the basic attack of the current weapon
+        /// </summary>
+        public BasicAttackCard GetWeaponBasicAttack()
+        {
+            return weapon.GetItem().attackDamage.basicAttack;
+        }
 
+        /// <summary>
+        /// Return the item equiped by slot
+        /// </summary>
+        public GearItem GetItemBySlot(GearSlot slot)
+        {
+            switch (slot)
+            {
+                case GearSlot.helm:
+                    return head.GetItem();
+                case GearSlot.gloves:
+                    return gloves.GetItem();
+                case GearSlot.chest:
+                    return chest.GetItem();
+                case GearSlot.legs:
+                    return legs.GetItem();
+                case GearSlot.firstRing:
+                    return firstRing.GetItem();
+                case GearSlot.secondRing:
+                    return secondRing.GetItem();
+                case GearSlot.weapon:
+                    return weapon.GetItem();
+            }
+            throw new KeyValueMissingException(slot.ToString(), GetType().Name);
+        }
 
-
+        /// <summary>
+        /// Set the item in the specified slot.
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <param name="item"></param>
+        /// <returns>Return true when the item is for the specified slot</returns>
+        public bool SetItemBySlot(GearSlot slot, GearItem item)
+        {
+            switch (slot)
+            {
+                case GearSlot.helm:
+                    return head.SetItem(item);
+                case GearSlot.gloves:
+                    return gloves.SetItem(item);
+                case GearSlot.chest:
+                    return chest.SetItem(item);
+                case GearSlot.legs:
+                    return legs.SetItem(item);
+                case GearSlot.firstRing:
+                    return firstRing.SetItem(item);
+                case GearSlot.secondRing:
+                    return secondRing.SetItem(item);
+                case GearSlot.weapon:
+                    return weapon.SetItem(item);
+            }
+            throw new KeyValueMissingException(slot.ToString(), GetType().Name);
+        }
     }
 
     [System.Serializable]
     public class GearItemSlots
     {
+        [SerializeField] GearItem item = null;
+        [HideInInspector]
+        public GearPiece slotType { get; private set; }
+
         public GearItemSlots(GearPiece slotType)
         {
             this.slotType = slotType;
         }
-        public GearItem item = null;
-        [HideInInspector]
-        public GearPiece slotType { get; private set; }
 
         public bool SetItem(GearItem item)
         {
-            if (item.slot == slotType)
+            if (item != null)
             {
+                if (item.slot != slotType)
+                    return false;
                 this.item = item;
-                return true;
             }
             else
             {
-                return false;
+                this.item = null;
             }
+            return true;
         }
+
+        public GearItem GetItem()
+        {
+            return item;
+        }
+
+        
+    }
+
+    public enum GearSlot
+    {
+        helm, gloves, chest, legs, firstRing, secondRing, weapon
     }
 }
 

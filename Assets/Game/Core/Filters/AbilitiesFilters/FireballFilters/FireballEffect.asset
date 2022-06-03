@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stat: 3
   scaleCoef: 1
-  flatDamage: 3
+  flatDamage: 20
   damageType: 1

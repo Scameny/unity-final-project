@@ -1,3 +1,4 @@
+using CardSystem;
 using NaughtyAttributes;
 using Strategies.EffectStrategies;
 using Strategies.FilterStrategies;
@@ -9,9 +10,8 @@ namespace Items
 {
     public abstract class Item : ScriptableObject
     {
-        public ItemType type;
-        [MinValue(0)]
-        public int maxQuantity;
+        [ShowAssetPreview]
+        [SerializeField] Sprite sprite;
 
         public override bool Equals(object obj)
         {
@@ -26,6 +26,13 @@ namespace Items
             hashCode = hashCode * -1521134295 + base.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(name);
             return hashCode;
+        }
+
+        public abstract ItemType GetItemType();
+
+        public Sprite GetSprite()
+        {
+            return sprite;
         }
     }
 

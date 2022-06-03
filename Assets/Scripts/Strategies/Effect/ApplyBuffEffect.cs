@@ -15,7 +15,7 @@ namespace Strategies.EffectStrategies
             foreach (var target in targets)
             {
                 DefaultCharacter character = target.GetComponent<DefaultCharacter>();
-                character.traits.NewTrait(trait);
+                character.AddNewTrait(trait);
             }
         }
     }

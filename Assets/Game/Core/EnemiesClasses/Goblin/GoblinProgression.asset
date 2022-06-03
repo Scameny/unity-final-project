@@ -29,4 +29,5 @@ MonoBehaviour:
       type: 0
       value: 0
     abilities: []
+    maxCardsInHand: 2
     expNextLevel: 0

@@ -1,5 +1,4 @@
 using Combat;
-using Character.Abilities;
 using Items;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,48 +9,35 @@ namespace UI
     public class UIManager : MonoBehaviour
     {
         public static UIManager manager;
-        public GameObject combatMenu, abilityMenu, itemMenu, itemButton, abilityButton;
+        public GameObject combatMenu;
+        public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton;
 
         private void Awake()
         {
             manager = this;
         }
 
-        public void ActivateCombatMenu()
+        public void ActivateCombatUI(bool enable)
         {
-            combatMenu.SetActive(true);
-        }
-        
-        public void PopulateAbilityMenu(List<AbilityUsable> abilities, HeroCombat player)
-        {
-
-            foreach (var abilityUsable in abilities)
-            {
-                GameObject abilitySlot = Instantiate(abilityButton, abilityMenu.transform);
-                abilitySlot.GetComponentInChildren<Text>().text = abilityUsable.ability.name;
-                abilitySlot.GetComponent<AbilityButton>().ability = abilityUsable;
-                abilitySlot.GetComponent<Button>().onClick.AddListener(() => { abilitySlot.GetComponent<AbilityButton>().UseAbility(player); });
-            }
-        }
-
-        public void PopulateItemMenu(List<Item> items, HeroCombat player)
-        {
-            foreach (var usableItem in items)
-            {
-                GameObject itemSlot = Instantiate(itemButton, itemMenu.transform);
-                itemSlot.GetComponent<ItemButton>().item = usableItem;
-                itemSlot.GetComponentInChildren<Text>().text = usableItem.name;
-                itemSlot.GetComponent<Button>().onClick.AddListener(() => { itemSlot.GetComponent<ItemButton>().UseItem(player); });
-            }
+            Debug.Log("Combat UI enabled: " + enable);
+            combatMenu.SetActive(enable);
         }
 
 
-        public void EnableSelectorInTargets(IEnumerable<GameObject> targets, bool enable)
+        public void ChangeSceneToSelection(IEnumerable<GameObject> targets, bool selection)
         {
             foreach(var character in targets)
             {
-                character.GetComponent<TurnCombat>().selector.SetActive(enable);
+                character.GetComponent<TurnCombat>().selector.SetActive(selection);
             }
+        }
+
+        public void ActiveCharacterMenu(bool enable)
+        {
+            characterMenu.SetActive(enable);
+            inventory.SetActive(enable);
+            openCharacterMenuButton.SetActive(!enable);
+            closeCharacterMenuButton.SetActive(enable);
         }
 
     }

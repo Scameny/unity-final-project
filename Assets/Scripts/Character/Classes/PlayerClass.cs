@@ -7,6 +7,10 @@ namespace Character.Classes
     public class PlayerClass : CharacterClass
     {
         public const bool npc = false;
+        public int GetExpForNextLevel(int level)
+        {
+            return progression.GetExpNeeded(level);
+        }
         // talents
     }
 }

@@ -11,7 +11,7 @@ namespace Strategies.EffectStrategies
     {
         public override void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
-            GearItem weapon = user.GetComponent<DefaultCharacter>().GetWeapon();
+            GearItem weapon = user.GetComponent<DefaultCharacter>().GetItemBySlot(GearSlot.weapon);
             float damage = Random.Range(weapon.attackDamage.minimAttack, weapon.attackDamage.maxAttack);
             damage += weapon.attackDamage.scaleCoef * user.GetComponent<DefaultCharacter>().GetStatistic(weapon.attackDamage.scalingStat);
             damage = user.GetComponent<DefaultCharacter>().ProcessDamageDone(damage, weapon.attackDamage.damageType);

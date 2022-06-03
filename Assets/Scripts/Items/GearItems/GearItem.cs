@@ -2,13 +2,16 @@ using Character.Stats;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
-using Character.Abilities;
+using Abilities.ability;
+using CardSystem;
+using Abilities.BasicAttack;
 
 namespace Items
 {
     [CreateAssetMenu(fileName = "GearItem", menuName = "Items/Type of items/GearItem", order = 2)]
     public class GearItem : Item, IModifierProvider
     {
+        ItemType type = ItemType.Equipable;
 
         public GearPiece slot;
         [EnableIf("slot", GearPiece.Weapon)]
@@ -38,6 +41,11 @@ namespace Items
                 }
             }
         }
+
+        public override ItemType GetItemType()
+        {
+            return type;
+        }
     }
 
 
@@ -63,7 +71,7 @@ namespace Items
         public StatType scalingStat;
         public float scaleCoef;
         public DamageType damageType;
-        public Ability ability;
+        public BasicAttackCard basicAttack;
     }
 
 
@@ -71,7 +79,6 @@ namespace Items
     {
         Helm,
         Chest,
-        Boots,
         Legs,
         Gloves,
         Ring,

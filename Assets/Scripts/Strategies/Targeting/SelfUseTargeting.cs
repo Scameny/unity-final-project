@@ -7,10 +7,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SelfUseSelection", menuName = "Strategy/TargetingSelection/SelfUseSelection", order = 2)]
 public class SelfUseTargeting : TargetingStrategy
 {
-    public override void AbilityTargeting(GameObject user, IEnumerable<GameObject> targets, Action<IEnumerable<GameObject>> effectAction)
+    public override void AbilityTargeting(GameObject user, IEnumerable<GameObject> targets, Action<IEnumerable<GameObject>, bool> effectAction)
     {
         List<GameObject> toRet = new List<GameObject>();
         toRet.Add(user);
-        effectAction.Invoke(toRet);
+        effectAction.Invoke(toRet, true);
     }
 }

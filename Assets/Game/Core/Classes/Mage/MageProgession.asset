@@ -29,8 +29,10 @@ MonoBehaviour:
       type: 0
       value: 3
     abilities:
-    - {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
-    expNextLevel: 0
+    - usable: {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
+      quantity: 3
+    maxCardsInHand: 3
+    expNextLevel: 10
   - health:
       type: 0
       value: 12
@@ -47,6 +49,7 @@ MonoBehaviour:
       type: 0
       value: 4
     abilities: []
+    maxCardsInHand: 3
     expNextLevel: 10
   - health:
       type: 0
@@ -64,5 +67,7 @@ MonoBehaviour:
       type: 0
       value: 5
     abilities:
-    - {fileID: 11400000, guid: c6700592cd772a34d8951e6166cba9f6, type: 2}
-    expNextLevel: 30
+    - usable: {fileID: 11400000, guid: c6700592cd772a34d8951e6166cba9f6, type: 2}
+      quantity: 1
+    maxCardsInHand: 3
+    expNextLevel: 20
