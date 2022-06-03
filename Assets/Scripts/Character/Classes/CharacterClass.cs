@@ -15,12 +15,12 @@ namespace Character.Classes
             return progression.GetStatistic(type, level);
         }
 
-        public List<AbilityCard> GetAllAbilitesAvaliable(int level)
+        public List<UsableCard> GetAllAbilitesAvaliable(int level)
         {
             return progression.GetAllAbilitesAvaliable(level);
         }
 
-        public AbilityCard[] GetAbilitiesOnLevel(int level)
+        public UsableCard[] GetAbilitiesOnLevel(int level)
         {
             return progression.GetAbilitiesOnLevel(level);
         }

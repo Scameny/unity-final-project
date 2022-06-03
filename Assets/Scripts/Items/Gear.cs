@@ -1,4 +1,5 @@
 using Abilities.BasicAttack;
+using CardSystem;
 using Character.Stats;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Items
         [SerializeField] GearItemSlots firstRing = new GearItemSlots(GearPiece.Ring);
         [SerializeField] GearItemSlots secondRing=  new GearItemSlots(GearPiece.Ring);
 
+        #region Stats operations
         /// <summary>
         /// Return the value given by gear of the specific stat
         /// </summary>
@@ -56,14 +58,9 @@ namespace Items
             return value;
         }
 
-        /// <summary>
-        /// Return the basic attack of the current weapon
-        /// </summary>
-        public BasicAttackCard GetWeaponBasicAttack()
-        {
-            return weapon.GetItem().attackDamage.basicAttack;
-        }
+        #endregion
 
+        #region Items operatiosn
         /// <summary>
         /// Return the item equiped by slot
         /// </summary>
@@ -116,6 +113,24 @@ namespace Items
             }
             throw new KeyValueMissingException(slot.ToString(), GetType().Name);
         }
+        #endregion
+
+        #region Abilities operations
+        
+        public List<UsableCard> GetAbilitiesGivenByGear()
+        {
+            GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
+            List<UsableCard> cards = new List<UsableCard>();
+            foreach (var item in items)
+            {
+                foreach (var usableCard in item.GetItem().GetUsableCards())
+                {
+                    cards.Add(usableCard);
+                }
+            }
+            return cards;
+        }
+        #endregion
     }
 
     [System.Serializable]

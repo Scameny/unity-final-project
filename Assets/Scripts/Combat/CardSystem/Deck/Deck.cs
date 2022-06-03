@@ -15,13 +15,16 @@ namespace CardSystem
             throw new System.NotImplementedException();
         }
 
-        public void InitDeck()
+        public void AddPermanentDeckToCurrentDeck()
         {
-            Debug.Log("Initializing deck");
             foreach (var card in permanentDeck)
             {
                 AddCard(card);
             }
+        }
+
+        public void ShuffleCurrentDeck()
+        {
             currentDeck.Shuffle();
         }
 
@@ -52,11 +55,11 @@ namespace CardSystem
             throw new System.NotImplementedException();
         }
 
-        virtual public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab)
+        virtual public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse, GameObject cardPrefab)
         {
             GameObject cardGameObject = Instantiate(cardPrefab, transform);
             Card card = cardGameObject.GetComponent<Card>();
-            card.InitializeCard(cardUse, user, temporary);
+            card.InitializeCard(cardUse, user, temporary, oneUse);
             card.SetVisibility(false);
             if (temporary)
                 currentDeck.Add(card);
@@ -72,6 +75,14 @@ namespace CardSystem
         public Card RemoveNextCard()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void ClearTemporaryCards()
+        {
+            foreach (var item in currentDeck)
+            {
+                Destroy(item);
+            }
         }
     }
     static class ShuffleClass

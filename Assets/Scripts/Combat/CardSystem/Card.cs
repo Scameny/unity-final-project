@@ -15,19 +15,21 @@ namespace CardSystem
 
 
         bool temporary;
-        IUsable cardEffect;
+        bool oneUse;
+        Usable cardEffect;
         GameObject user;
 
         Vector3 position;
         bool onDropZone = false;
 
-        public void InitializeCard(IUsable cardUse, GameObject user, bool temporary)
+        public void InitializeCard(Usable cardUse, GameObject user, bool temporary, bool oneUse)
         {
             cardEffect = cardUse;
             cardImage.sprite = cardUse.GetSprite();
             cardName.text = ((ScriptableObject)cardUse).name;
             this.temporary = temporary;
             this.user = user;
+            this.oneUse = oneUse;
         }
       
         public void SetVisibility(bool visible)

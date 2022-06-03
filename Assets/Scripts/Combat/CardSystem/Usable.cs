@@ -1,4 +1,3 @@
-using CardSystem;
 using Combat;
 using NaughtyAttributes;
 using Strategies.EffectStrategies;
@@ -7,29 +6,19 @@ using Strategies.TargetingStrategies;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Items
+namespace CardSystem
 {
-    [CreateAssetMenu(fileName = "UsableItem", menuName = "Items/Type of items/UsableItem", order = 1)]
-    public class UsableItem : Item, IUsable
+    public abstract class Usable : ScriptableObject
     {
-        ItemType type = ItemType.Consumable;
+        [ShowAssetPreview]
+        Sprite sprite;
 
         [SerializeField] TargetingStrategy targetingStrategy;
         [SerializeField] FilterStrategy[] filterStrategies;
         [SerializeField] EffectStrategy[] effectStrategies;
-
-        public CardType GetCardType()
-        {
-            return CardType.Item;
-        }
-
-        public override ItemType GetItemType()
-        {
-            return type;
-        }
-
         public void Use(GameObject user, IEnumerable<GameObject> targets, Card card)
         {
+
             user.GetComponent<TurnCombat>().TurnPreparationPause();
             foreach (var filterStrategy in filterStrategies)
             {
@@ -40,15 +29,16 @@ namespace Items
                 {
                     if (targetAquired)
                     {
-                        TargetAquired(user, targets, card);
+                        TargetAquired(user, targets);
                         card.CardEffectFinished();
                     }
                     else
                         card.CancelCardUse();
                 });
+
         }
 
-        private void TargetAquired(GameObject user, IEnumerable<GameObject> targets, Card card)
+        private void TargetAquired(GameObject user, IEnumerable<GameObject> targets)
         {
             foreach (var effectStrategy in effectStrategies)
             {
@@ -58,6 +48,25 @@ namespace Items
         }
 
 
+        public Sprite GetSprite()
+        {
+            return sprite;
+        }
+
+        abstract public CardType GetCardType();
     }
 
+    [System.Serializable]
+    public class UsableCard
+    {
+        public Usable usable;
+        public int quantity;
+    }
+
+    public enum CardType
+    {
+        BasicAttack,
+        Ability,
+        Item
+    }
 }

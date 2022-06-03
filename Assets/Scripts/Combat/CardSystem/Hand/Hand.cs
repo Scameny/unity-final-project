@@ -15,7 +15,7 @@ namespace CardSystem
             card.transform.SetParent(transform);
         }
 
-        public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab)
+        public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse, GameObject cardPrefab)
         {
             throw new System.NotImplementedException();
         }
@@ -48,6 +48,11 @@ namespace CardSystem
         }
 
         public Card RemoveNextCard()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ClearTemporaryCards()
         {
             throw new System.NotImplementedException();
         }

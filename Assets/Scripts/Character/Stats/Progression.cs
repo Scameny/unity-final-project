@@ -25,14 +25,14 @@ namespace Character.Stats
             return progression[level - 1].maxCardsInHand;
         }
 
-        public AbilityCard[] GetAbilitiesOnLevel(int level)
+        public UsableCard[] GetAbilitiesOnLevel(int level)
         {
             return progression[level - 1].abilities;
         }
 
-        public List<AbilityCard> GetAllAbilitesAvaliable(int level)
+        public List<UsableCard> GetAllAbilitesAvaliable(int level)
         {
-            List<AbilityCard> abilities = new List<AbilityCard>();
+            List<UsableCard> abilities = new List<UsableCard>();
             for (int i = 0; i < level; i++)
             {
                 foreach (var ability in progression[i].abilities)
@@ -51,7 +51,7 @@ namespace Character.Stats
             public Statistic agility = new Statistic(StatType.Agility);
             public Statistic defense = new Statistic(StatType.Defense);
             public Statistic intelect = new Statistic(StatType.Intelect);
-            public AbilityCard[] abilities;
+            public UsableCard[] abilities;
             public int maxCardsInHand;
             public int expNextLevel;
 

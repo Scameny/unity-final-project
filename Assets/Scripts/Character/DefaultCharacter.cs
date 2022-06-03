@@ -13,10 +13,9 @@ namespace Character.Character
 {
     public class DefaultCharacter : MonoBehaviour
     {
-        public CharacterClass characterClass;
+        [SerializeField] protected CharacterClass characterClass;
         
         [Header("Modifiers")]
-        [SerializeField] protected Gear gear;
         [SerializeField] protected Traits traits;
 
 
@@ -36,22 +35,9 @@ namespace Character.Character
         }
 
         #region Abilities operations
-        public List<AbilityCard> GetAllClassAbilitiesAvaliable()
+        public List<UsableCard> GetAllClassAbilitiesAvaliable()
         {
             return characterClass.GetAllAbilitesAvaliable(level);
-        }
-        #endregion
-
-
-        #region Gear operations
-        /// <summary>
-        /// Return item in the specified slot
-        /// </summary>
-        /// <param name="slot"></param>
-        /// <returns></returns>
-        public GearItem GetItemBySlot(GearSlot slot)
-        {
-            return gear.GetItemBySlot(slot);
         }
         #endregion
 

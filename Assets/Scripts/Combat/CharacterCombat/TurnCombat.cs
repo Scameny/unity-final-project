@@ -47,6 +47,7 @@ namespace Combat
             EnableHealthBar(false);
             TurnPreparationStop();
             RefillPermanentDeck();
+            ClearTemporaryCards();
         }
 
         public DefaultCharacter GetCharacter()
@@ -64,7 +65,7 @@ namespace Combat
         #region Card operations
         virtual protected void InitDeck()
         {
-            deck.InitDeck();
+            deck.AddPermanentDeckToCurrentDeck();
         }
 
         public void DrawCard()
@@ -79,6 +80,7 @@ namespace Combat
                 RechargeDeck();
             }
         }
+
         private void RechargeDeck()
         {
             List<Card> cards = new List<Card>();
@@ -103,24 +105,31 @@ namespace Combat
         /// <summary>
         /// Create a new card for the deck. If temporary is true, only for the current deck otherwise for both current and permanent deck
         /// </summary>
-        public void AddNewCardToDeck(IUsable usable, bool temporary)
+        public void AddNewCardToDeck(Usable usable, bool temporary, bool oneUse)
         {
-            deck.CreateCard(gameObject, usable, temporary, cardPrefab);
+            deck.CreateCard(gameObject, usable, temporary, oneUse, cardPrefab);
         }
 
         /// <summary>
-        /// Send all the permanent cards to the permanent deck.
+        /// Send all the permanent cards to the permanent deck. Should be called when the combat ends
         /// </summary>
         public void RefillPermanentDeck()
         {
             deck.RefillPermanentDeck();
+        
+        }
+
+        public void ClearTemporaryCards()
+        {
+            deck.ClearTemporaryCards();
+            stack.ClearTemporaryCards();
+            hand.ClearTemporaryCards();
         }
 
         protected void DrawInitialHand()
         {
             for (int i = 0; i < character.GetMaxCardsInHand(); i++)
             {
-                Debug.Log("Robamos carta");
                 DrawCard();
             }
         }

@@ -17,22 +17,26 @@ namespace Items {
         {
             switch (item.GetItemType())
             {
-                case ItemType.Consumable:
-                    break;
                 case ItemType.Equipable:
                     gearItems.Add(item);
                     break;
                 case ItemType.KeyItem:
                     keyItems.Add(item);
                     break;
-                default:
-                    break;
             }
         }
 
-        public void RemoveItem(Item item, int quantity)
+        public void RemoveItem(Item item)
         {
-            
+            switch (item.GetItemType())
+            {
+                case ItemType.Equipable:
+                    gearItems.Remove(item);
+                    break;
+                case ItemType.KeyItem:
+                    keyItems.Remove(item);
+                    break;
+            }
         }
 
     }

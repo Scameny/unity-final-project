@@ -47,6 +47,19 @@ namespace Combat
             UpdateHealthBar();
         }
 
+        #region Card operations
+        override protected void InitDeck()
+        {
+            deck.AddPermanentDeckToCurrentDeck();
+            foreach (var item in ((Hero)character).GetUsableCards())
+            {
+                for (int i = 0; i < item.quantity; i++)
+                {
+                    deck.CreateCard(gameObject, item.usable, true, false, cardPrefab);
+                }
+            }
+        }
+        #endregion
 
         override public void TurnPreparationResume()
         {
@@ -63,12 +76,8 @@ namespace Combat
             {
                 for (int i = 0; i < item.quantity; i++)
                 {
-                    deck.CreateCard(gameObject, item.usable, false, cardPrefab);
+                    deck.CreateCard(gameObject, item.usable, false, false,cardPrefab);
                 }
-            }
-            for (int i = 0; i < character.GetItemBySlot(Items.GearSlot.weapon).attackDamage.basicAttack.quantity; i++)
-            {
-                deck.CreateCard(gameObject, character.GetItemBySlot(Items.GearSlot.weapon).attackDamage.basicAttack.usable, false, cardPrefab);
             }
         }
         #endregion

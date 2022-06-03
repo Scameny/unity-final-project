@@ -39,7 +39,6 @@ namespace Items
 
     public enum ItemType
     {
-        Consumable,
         Equipable,
         KeyItem
     }

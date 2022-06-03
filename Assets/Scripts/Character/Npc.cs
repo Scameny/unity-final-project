@@ -21,13 +21,13 @@ namespace Character.Character
         override public float GetStatistic(StatType type)
         {
             // Falta añadir traits
-            return characterClass.GetStatistic(type, level) + gear.GetAdditiveModifier(type);
+            return characterClass.GetStatistic(type, level) + traits.GetAdditiveModifier(type);
         }
 
         override public float GetSecondaryStatistic(DamageTypeStat type)
         {
             // Falta añadir traits
-            return gear.GetAdditiveModifier(type);
+            return traits.GetAdditiveModifier(type);
         }
 
         public int GetRewardExp()

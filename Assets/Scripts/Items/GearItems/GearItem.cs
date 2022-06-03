@@ -9,15 +9,16 @@ using Abilities.BasicAttack;
 namespace Items
 {
     [CreateAssetMenu(fileName = "GearItem", menuName = "Items/Type of items/GearItem", order = 2)]
-    public class GearItem : Item, IModifierProvider
+    public class GearItem : Item, IModifierProvider, ICardGiver
     {
         ItemType type = ItemType.Equipable;
 
         public GearPiece slot;
         [EnableIf("slot", GearPiece.Weapon)]
-        public AttackDamage attackDamage;
-        public GearStat[] stats;
-        public GearSecondaryStat[] secondaryStats;
+        [SerializeField] AttackDamage attackDamage;
+        [SerializeField] GearStat[] stats;
+        [SerializeField] GearSecondaryStat[] secondaryStats;
+        [SerializeField] UsableCard[] abilitiesGiven;
 
 
         public IEnumerable<float> GetAdditiveModifier(DamageTypeStat stat)
@@ -46,6 +47,14 @@ namespace Items
         {
             return type;
         }
+
+        public IEnumerable<UsableCard> GetUsableCards()
+        {
+            foreach (var item in abilitiesGiven)
+            {
+                yield return item;
+            }
+        }
     }
 
 
@@ -70,8 +79,6 @@ namespace Items
         public float maxAttack;
         public StatType scalingStat;
         public float scaleCoef;
-        public DamageType damageType;
-        public BasicAttackCard basicAttack;
     }
 
 

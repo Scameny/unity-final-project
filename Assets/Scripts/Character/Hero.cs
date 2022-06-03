@@ -14,7 +14,28 @@ namespace Character.Character
     {
         [SerializeField] float exp;
         [SerializeField] Inventory inventory = new Inventory();
-        [SerializeField] List<AbilityCard> extraAbiilities = new List<AbilityCard>();
+        [SerializeField] protected Gear gear;
+
+        #region Abilities
+
+        public List<UsableCard> GetUsableCards()
+        {
+            return gear.GetAbilitiesGivenByGear();
+        }
+
+        #endregion
+
+        #region Gear operations
+        /// <summary>
+        /// Return item in the specified slot
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public GearItem GetItemBySlot(GearSlot slot)
+        {
+            return gear.GetItemBySlot(slot);
+        }
+        #endregion
 
         #region Stats operations
         override public float GetStatistic(StatType type)
@@ -57,7 +78,7 @@ namespace Character.Character
                 {
                     AddItem(item);
                 } 
-                catch (MaxItemQuantityException e)
+                catch (MaxItemQuantityException _)
                 {
                     Debug.Log("Reached max quantity of item " + item.name);
                 }
@@ -80,7 +101,7 @@ namespace Character.Character
             GearItem itemToInv = GetItemBySlot(slot);
             if (gear.SetItemBySlot(slot, item))
             {
-                inventory.RemoveItem(item, 1);
+                inventory.RemoveItem(item);
                 if (itemToInv != null)
                     inventory.AddItem(itemToInv);
                 return true;

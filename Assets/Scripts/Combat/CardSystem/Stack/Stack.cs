@@ -14,7 +14,12 @@ namespace CardSystem
             currentStack.Add(card);
         }
 
-        virtual public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab)
+        public void ClearTemporaryCards()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        virtual public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse, GameObject cardPrefab)
         {
             throw new System.NotImplementedException();
         }

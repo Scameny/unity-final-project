@@ -12,9 +12,11 @@ namespace CardSystem
 
         public void AddCard(Card card);
 
-        public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab);
+        public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse,GameObject cardPrefab);
 
         public int GetCurrentCardsNumber();
+
+        public void ClearTemporaryCards();
     }
 
 }
