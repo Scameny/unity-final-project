@@ -1,7 +1,6 @@
-using Combat;
 using FloorManagement;
 using GameControl;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Utils;
 
@@ -70,7 +69,6 @@ namespace GameManagement
         [Button]
         public void StartGame()
         {
-            player.GetComponent<HeroCombat>().LoadAbilities();
             floorGenerator.GenerateFloor(8, roomPoolToTest);
             currentRoom = floorGenerator.GetBaseRoom();
         }

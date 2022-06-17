@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -135,7 +135,6 @@ namespace FloorManagement
         }
 
         [ReadOnly]
-        [AllowNesting]
         public Direction dir;
         public GameObject doorOpen;
         public GameObject doorClosed;

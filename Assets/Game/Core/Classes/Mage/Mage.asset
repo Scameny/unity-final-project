@@ -12,5 +12,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9c10956617e4de4fb9af1d535043050, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
-  className: Mage
-  progression: {fileID: 11400000, guid: 18464b65619457048bc7556ad3a64559, type: 2}
+  progression:
+    baseStats:
+      stats:
+        health: 10
+        strength: 0
+        agility: 1
+        defense: 1
+        intelect: 2
+        resourceAmount: 10
+        abilities:
+        - usable: {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
+          quantity: 4
+        - usable: {fileID: 11400000, guid: 6b91e06bea894914587f3a8cc01fdd86, type: 2}
+          quantity: 3
+        passives:
+        - passiveAbility: {fileID: 11400000, guid: 3f0da193c38d40d449751a86e259e628, type: 2}
+      maxCards: 3
+    progression:
+    - stats:
+        health: 2
+        strength: 0
+        agility: 0
+        defense: 1
+        intelect: 1
+        resourceAmount: 4
+        abilities: []
+        passives: []
+      newSlotsHand: 0
+      expNextLevel: 20
+      label: Level 1
+    - stats:
+        health: 3
+        strength: 0
+        agility: 1
+        defense: 0
+        intelect: 2
+        resourceAmount: 6
+        abilities:
+        - usable: {fileID: 11400000, guid: ef524300efb6ad046851336b2f800589, type: 2}
+          quantity: 2
+        - usable: {fileID: 11400000, guid: 3c9691759db820648a8fcc499bc940a4, type: 2}
+          quantity: 1
+        passives: []
+      newSlotsHand: 1
+      expNextLevel: 40
+      label: Level 2
+    - stats:
+        health: 3
+        strength: 1
+        agility: 0
+        defense: 1
+        intelect: 2
+        resourceAmount: 6
+        abilities: []
+        passives: []
+      newSlotsHand: 0
+      expNextLevel: 60
+      label: Level 3
+    - stats:
+        health: 6
+        strength: 0
+        agility: 1
+        defense: 1
+        intelect: 2
+        resourceAmount: 8
+        abilities: []
+        passives: []
+      newSlotsHand: 1
+      expNextLevel: 80
+      label: Level 4
+  resourceType: 0

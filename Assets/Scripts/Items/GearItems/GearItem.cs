@@ -1,29 +1,40 @@
 using Character.Stats;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
-using Abilities.ability;
 using CardSystem;
-using Abilities.BasicAttack;
+using Sirenix.OdinInspector;
+using System.Collections;
+using System;
+using System.Linq;
+using Sirenix.Utilities;
+using Abilities.Passive;
+using Character.Trait;
 
 namespace Items
 {
-    [CreateAssetMenu(fileName = "GearItem", menuName = "Items/Type of items/GearItem", order = 2)]
-    public class GearItem : Item, IModifierProvider, ICardGiver
+    public abstract class GearItem : Item, IModifierProvider, ICardGiver, IPassiveProvider
     {
-        ItemType type = ItemType.Equipable;
+        [HorizontalGroup("Middle")]
 
-        public GearPiece slot;
-        [EnableIf("slot", GearPiece.Weapon)]
-        [SerializeField] AttackDamage attackDamage;
-        [SerializeField] GearStat[] stats;
-        [SerializeField] GearSecondaryStat[] secondaryStats;
-        [SerializeField] UsableCard[] abilitiesGiven;
+        [VerticalGroup("Middle/Left")]
+        [SerializeField] StatisticList statList;
+
+        [VerticalGroup("Middle/Right")]
+        [SerializeField] SecondaryStatisticList secondaryStatList;
+
+
+        [HorizontalGroup("Bottom")]
+        [VerticalGroup("Bottom/Left")]
+        [ListDrawerSettings(Expanded = true)]
+        [PropertySpace(SpaceBefore = 20)]
+        [SerializeField] List<UsableCard> abilitiesGiven = new List<UsableCard>();
+
+        [SerializeField] List<Passive> passiveAbilities = new List<Passive>();
 
 
         public IEnumerable<float> GetAdditiveModifier(DamageTypeStat stat)
         {
-            foreach (var givenStat in secondaryStats)
+            foreach (var givenStat in secondaryStatList.stats)
             {
                 if (givenStat.statType == stat)
                 {
@@ -34,7 +45,7 @@ namespace Items
 
         public IEnumerable<float> GetAdditiveModifier(StatType stat)
         {
-            foreach (var givenStat in stats)
+            foreach (var givenStat in statList.stats)
             {
                 if (givenStat.statType == stat)
                 {
@@ -45,12 +56,27 @@ namespace Items
 
         public override ItemType GetItemType()
         {
-            return type;
+            return ItemType.Equipable;
         }
 
-        public IEnumerable<UsableCard> GetUsableCards()
+       
+
+        public IEnumerable<Usable> GetUsableCards()
         {
             foreach (var item in abilitiesGiven)
+            {
+                for (int i = 0; i < item.quantity; i++)
+                {
+                    yield return item.usable;
+                }
+            }
+        }
+
+        public abstract GearPiece GetSlotType();
+
+        public IEnumerable<Passive> GetPasiveAbilities()
+        {
+            foreach (var item in passiveAbilities)
             {
                 yield return item;
             }
@@ -58,27 +84,21 @@ namespace Items
     }
 
 
-    [System.Serializable]
-    public class GearStat
-    {
-        public StatType statType;
-        public float amount;
-    }
 
-    [System.Serializable]
+    [Serializable]
     public class GearSecondaryStat
     {
-        public DamageTypeStat statType;
-        public float amount;
-    }
+        public GearSecondaryStat(DamageTypeStat secondaryStat)
+        {
+            this.statType = secondaryStat;
+        }
 
-    [System.Serializable]
-    public class AttackDamage
-    {
-        public float minimAttack;
-        public float maxAttack;
-        public StatType scalingStat;
-        public float scaleCoef;
+
+
+        [HideInInspector]
+        public DamageTypeStat statType;
+        [LabelText("$statType"), LabelWidth(150)]
+        public float amount;
     }
 
 
@@ -91,6 +111,7 @@ namespace Items
         Ring,
         Weapon
     }
+
 
 }
 

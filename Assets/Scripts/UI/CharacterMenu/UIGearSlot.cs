@@ -8,8 +8,9 @@ namespace UI
         [SerializeField] GearSlot slot;
 
 
-        private void Start()
+        override protected void Start()
         {
+            base.Start();
             draggableItem.SetItem(player.GetItemBySlot(slot));
         }
 
@@ -40,6 +41,7 @@ namespace UI
                 return true;
             }
             return false;
+            
         }
     }
 }

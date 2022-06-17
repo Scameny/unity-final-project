@@ -1,6 +1,4 @@
-using NaughtyAttributes;
-using System.Collections;
-using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace FloorManagement
@@ -43,7 +41,6 @@ namespace FloorManagement
         public GameObject gameObject;
         public bool hasMaxNumPerRoom;
         [EnableIf("hasMaxNumPerRoom")]
-        [AllowNesting]
         public int maxNumPerRoom;
         public int weigth;
     }

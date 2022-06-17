@@ -7,64 +7,35 @@ namespace CardSystem
     public abstract class Deck : MonoBehaviour, ICardContainer
     {
         [SerializeField] protected List<Card> currentDeck = new List<Card>();
-        [SerializeField] protected List<Card> permanentDeck = new List<Card>();
-
-
-        virtual public void RechargeDeck(List<Card> cards)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void AddPermanentDeckToCurrentDeck()
-        {
-            foreach (var card in permanentDeck)
-            {
-                AddCard(card);
-            }
-        }
-
-        public void ShuffleCurrentDeck()
-        {
-            currentDeck.Shuffle();
-        }
-
-        public void RefillPermanentDeck()
-        {
-            foreach (var item in permanentDeck)
-            {
-                item.transform.SetParent(transform);
-                item.SetVisibility(false);
-            }
-        }
-
-        virtual public Card DrawCard()
-        {
-            Card card = currentDeck[currentDeck.Count - 1];
-            currentDeck.RemoveAt(currentDeck.Count - 1);
-            return card;
-        }
 
         virtual public void AddCard(Card card)
         {
-            currentDeck.Add(card);
             card.transform.SetParent(transform);
+            currentDeck.Add(card);
         }
 
-        public Card RemoveCard(Card card)
+        public bool RemoveCard(Card card)
         {
-            throw new System.NotImplementedException();
+            return currentDeck.Remove(card);
+        }
+        public Card RemoveNextCard()
+        {
+            if (currentDeck.Count > 0)
+            {
+                Card card = currentDeck[currentDeck.Count];
+                currentDeck.Remove(card);
+                return card;
+            }
+            throw new EmptyCardContainerException(GetType().Name);
         }
 
-        virtual public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse, GameObject cardPrefab)
+        virtual public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
         {
             GameObject cardGameObject = Instantiate(cardPrefab, transform);
             Card card = cardGameObject.GetComponent<Card>();
-            card.InitializeCard(cardUse, user, temporary, oneUse);
+            card.InitializeCard(cardUse, user, oneUse);
             card.SetVisibility(false);
-            if (temporary)
-                currentDeck.Add(card);
-            else
-                permanentDeck.Add(card);
+            currentDeck.Add(card);
         }
 
         public int GetCurrentCardsNumber()
@@ -72,16 +43,37 @@ namespace CardSystem
             return currentDeck.Count;
         }
 
-        public Card RemoveNextCard()
+        public void ShuffleDeck()
         {
-            throw new System.NotImplementedException();
+            currentDeck.Shuffle();
         }
 
-        public void ClearTemporaryCards()
+        virtual public Card DrawCard()
+        {
+            if (currentDeck.Count > 0)
+            {
+                Card card = currentDeck[currentDeck.Count - 1];
+                currentDeck.Remove(card);
+                return card;
+            }
+            throw new EmptyCardContainerException(GetType().Name);
+        }
+
+        public IEnumerable<Card> GetCards()
         {
             foreach (var item in currentDeck)
             {
-                Destroy(item);
+                yield return item;
+            }
+        }
+
+        public void ClearCards()
+        {
+            while(currentDeck.Count != 0)
+            {
+                Card card = currentDeck[0];
+                currentDeck.Remove(card);
+                Destroy(card.gameObject);
             }
         }
     }

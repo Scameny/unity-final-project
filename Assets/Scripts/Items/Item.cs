@@ -1,38 +1,54 @@
-using CardSystem;
-using NaughtyAttributes;
-using Strategies.EffectStrategies;
-using Strategies.FilterStrategies;
-using Strategies.TargetingStrategies;
-using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Items
 {
     public abstract class Item : ScriptableObject
     {
-        [ShowAssetPreview]
+        protected const string GENERAL_SETTINGS_GROUP = "Base/Right/Top/General Settings";
+        protected const string GENERAL_SETTINGS_POSITION = "Base/Right/Top";
+
+
+        [HorizontalGroup("Base", Width = 150)]
+
+        [HideLabel, PreviewField(150)]
+        [VerticalGroup("Base/Left")]
         [SerializeField] Sprite sprite;
 
-        public override bool Equals(object obj)
-        {
-            return obj is Item item &&
-                   base.Equals(obj) &&
-                   name == item.name;
-        }
+        [VerticalGroup("Base/Right")]
+        [HorizontalGroup(GENERAL_SETTINGS_POSITION)]
+        [BoxGroup(GENERAL_SETTINGS_GROUP)]
+        [SerializeField] string Name;
 
-        public override int GetHashCode()
-        {
-            int hashCode = -1301573508;
-            hashCode = hashCode * -1521134295 + base.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(name);
-            return hashCode;
-        }
+        [BoxGroup(GENERAL_SETTINGS_GROUP)]
+        [SerializeField] ItemRarity itemRarity;
+
+        [HorizontalGroup("Base/Right/Bottom")]
+        [TextArea(4, 14)]
+        [SerializeField] string description;
+
+        
 
         public abstract ItemType GetItemType();
 
         public Sprite GetSprite()
         {
             return sprite;
+        }
+
+        public ItemRarity GetItemRarity()
+        {
+            return itemRarity;
+        }
+
+        public string GetDescription()
+        {
+            return description;
+        }
+
+        public string GetName()
+        {
+            return Name;
         }
     }
 
@@ -41,5 +57,13 @@ namespace Items
     {
         Equipable,
         KeyItem
+    }
+
+    public enum ItemRarity
+    {
+        Common,
+        Rare,
+        Epic,
+        Legendary
     }
 }

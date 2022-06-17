@@ -3,12 +3,15 @@ using UnityEngine.UI;
 using UnityEngine;
 using Character.Character;
 using CardSystem;
+using Abilities.Passive;
+using System;
 using System.Collections.Generic;
 
 namespace Combat
 {
     /// <summary>
     /// Class that should inherit every script that manage combat.
+    /// It's in charge of Card system in combat and turn base system
     /// When enabled, it starts the turn based system.
     /// </summary>
     public class TurnCombat : MonoBehaviour
@@ -25,8 +28,9 @@ namespace Combat
 
         [HideInInspector]
         protected DefaultCharacter character = null;
-        
-        
+
+
+        protected PassiveManager passiveManager = new PassiveManager();
         protected bool prepared = false;
         protected float turnSpeed;
         protected float turnTime;
@@ -36,24 +40,48 @@ namespace Combat
 
         private void OnEnable()
         {
-            TurnPreparationStart();
             EnableHealthBar(true);
             InitDeck();
             DrawInitialHand();
+            TurnPreparationStart();
+            ActivePassiveAbilities();
         }
 
         private void OnDisable()
         {
             EnableHealthBar(false);
             TurnPreparationStop();
-            RefillPermanentDeck();
-            ClearTemporaryCards();
+            ClearCards();
+        }
+
+        virtual protected void Update()
+        {
+            EvaluateTraits();
+            UpdateHealthBar();
         }
 
         public DefaultCharacter GetCharacter()
         {
             return character;
         }
+
+        #region Passive operations
+
+        protected void ActivePassiveAbilities()
+        {
+            foreach (var item in character.GetCurrentPassiveAbilities())
+            {
+                IDisposable disposable = passiveManager.Subscribe(item);
+                item.SetDisposable(disposable);
+            }
+        }
+
+        protected void SendPassiveData(PassiveSignal signal)
+        {
+            passiveManager.SendData(signal, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+        }
+       
+        #endregion
 
         #region Health operations
         public void TakeDamage(float damage, DamageType type)
@@ -65,30 +93,39 @@ namespace Combat
         #region Card operations
         virtual protected void InitDeck()
         {
-            deck.AddPermanentDeckToCurrentDeck();
+            foreach (var item in character.GetUsableCards())
+            {
+                deck.CreateCard(gameObject, item, false, cardPrefab);
+            }
+            deck.ShuffleDeck();
         }
 
-        public void DrawCard()
+        public void DrawCard(int numCards)
         {
-            if (deck.GetCurrentCardsNumber() != 0)
+            for (int i = 0; i < numCards; i++)
             {
-                Card card = deck.DrawCard();
-                hand.AddCard(card);
-            }
-            else if (hand.GetCurrentCardsNumber() == 0)
-            {
-                RechargeDeck();
+                try
+                {
+                    Card card = deck.DrawCard();
+                    if (hand.GetCurrentCardsNumber() < 10)
+                        hand.AddCard(card);
+                    else
+                        stack.AddCard(card);
+                }
+                catch (EmptyCardContainerException e)
+                {
+                    RechargeDeck();
+                }
             }
         }
 
         private void RechargeDeck()
         {
-            List<Card> cards = new List<Card>();
-            while (stack.GetCurrentCardsNumber() > 0)
+            foreach (var card in stack.GetCards())
             {
-                cards.Add(stack.RemoveNextCard());
+                stack.RemoveCard(card);
+                deck.AddCard(card);
             }
-            deck.RechargeDeck(cards);
             TurnPreparationResume();
         }
 
@@ -105,34 +142,23 @@ namespace Combat
         /// <summary>
         /// Create a new card for the deck. If temporary is true, only for the current deck otherwise for both current and permanent deck
         /// </summary>
-        public void AddNewCardToDeck(Usable usable, bool temporary, bool oneUse)
+        public void AddNewCardToDeck(Usable usable, bool oneUse)
         {
-            deck.CreateCard(gameObject, usable, temporary, oneUse, cardPrefab);
-        }
-
-        /// <summary>
-        /// Send all the permanent cards to the permanent deck. Should be called when the combat ends
-        /// </summary>
-        public void RefillPermanentDeck()
-        {
-            deck.RefillPermanentDeck();
-        
-        }
-
-        public void ClearTemporaryCards()
-        {
-            deck.ClearTemporaryCards();
-            stack.ClearTemporaryCards();
-            hand.ClearTemporaryCards();
+            deck.CreateCard(gameObject, usable, oneUse, cardPrefab);
         }
 
         protected void DrawInitialHand()
         {
-            for (int i = 0; i < character.GetMaxCardsInHand(); i++)
-            {
-                DrawCard();
-            }
+            DrawCard(character.GetMaxCardsInHand());
         }
+
+        protected void ClearCards()
+        {
+            deck.ClearCards();
+            stack.ClearCards();
+            hand.ClearCards();
+        }
+
         #endregion
 
         #region Traits operation
@@ -201,7 +227,6 @@ namespace Combat
             healthBar.maxValue = character.GetMaxHealth();
             healthBar.value = character.GetCurrentHealth();
         }
-
         #endregion
 
     }

@@ -16,18 +16,17 @@ namespace Character.Character
         {
             currentHealth = GetStatistic(StatType.Health);
             maxHealth = currentHealth;
+            LoadAbilities();
         }
 
         override public float GetStatistic(StatType type)
         {
-            // Falta añadir traits
-            return characterClass.GetStatistic(type, level) + traits.GetAdditiveModifier(type);
+            return base.GetStatistic(type);
         }
 
         override public float GetSecondaryStatistic(DamageTypeStat type)
         {
-            // Falta añadir traits
-            return traits.GetAdditiveModifier(type);
+            return base.GetSecondaryStatistic(type);
         }
 
         public int GetRewardExp()
@@ -38,6 +37,15 @@ namespace Character.Character
         public List<Item> GetRewardItems()
         {
             return reward.GetLoot();
+        }
+
+        public void LoadAbilities()
+        {
+
+            foreach (var item in GetAllClassAbilitiesAvaliable())
+            {
+                permanentCards.Add(item);
+            }
         }
     }
 }

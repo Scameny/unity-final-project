@@ -12,7 +12,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c25a7ab77c01842a3927144be6dd0d, type: 3}
   m_Name: Goblin
   m_EditorClassIdentifier: 
-  className: Goblin
-  progression: {fileID: 11400000, guid: 3c2b8801df7d8994489470d428fe98d5, type: 2}
-  xpCoeficient: 1
-  xp: 10
+  progression:
+    baseStats:
+      stats:
+        health: 6
+        strength: 1
+        agility: 1
+        defense: 1
+        intelect: 0
+        resourceAmount: 0
+        abilities:
+        - usable: {fileID: 11400000, guid: 97fb4a0d9fff4d7439758848291beab9, type: 2}
+          quantity: 8
+      maxCards: 3
+    progression:
+    - stats:
+        health: 3
+        strength: 0
+        agility: 0
+        defense: 1
+        intelect: 0
+        resourceAmount: 2
+        abilities: []
+      newSlotsHand: 0
+      expNextLevel: 0
+      label: Level 1
+    - stats:
+        health: 4
+        strength: 1
+        agility: 1
+        defense: 1
+        intelect: 0
+        resourceAmount: 2
+        abilities: []
+      newSlotsHand: 0
+      expNextLevel: 0
+      label: Level 2
+    - stats:
+        health: 5
+        strength: 2
+        agility: 1
+        defense: 2
+        intelect: 0
+        resourceAmount: 4
+        abilities: []
+      newSlotsHand: 1
+      expNextLevel: 0
+      label: Level 3
+  resourceType: 1

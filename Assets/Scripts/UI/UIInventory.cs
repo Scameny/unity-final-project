@@ -9,17 +9,21 @@ namespace UI
     public class UIInventory : MonoBehaviour
     {
         Hero player;
-        UISlot[] slots;
+        UIInventorySlot[] slots;
         private void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
-            slots = GetComponentsInChildren<UISlot>();
-            int count = 0;
-            List<Item> itemsInInventory = player.GetAllStoredItems();  
-            foreach (var item in itemsInInventory)
+            slots = GetComponentsInChildren<UIInventorySlot>();
+            Item[,] itemsInInventory = player.GetAllStoredItems();
+            for (int i = 0; i < itemsInInventory.GetLength(0); i++)
             {
-                slots[count].GetDragableItem().SetItem(item);
-                count++;
+                for (int j = 0; j < itemsInInventory.GetLength(1); j++)
+                {
+                    if (itemsInInventory[i,j] != null)
+                        slots[j * itemsInInventory.GetLength(0) + i].GetDragableItem().SetItem(itemsInInventory[i,j]);
+                    slots[j * itemsInInventory.GetLength(0) + i].slotInfo.i = i;
+                    slots[j * itemsInInventory.GetLength(0) + i].slotInfo.j = j;
+                }
             }
         }
 

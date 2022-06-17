@@ -8,6 +8,27 @@ namespace CardSystem
     {
         [SerializeField] protected List<Card> currentHand = new List<Card>();
 
+        virtual public bool RemoveCard(Card card)
+        {
+            if (currentHand.Remove(card))
+            {
+                card.SetVisibility(false);
+                return true;
+            }
+            else
+                return false;
+        }
+        public Card RemoveNextCard()
+        {
+            if (currentHand.Count > 0)
+            {
+                Card card = currentHand[currentHand.Count - 1];
+                currentHand.Remove(card);
+                return card;
+            }
+            throw new EmptyCardContainerException(GetType().Name);
+        }
+
         virtual public void AddCard(Card card)
         {
             currentHand.Add(card);
@@ -15,9 +36,12 @@ namespace CardSystem
             card.transform.SetParent(transform);
         }
 
-        public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse, GameObject cardPrefab)
+        public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
         {
-            throw new System.NotImplementedException();
+            GameObject cardGameObject = Instantiate(cardPrefab, transform);
+            Card card = cardGameObject.GetComponent<Card>();
+            card.InitializeCard(cardUse, user, oneUse);
+            card.SetVisibility(true);
         }
 
         public int GetCurrentCardsNumber()
@@ -25,36 +49,22 @@ namespace CardSystem
             return currentHand.Count;
         }
 
-        virtual public Card RemoveCard(Card card)
+        public IEnumerable<Card> GetCards()
         {
-            if (currentHand.Remove(card))
+            foreach (var item in currentHand)
             {
-                card.SetVisibility(false);
-                return card;
+                yield return item;
             }
-            else
-                throw new NotValidOperationException("", GetType().Name);
         }
 
-        public Card GetNextCard()
+        public void ClearCards()
         {
-            Card card = currentHand[0];
-            return card;
-        }
-
-        virtual public bool UseCard(Card card)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Card RemoveNextCard()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void ClearTemporaryCards()
-        {
-            throw new System.NotImplementedException();
+            while (currentHand.Count != 0)
+            {
+                Card card = currentHand[0];
+                currentHand.Remove(card);
+                Destroy(card.gameObject);
+            }
         }
     }
 

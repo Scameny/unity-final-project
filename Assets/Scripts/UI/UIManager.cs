@@ -19,7 +19,6 @@ namespace UI
 
         public void ActivateCombatUI(bool enable)
         {
-            Debug.Log("Combat UI enabled: " + enable);
             combatMenu.SetActive(enable);
         }
 

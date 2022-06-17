@@ -1,12 +1,12 @@
 using Combat;
 using Character.Character;
 using Items;
-using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 using GameManagement;
+using Sirenix.OdinInspector;
 
 public class CombatManager : MonoBehaviour
 {
@@ -38,7 +38,6 @@ public class CombatManager : MonoBehaviour
     #region Combat management
     public void StartCombat(List<GameObject> enemies)
     {
-
         this.enemies = enemies;
         charactersInCombat.AddRange(enemies);
         charactersInCombat.Add(player.gameObject);

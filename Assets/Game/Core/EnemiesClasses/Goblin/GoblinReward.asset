@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e92ca69e2e69a8b468bddfcf564ea9fc, type: 3}
   m_Name: GoblinReward
   m_EditorClassIdentifier: 
-  exp: 1
-  lootProb: 80
-  maxItems: 1
-  lootList:
-  - item: {fileID: 11400000, guid: 95c1da549802ffe45a4972edf5100814, type: 2}
-    quantity: 1
-    dropChances: 80
+  exp: 2
+  lootProb: 0
+  maxItems: 0
+  lootList: []

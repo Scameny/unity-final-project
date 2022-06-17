@@ -1,6 +1,7 @@
 using UnityEngine;
 using Character.Stats;
 using Character.Character;
+using CardSystem;
 
 namespace Combat
 {
@@ -22,7 +23,7 @@ namespace Combat
         }
 
         // Update is called once per frame
-        void Update()
+        override protected void Update()
         {
             if (character.IsDead())
             {
@@ -32,39 +33,29 @@ namespace Combat
             {
                 prepared = false;
                 TurnPreparationPause();
-                DrawCard();
+                DrawCard(1);
                 UseCard();
-                EvaluateTraits();
             }
-            UpdateHealthBar();
+            base.Update();
         }
 
         #region Cards operations
 
         protected override void InitDeck()
         {
-            CreateDeck();
             base.InitDeck();
-        }
-
-        private void CreateDeck()
-        {
-            foreach (var item in character.GetAllClassAbilitiesAvaliable())
-            {
-                for (int i = 0; i < item.quantity; i++)
-                {
-                    deck.CreateCard(gameObject, item.usable, false, cardPrefab);
-                }
-            }
-            for (int i = 0; i < character.GetItemBySlot(Items.GearSlot.weapon).attackDamage.basicAttack.quantity; i++)
-            {
-                deck.CreateCard(gameObject, character.GetItemBySlot(Items.GearSlot.weapon).attackDamage.basicAttack.usable, false, cardPrefab);
-            }
         }
 
         private void UseCard()
         {
-            hand.GetNextCard().UseCard();
+            try
+            {
+                Card card = hand.RemoveNextCard();
+                card.UseCard();
+            } catch (EmptyCardContainerException e) 
+            {
+                TurnPreparationResume();
+            }
         }
         #endregion
     }

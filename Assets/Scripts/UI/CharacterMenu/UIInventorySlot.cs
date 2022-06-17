@@ -7,6 +7,8 @@ namespace UI
 {
     public class UIInventorySlot : UISlot
     {
+        public slotInfo slotInfo;
+
         protected override void OnDropNewDraggableItem(DraggableItem droppedDraggableItem)
         {
             Item item = droppedDraggableItem.GetItem();
@@ -27,13 +29,16 @@ namespace UI
 
         public override bool OnItemChange(Item itemToinventory)
         {
-            if (itemToinventory != null)
-            {
-                player.AddItem(itemToinventory);
-            }
+            player.AddItem(itemToinventory, slotInfo.i, slotInfo.j);
             draggableItem.SetItem(itemToinventory);
             return true;
         }
+    }
+
+    public struct slotInfo
+    {
+        public int i;
+        public int j;
     }
 
 }

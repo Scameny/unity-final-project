@@ -4,30 +4,50 @@ using Character.Stats;
 using Character.Trait;
 using UnityEngine;
 using Utils;
-using Items;
 using CardSystem;
 using System.Collections.Generic;
-using Abilities.ability;
+using Sirenix.OdinInspector;
+using Abilities.Passive;
 
 namespace Character.Character 
 {
-    public class DefaultCharacter : MonoBehaviour
+    public class DefaultCharacter : SerializedMonoBehaviour, ICardGiver
     {
         [SerializeField] protected CharacterClass characterClass;
-        
-        [Header("Modifiers")]
-        [SerializeField] protected Traits traits;
 
-
-        [Header("heal")]
+        [Header("Heal")]
+        [TabGroup("General")]
+        [LabelText("Current health")]
         [SerializeField] protected float currentHealth;
+
+        [TabGroup("General")]
+        [LabelText("Max health")]
         [SerializeField] protected float maxHealth;
+
+        [Header("@GetResourceType().ToString()")]
+        [TabGroup("General")]
+        [LabelText("Current resource")]
+        [SerializeField] protected float currentResource;
+
+        [TabGroup("General")]
+        [LabelText("Max resource")]
+        [SerializeField] protected float maxResource;
 
 
         [Header("Level")]
+        [TabGroup("General")]
         [SerializeField] protected int level;
 
+
+        [Header("Cards")]
+        [TabGroup("Cards")]
+        [SerializeField] protected List<Usable> permanentCards = new List<Usable>();
+
+        [TabGroup("Passive abilities")]
+        [SerializeField] protected List<Passive> permanentPassiveAbilities = new List<Passive>();
+
         bool isDead;
+        protected Traits traits;
 
         private void Awake()
         {
@@ -35,10 +55,44 @@ namespace Character.Character
         }
 
         #region Abilities operations
-        public List<UsableCard> GetAllClassAbilitiesAvaliable()
+
+        public IEnumerable<Usable> GetAllClassAbilitiesAvaliable()
         {
             return characterClass.GetAllAbilitesAvaliable(level);
         }
+
+        protected IEnumerable<Passive> GetClassPasiveAbilitiesAvaliable()
+        {
+            return characterClass.GetAllPassiveAbilitiesAvaliable(level);
+        }
+
+        virtual public IEnumerable<Passive> GetCurrentPassiveAbilities()
+        {
+            foreach (var item in permanentPassiveAbilities)
+            {
+                yield return item;
+            }
+            foreach (var item in traits.GetPasiveAbilities())
+            {
+                yield return item;
+            }
+        }
+
+        #endregion
+
+        #region Cards operations
+        virtual public IEnumerable<Usable> GetUsableCards()
+        {
+            foreach (var card in traits.GetUsableCards())
+            {
+                yield return card;
+            }
+            foreach (var card in permanentCards)
+            {
+                yield return card;
+            }
+        }
+
         #endregion
 
         #region Traits operations
@@ -63,12 +117,12 @@ namespace Character.Character
 
         public virtual float GetStatistic(StatType type)
         {
-            throw new NotImplementedException();
+            return characterClass.GetStatistic(type, level) + traits.GetAdditiveModifier(type);
         }
 
         public virtual float GetSecondaryStatistic(DamageTypeStat type)
         {
-            throw new NotImplementedException();
+            return traits.GetAdditiveModifier(type);
         }
 
         protected float GetOffensiveStatViaDamageType(DamageType damageType)
@@ -124,6 +178,29 @@ namespace Character.Character
         {
             return damage + GetOffensiveStatViaDamageType(damageType);
         }
+
+        public void UseResource(int resource, ResourceType resourceType)
+        {
+            currentResource -= resource;    
+        }
+
+        public bool HaveEnoughResource(int resourceAmount, ResourceType resourceType)
+        {
+            Debug.Log("Comprobando que tienes recursos coste:" + resourceAmount + " Mana actual : " + currentResource);
+            return resourceAmount < currentResource;
+        }
+
+        public ResourceType GetResourceType()
+        {
+            return characterClass.GetResourceType();
+        }
+
+        public void GainResource(int amount) 
+        {
+            currentResource += amount;
+            currentResource = Mathf.Min(currentResource, maxResource);
+        }
+
         #endregion
 
         #region health operations

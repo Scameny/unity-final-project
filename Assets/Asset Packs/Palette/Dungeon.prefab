@@ -5762,7 +5762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 585732213875078691}
   - component: {fileID: 8080221851880068669}
-  m_Layer: 31
+  m_Layer: 0
   m_Name: Dungeon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

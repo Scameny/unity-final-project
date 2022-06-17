@@ -1,5 +1,8 @@
+using Abilities.Passive;
+using CardSystem;
 using Character.Stats;
 using RotaryHeart.Lib.SerializableDictionary;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,21 +11,24 @@ using Utils;
 
 namespace Character.Trait
 {
-    public class Traits : MonoBehaviour
+    [Serializable]
+    public class Traits : MonoBehaviour, ICardGiver, IPassiveProvider
     {
-        [System.Serializable]
-        public class TraitsDictionary : SerializableDictionaryBase<BaseTrait, TraitInfo> { }
-
+        [Serializable]
+        public class TraitsDictionary : SerializableDictionaryBase<string, TraitInfo> { }
+        
+        [TabGroup("Traits")]
         public TraitsDictionary currentTraits;
 
+        [TabGroup("UI")]
         public GameObject traitMenu, traitUI;
 
         public float GetAdditiveModifier(DamageTypeStat stat)
         {
             float value = 0;
-            foreach (var trait in currentTraits.Keys)
+            foreach (var trait in currentTraits.Values)
             {
-                foreach (var givenStat in trait.GetAdditiveModifier(stat))
+                foreach (var givenStat in trait.trait.GetAdditiveModifier(stat))
                 {
                     value += givenStat;    
                 }
@@ -33,9 +39,9 @@ namespace Character.Trait
         public float GetAdditiveModifier(StatType stat)
         {
             float value = 0;
-            foreach (var trait in currentTraits.Keys)
+            foreach (var trait in currentTraits.Values)
             {
-                foreach (var givenStat in trait.GetAdditiveModifier(stat))
+                foreach (var givenStat in trait.trait.GetAdditiveModifier(stat))
                 {
                     value += givenStat;
                 }
@@ -43,12 +49,33 @@ namespace Character.Trait
             return value;
         }
 
+        public IEnumerable<Usable> GetUsableCards()
+        {
+            foreach (var trait in currentTraits.Values)
+            {
+                foreach (var usable in trait.trait.GetUsableCards())
+                {
+                    yield return usable;
+                }
+            }
+        }
+
+        public IEnumerable<Passive> GetPasiveAbilities()
+        {
+            foreach (var item in currentTraits.Values)
+            {
+                foreach (var passive in item.trait.GetPasiveAbilities())
+                {
+                    yield return passive;
+                }
+            }
+        }
 
         public void ReduceTurnInTemporaryTraits()
         {
             foreach (var pair in currentTraits)
             {
-                if (pair.Key.IsTemporary)
+                if (pair.Value.trait.IsTemporary)
                 {
                     currentTraits[pair.Key].remainingTurns -= 1;
                     if (currentTraits[pair.Key].remainingTurns == 0)
@@ -61,25 +88,28 @@ namespace Character.Trait
 
         public void NewTrait(BaseTrait trait)
         {
-            if (currentTraits.ContainsKey(trait))
+            if (currentTraits.ContainsKey(trait.name))
             {
                 if (trait.IsTemporary)
                 {
-                    currentTraits[trait].remainingTurns = trait.turns;
+                    currentTraits[trait.name].remainingTurns = trait.turns;
                 }
             }
             else
             {
-                currentTraits[trait] = new TraitInfo(trait.turns, NewTraitUIElement(trait));
+                currentTraits[trait.name] = new TraitInfo(trait, trait.turns, NewTraitUIElement(trait));
             }
         }
 
-        public void RemoveTrait(BaseTrait trait)
+        public void RemoveTrait(string trait)
         {
             DeleteTraitUIElement(currentTraits[trait].uiElement);
+            foreach(var item in currentTraits[trait].trait.GetPasiveAbilities())
+            {
+                item.OnCompleted();
+            }
             currentTraits.Remove(trait);
             GameDebug.Instance.Log(Color.blue, "Modifier expired");
-
         }
 
         #region UI Management
@@ -95,16 +125,13 @@ namespace Character.Trait
             Destroy(uiElement);
         }
 
-        public void UpdateTraitElements(BaseTrait trait, TraitInfo info)
+        public void UpdateTraitElements(string trait, TraitInfo info)
         {
-            if (trait.IsTemporary)
-                info.uiElement.GetComponent<Text>().text = trait.name + " " + info.remainingTurns + " secs";
+            if (info.trait.IsTemporary)
+                info.uiElement.GetComponent<Text>().text = trait + " " + info.remainingTurns + " secs";
             else
-                info.uiElement.GetComponent<Text>().text = trait.name;
+                info.uiElement.GetComponent<Text>().text = trait;
         }
-
-
-
         #endregion
 
     }
@@ -112,12 +139,19 @@ namespace Character.Trait
     [System.Serializable]
     public class TraitInfo
     {
-        public TraitInfo(int remainingTurns, GameObject uiElement)
+        public TraitInfo(BaseTrait trait, int remainingTurns, GameObject uiElement)
         {
+            this.trait = trait;
             this.remainingTurns = remainingTurns;
             this.uiElement = uiElement;
         }
 
+        public TraitInfo()
+        {
+
+        }
+
+        public BaseTrait trait;
         public int remainingTurns;
         public GameObject uiElement;
     }

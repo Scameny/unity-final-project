@@ -8,12 +8,17 @@ namespace UI
 {
     public abstract class UISlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        [HideInInspector]
         protected DraggableItem draggableItem;
         protected Hero player;
 
         private void Awake()
         {
             draggableItem = GetComponentInChildren<DraggableItem>();
+        }
+
+        virtual protected void Start()
+        {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
         }
 
@@ -59,4 +64,6 @@ namespace UI
 
         abstract public bool OnItemChange(Item item);
     }
+
+
 }

@@ -1,26 +1,87 @@
 using Saving;
 using Character.Stats;
-using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 using Character.Classes;
 using Items;
 using CardSystem;
-using Abilities.ability;
+using Sirenix.OdinInspector;
+using Abilities.Passive;
 
 namespace Character.Character
 {
     public class Hero : DefaultCharacter, ISaveable
     {
+        [TabGroup("General")]
         [SerializeField] float exp;
+        
+        [TabGroup("Inventory")]
         [SerializeField] Inventory inventory = new Inventory();
+
+        [TabGroup("Gear")]
+        [HideLabel]
         [SerializeField] protected Gear gear;
+
+
+        private void Start()
+        {
+
+            OnGameStart();
+        }
+
+        private void Update()
+        {
+            maxHealth = GetStatistic(StatType.Health);
+        }
+
+        private void OnGameStart()
+        {
+            maxHealth = GetStatistic(StatType.Health);
+            currentHealth = GetStatistic(StatType.Health);
+            AddAbilityCards(GetAllClassAbilitiesAvaliable());
+            AddPassiveAbilities(GetClassPasiveAbilitiesAvaliable());
+        }
 
         #region Abilities
 
-        public List<UsableCard> GetUsableCards()
+        override public IEnumerable<Usable> GetUsableCards()
         {
-            return gear.GetAbilitiesGivenByGear();
+            foreach (var item in base.GetUsableCards())
+            {
+                yield return item;
+            }
+            foreach (var item in gear.GetUsableCards())
+            {
+                yield return item;
+            }
+        }
+
+        override public IEnumerable<Passive> GetCurrentPassiveAbilities()
+        {
+            foreach (var item in base.GetCurrentPassiveAbilities())
+            {
+                yield return item;
+            }
+            foreach (var item in gear.GetPasiveAbilities())
+            {
+                yield return item;
+            }
+        }
+
+        private void AddPassiveAbilities(IEnumerable<Passive> passiveAbilities) 
+        {
+            foreach (var item in passiveAbilities)
+            {
+                permanentPassiveAbilities.Add(item);
+            }
+        }
+
+        private void AddAbilityCards(IEnumerable<Usable> abilities)
+        {
+            foreach (var ability in abilities)
+            {
+                permanentCards.Add(ability);
+            }
         }
 
         #endregion
@@ -40,19 +101,22 @@ namespace Character.Character
         #region Stats operations
         override public float GetStatistic(StatType type)
         {
-            return characterClass.GetStatistic(type, level) + gear.GetAdditiveModifier(type) + traits.GetAdditiveModifier(type);
+            return base.GetStatistic(type) + gear.GetAdditiveModifier(type);
         }
 
         override public float GetSecondaryStatistic(DamageTypeStat type)
         {
-            return gear.GetAdditiveModifier(type) + traits.GetAdditiveModifier(type);
+            return base.GetSecondaryStatistic(type) + gear.GetAdditiveModifier(type);
         }
+
         #endregion
 
         #region Level operations
         public void AddExp(float expEarned)
         {
             exp += expEarned;
+            if (level == ((PlayerClass)characterClass).GetMaxLevel())
+                return;
             int expNeededToLvlUp = ((PlayerClass)characterClass).GetExpForNextLevel(level + 1);
             if (expNeededToLvlUp < exp)
             {
@@ -65,7 +129,8 @@ namespace Character.Character
         {
             level += 1;
             Debug.Log("Level up. Reached level " + level);
-            characterClass.GetAbilitiesOnLevel(level);
+            AddAbilityCards(characterClass.GetAbilitiesOnLevel(level));
+            AddPassiveAbilities(characterClass.GetPassiveAbilitiesOnLevel(level));
         }
         #endregion
 
@@ -78,13 +143,18 @@ namespace Character.Character
                 {
                     AddItem(item);
                 } 
-                catch (MaxItemQuantityException _)
+                catch (MaxItemQuantityException e)
                 {
                     Debug.Log("Reached max quantity of item " + item.name);
                 }
             }
         }
 
+
+        public void AddItem(Item item, int i, int j)
+        {
+            inventory.AddItem(item, i, j);
+        }
 
         public void AddItem(Item item)
         {
@@ -98,12 +168,10 @@ namespace Character.Character
         /// <returns>True if the item has been equipped, false if not</returns>
         public bool SetItemBySlot(GearSlot slot, GearItem item)
         {
-            GearItem itemToInv = GetItemBySlot(slot);
             if (gear.SetItemBySlot(slot, item))
             {
-                inventory.RemoveItem(item);
-                if (itemToInv != null)
-                    inventory.AddItem(itemToInv);
+                if (item != null)
+                    inventory.RemoveItem(item);
                 return true;
             }
             return false;
@@ -113,9 +181,9 @@ namespace Character.Character
         /// Returns all items in the inventory
         /// </summary>
         /// <returns></returns>
-        public List<Item> GetAllStoredItems()
+        public Item[,] GetAllStoredItems()
         {
-            return inventory.gearItems;
+            return inventory.items;
         }
 
 
@@ -146,6 +214,18 @@ namespace Character.Character
             data.level = level;
             data.currentHealth = currentHealth;
             return data;
+        }
+        #endregion
+
+        #region Debug
+        [Button]
+        public void LoadAbilities()
+        {
+
+            foreach (var item in GetAllClassAbilitiesAvaliable())
+            {
+                    permanentCards.Add(item);
+            }
         }
         #endregion
     }

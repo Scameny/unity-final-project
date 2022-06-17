@@ -1,21 +1,39 @@
-using Abilities.BasicAttack;
+using Abilities.Passive;
 using CardSystem;
 using Character.Stats;
+using Character.Trait;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Items
 {
     [System.Serializable]
-    public class Gear
+    [InlineProperty]
+    public class Gear: ICardGiver, IPassiveProvider
     {
+        [HorizontalGroup("Main")]
 
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots head = new GearItemSlots(GearPiece.Helm);
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots chest = new GearItemSlots(GearPiece.Chest);
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots legs = new GearItemSlots(GearPiece.Legs);
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots weapon = new GearItemSlots(GearPiece.Weapon);
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots gloves = new GearItemSlots(GearPiece.Gloves);
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots firstRing = new GearItemSlots(GearPiece.Ring);
+        [ValidateInput("ValidateEquipment")]
+        [LabelWidth(100)]
         [SerializeField] GearItemSlots secondRing=  new GearItemSlots(GearPiece.Ring);
 
         #region Stats operations
@@ -116,26 +134,54 @@ namespace Items
         #endregion
 
         #region Abilities operations
-        
-        public List<UsableCard> GetAbilitiesGivenByGear()
+
+        public IEnumerable<Usable> GetUsableCards()
         {
             GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
-            List<UsableCard> cards = new List<UsableCard>();
             foreach (var item in items)
             {
-                foreach (var usableCard in item.GetItem().GetUsableCards())
+                if (item.GetItem() != null)
                 {
-                    cards.Add(usableCard);
+                    foreach (var usableCard in item.GetItem().GetUsableCards())
+                    {
+                        yield return usableCard;
+                    }
                 }
             }
-            return cards;
+        }
+
+        public IEnumerable<Passive> GetPasiveAbilities()
+        {
+            GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
+            foreach (var item in items)
+            {
+                if (item.GetItem() != null)
+                {
+                    foreach (var passive in item.GetItem().GetPasiveAbilities())
+                    {
+                        yield return passive;
+                    }
+                }
+            }
         }
         #endregion
+
+        #region editor operations
+        private bool ValidateEquipment(GearItemSlots slot)
+        {
+            if (slot.GetItem() != null)
+                return slot.GetItem().GetSlotType().Equals(slot.slotType);
+            return true;
+        }
+        #endregion
+
     }
 
     [System.Serializable]
+    [InlineProperty(LabelWidth = 5)]
     public class GearItemSlots
     {
+        [HideLabel]
         [SerializeField] GearItem item = null;
         [HideInInspector]
         public GearPiece slotType { get; private set; }
@@ -145,18 +191,16 @@ namespace Items
             this.slotType = slotType;
         }
 
+        public GearItemSlots()
+        {
+
+        }
+
         public bool SetItem(GearItem item)
         {
-            if (item != null)
-            {
-                if (item.slot != slotType)
-                    return false;
-                this.item = item;
-            }
-            else
-            {
-                this.item = null;
-            }
+            if (item != null && item.GetSlotType() != slotType)
+                return false;
+            this.item = item;
             return true;
         }
 

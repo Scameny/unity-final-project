@@ -13,15 +13,28 @@ namespace CardSystem
             card.transform.SetParent(transform);
             currentStack.Add(card);
         }
-
-        public void ClearTemporaryCards()
+        virtual public bool RemoveCard(Card card)
         {
-            throw new System.NotImplementedException();
+            return currentStack.Remove(card);
         }
 
-        virtual public void CreateCard(GameObject user, Usable cardUse, bool temporary, bool oneUse, GameObject cardPrefab)
+        public Card RemoveNextCard()
         {
-            throw new System.NotImplementedException();
+            if (currentStack.Count > 0)
+            {
+                Card card = currentStack[currentStack.Count];
+                currentStack.Remove(card);
+                return card;
+            }
+            return null;
+        }
+
+        virtual public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
+        {
+            GameObject cardGameObject = Instantiate(cardPrefab, transform);
+            Card card = cardGameObject.GetComponent<Card>();
+            card.InitializeCard(cardUse, user, oneUse);
+            card.SetVisibility(false);
         }
 
         public int GetCurrentCardsNumber()
@@ -29,25 +42,21 @@ namespace CardSystem
             return currentStack.Count;
         }
 
-        virtual public Card RemoveCard(Card card)
+        public IEnumerable<Card> GetCards()
         {
-            if (currentStack.Remove(card))
-                return card;
-            else
-                throw new NotValidOperationException("", GetType().Name);
+            foreach (var item in currentStack)
+            {
+                yield return item;
+            }
         }
 
-        public Card RemoveNextCard()
+        public void ClearCards()
         {
-            if (GetCurrentCardsNumber() > 0)
+            while(currentStack.Count != 0)
             {
                 Card card = currentStack[0];
-                currentStack.RemoveAt(0);
-                return card;
-            }
-            else
-            {
-                throw new NotValidOperationException("", GetType().Name);
+                currentStack.Remove(card);
+                Destroy(card.gameObject);
             }
         }
     }

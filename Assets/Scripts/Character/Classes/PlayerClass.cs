@@ -11,6 +11,11 @@ namespace Character.Classes
         {
             return progression.GetExpNeeded(level);
         }
+
+        public int GetMaxLevel()
+        {
+            return progression.GetMaxLevel();
+        }
         // talents
     }
 }

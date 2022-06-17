@@ -1,42 +1,39 @@
-using Items;
-using RotaryHeart.Lib.SerializableDictionary;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
-using Utils;
+using Sirenix.OdinInspector;
+using System;
 
-namespace Items { 
-    [System.Serializable]
+namespace Items {
+    [Serializable]
     public class Inventory
     {
-        public List<Item> gearItems;
-        public List<Item> keyItems;
+        [LabelText("Inventory")]
+        [InlineProperty]
+        public Item[,] items = new Item[8,3];
 
-        public void AddItem(Item item)
+        public void AddItem(Item itemToAdd, int i, int j)
         {
-            switch (item.GetItemType())
-            {
-                case ItemType.Equipable:
-                    gearItems.Add(item);
-                    break;
-                case ItemType.KeyItem:
-                    keyItems.Add(item);
-                    break;
-            }
+            items[i, j] = itemToAdd;
         }
+
+        public void AddItem(Item itemToAdd)
+        {
+            for (int i = 0; i < items.GetLength(0); i++)
+            {
+                for (int j = 0; j < items.GetLength(1); j++)
+                {
+                    if (items[i,j] == null)
+                    {
+                        items[i, j] = itemToAdd;
+                        return;
+                    }
+                }
+            }
+            // inventory full;
+        }
+
 
         public void RemoveItem(Item item)
         {
-            switch (item.GetItemType())
-            {
-                case ItemType.Equipable:
-                    gearItems.Remove(item);
-                    break;
-                case ItemType.KeyItem:
-                    keyItems.Remove(item);
-                    break;
-            }
+           
         }
 
     }
