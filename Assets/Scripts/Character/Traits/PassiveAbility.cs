@@ -77,7 +77,9 @@ namespace Abilities.Passive
     {
         StartOfTurn,
         EndOfTurn,
-        CardPlayed
+        CardDrawed,
+        CardPlayed,
+        DamageReceived
     }
 
 }

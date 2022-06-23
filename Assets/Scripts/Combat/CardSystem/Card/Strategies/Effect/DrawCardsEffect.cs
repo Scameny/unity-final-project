@@ -1,11 +1,11 @@
 using Combat;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Strategies.EffectStrategies
 {
+    [System.Serializable]
     public class DrawCardsEffect : EffectStrategy
     {
         [HideLabel]
@@ -13,7 +13,8 @@ namespace Strategies.EffectStrategies
         [LabelWidth(120)]
         public int numCards;
 
-        public override void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+
+        override public void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
             foreach (var target in targets)
             {

@@ -23,21 +23,22 @@ namespace Character.Character
         [SerializeField] protected Gear gear;
 
 
-        private void Start()
+        override protected void Start()
         {
-
+            base.Start();
             OnGameStart();
         }
 
         private void Update()
         {
-            maxHealth = GetStatistic(StatType.Health);
+            foreach (var item in resources)
+            {
+                item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
+            }
         }
 
         private void OnGameStart()
         {
-            maxHealth = GetStatistic(StatType.Health);
-            currentHealth = GetStatistic(StatType.Health);
             AddAbilityCards(GetAllClassAbilitiesAvaliable());
             AddPassiveAbilities(GetClassPasiveAbilitiesAvaliable());
         }
@@ -99,12 +100,12 @@ namespace Character.Character
         #endregion
 
         #region Stats operations
-        override public float GetStatistic(StatType type)
+        override public int GetStatistic(StatType type)
         {
             return base.GetStatistic(type) + gear.GetAdditiveModifier(type);
         }
 
-        override public float GetSecondaryStatistic(DamageTypeStat type)
+        override public int GetSecondaryStatistic(DamageTypeStat type)
         {
             return base.GetSecondaryStatistic(type) + gear.GetAdditiveModifier(type);
         }
@@ -129,6 +130,10 @@ namespace Character.Character
         {
             level += 1;
             Debug.Log("Level up. Reached level " + level);
+            foreach (var item in resources)
+            {
+                item.currentAmount += characterClass.GetResourceAmount(level, item.resourceType);
+            }
             AddAbilityCards(characterClass.GetAbilitiesOnLevel(level));
             AddPassiveAbilities(characterClass.GetPassiveAbilitiesOnLevel(level));
         }
@@ -194,25 +199,20 @@ namespace Character.Character
         [System.Serializable]
         struct HeroData
         {
-            public string heroClass;
             public int level;
-            public float currentHealth;
+            public int currentHealth;
         }
 
         public void RestoreState(object state)
         {
             HeroData data = (HeroData)state;
-            characterClass = Resources.Load<PlayerClass>(data.heroClass);
             level = data.level;
-            currentHealth = data.currentHealth;
         }
 
         public object CaptureState()
         {
             HeroData data = new HeroData();
-            data.heroClass = characterClass.name;
             data.level = level;
-            data.currentHealth = currentHealth;
             return data;
         }
         #endregion

@@ -44,7 +44,7 @@ namespace Character.Trait
 
 
 
-        public IEnumerable<float> GetAdditiveModifier(DamageTypeStat stat)
+        public IEnumerable<int> GetAdditiveModifier(DamageTypeStat stat)
         {
             foreach (var givenStat in secondaryStatList.stats)
             {
@@ -55,7 +55,7 @@ namespace Character.Trait
             }
         }
 
-        public IEnumerable<float> GetAdditiveModifier(StatType stat)
+        public IEnumerable<int> GetAdditiveModifier(StatType stat)
         {
             foreach (var givenStat in statList.stats)
             {

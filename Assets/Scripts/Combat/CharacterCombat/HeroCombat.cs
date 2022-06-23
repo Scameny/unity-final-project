@@ -23,10 +23,6 @@ namespace Combat
             targetIndex = 0;
             turnSpeed = character.GetStatistic(StatType.Agility);
         }
-        public void StartCoroutine(Action<IEnumerator> coroutine)
-        {
-            StartCoroutine(coroutine);
-        }
 
         override protected void Update()
         {
@@ -34,32 +30,39 @@ namespace Combat
             {
                 CombatManager.combatManager.HeroDeath();
             }
-            else if (prepared)
-            {
-                prepared = false;
-                DrawCard(1);
-                UIManager.manager.ActivateCombatUI(true);
-                CombatManager.combatManager.PauseCombat();
-            }
             base.Update();
         }
 
-        public void EndTurn()
+        public void StartCoroutine(Action<IEnumerator> coroutine)
         {
-            TurnPreparationResume();
+            StartCoroutine(coroutine);
         }
 
-        #region Card operations
-        override protected void InitDeck()
+        public override void TurnPreparationStart()
         {
-            base.InitDeck();
+            base.TurnPreparationStart();
+            UIManager.manager.ActivateCombatUI(true);
+            UIManager.manager.CombatUIInteractable(false);
         }
-        #endregion
 
-        override public void TurnPreparationResume()
+        override public void TurnPreparationStop()
         {
-            stopTurn = false;
+            base.TurnPreparationStop();
+            UIManager.manager.ActivateCombatUI(false);
+        }
+
+        protected override void EndTurn()
+        {
+            base.EndTurn();
+            UIManager.manager.CombatUIInteractable(false);
             CombatManager.combatManager.ResumeCombat();
+        }
+
+        protected override void StartOfTurn()
+        {
+            base.StartOfTurn();
+            UIManager.manager.CombatUIInteractable(true);
+            CombatManager.combatManager.PauseCombat();
         }
 
     }

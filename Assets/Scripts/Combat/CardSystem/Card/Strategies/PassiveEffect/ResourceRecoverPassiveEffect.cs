@@ -2,14 +2,12 @@ using Abilities.Passive;
 using Character.Character;
 using Character.Stats;
 using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Strategies.PassiveEffectStrategies
 {
-    [Serializable]
-
+    [System.Serializable]
     public class ResourceRecoverPassiveEffect : PassiveEffectStrategy
     {
         [LabelWidth(120)]
@@ -17,15 +15,15 @@ namespace Strategies.PassiveEffectStrategies
         [LabelWidth(120)]
         [SerializeField] public ResourceType resourceType;
 
-        public override void Evaluate(PassiveSignal signal, GameObject user, IEnumerable<GameObject> targets)
+        override public void Evaluate(PassiveSignal signal, GameObject user, IEnumerable<GameObject> targets)
         {
-            if (signal.Equals(this.signal))
+            if (signal.Equals(GetPassiveSignal()))
                 EffectActivation(user, targets);
         }
 
-        protected override void EffectActivation(GameObject user, IEnumerable<GameObject> targets)
+        void EffectActivation(GameObject user, IEnumerable<GameObject> targets)
         {
-            user.GetComponent<DefaultCharacter>().GainResource(quantity);
+            user.GetComponent<DefaultCharacter>().GainResource(quantity, resourceType);
         }
     }
 

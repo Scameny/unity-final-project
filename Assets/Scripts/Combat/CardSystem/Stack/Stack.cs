@@ -18,7 +18,7 @@ namespace CardSystem
             return currentStack.Remove(card);
         }
 
-        public Card RemoveNextCard()
+        public Card GetNextCard()
         {
             if (currentStack.Count > 0)
             {
@@ -42,14 +42,6 @@ namespace CardSystem
             return currentStack.Count;
         }
 
-        public IEnumerable<Card> GetCards()
-        {
-            foreach (var item in currentStack)
-            {
-                yield return item;
-            }
-        }
-
         public void ClearCards()
         {
             while(currentStack.Count != 0)
@@ -57,6 +49,21 @@ namespace CardSystem
                 Card card = currentStack[0];
                 currentStack.Remove(card);
                 Destroy(card.gameObject);
+            }
+        }
+
+        public IEnumerable<Card> GetCards()
+        {
+            return currentStack;
+        }
+
+        public IEnumerable<Card> RemoveAllCards()
+        {
+            while(currentStack.Count != 0)
+            {
+                Card card = currentStack[0];
+                currentStack.Remove(card);
+                yield return card;
             }
         }
     }

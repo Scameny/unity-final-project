@@ -8,7 +8,7 @@ namespace CardSystem
     {
         public bool RemoveCard(Card card);
 
-        public Card RemoveNextCard();
+        public Card GetNextCard();
 
         public void AddCard(Card card);
 
@@ -17,6 +17,8 @@ namespace CardSystem
         public int GetCurrentCardsNumber();
 
         public IEnumerable<Card> GetCards();
+
+        public IEnumerable<Card> RemoveAllCards();
 
         public void ClearCards();
     }

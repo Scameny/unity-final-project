@@ -40,10 +40,10 @@ namespace Items
         /// <summary>
         /// Return the value given by gear of the specific stat
         /// </summary>
-        public float GetAdditiveModifier(StatType stat)
+        public int GetAdditiveModifier(StatType stat)
         {
             GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
-            float value = 0;
+            int value = 0;
             foreach (var slot in items)
             {
                 if (slot.GetItem() != null) { 
@@ -59,10 +59,10 @@ namespace Items
         /// <summary>
         /// Return the value given by gear of the specific stat
         /// </summary
-        public float GetAdditiveModifier(DamageTypeStat stat)
+        public int GetAdditiveModifier(DamageTypeStat stat)
         {
             GearItemSlots[] items = new GearItemSlots[7] { head, chest, legs, weapon, gloves, firstRing, secondRing };
-            float value = 0;
+            int value = 0;
             foreach (var slot in items)
             {
                 if (slot.GetItem() != null)

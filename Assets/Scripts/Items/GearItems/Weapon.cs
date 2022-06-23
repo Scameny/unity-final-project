@@ -24,10 +24,10 @@ namespace Items
         [System.Serializable]
         public class AttackDamage
         {
-            public float minimAttack;
-            public float maxAttack;
+            public int minimAttack;
+            public int maxAttack;
             public StatType scalingStat;
-            public float scaleCoef;
+            public int scaleCoef;
             public DamageType damageType;
         }
     }

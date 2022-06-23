@@ -15,6 +15,6 @@ namespace Character.Stats
         [HideInInspector]
         public StatType statType;
         [LabelText("$statType"), LabelWidth(150)]
-        public float amount;
+        public int amount;
     }
 }

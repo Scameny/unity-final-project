@@ -5,7 +5,6 @@ using Character.Character;
 using CardSystem;
 using Abilities.Passive;
 using System;
-using System.Collections.Generic;
 
 namespace Combat
 {
@@ -22,16 +21,10 @@ namespace Combat
         [SerializeField] protected CardSystem.Stack stack;
         public GameObject cardPrefab;
 
-        [Header("UI Elements")]
-        public Slider healthBar;
-        public GameObject selector;
 
         [HideInInspector]
         protected DefaultCharacter character = null;
 
-
-        protected PassiveManager passiveManager = new PassiveManager();
-        protected bool prepared = false;
         protected float turnSpeed;
         protected float turnTime;
         protected bool stopTurn;
@@ -40,7 +33,6 @@ namespace Combat
 
         private void OnEnable()
         {
-            EnableHealthBar(true);
             InitDeck();
             DrawInitialHand();
             TurnPreparationStart();
@@ -49,7 +41,6 @@ namespace Combat
 
         private void OnDisable()
         {
-            EnableHealthBar(false);
             TurnPreparationStop();
             ClearCards();
         }
@@ -57,7 +48,6 @@ namespace Combat
         virtual protected void Update()
         {
             EvaluateTraits();
-            UpdateHealthBar();
         }
 
         public DefaultCharacter GetCharacter()
@@ -71,23 +61,16 @@ namespace Combat
         {
             foreach (var item in character.GetCurrentPassiveAbilities())
             {
-                IDisposable disposable = passiveManager.Subscribe(item);
+                IDisposable disposable = character.passiveManager.Subscribe(item);
                 item.SetDisposable(disposable);
             }
         }
 
         protected void SendPassiveData(PassiveSignal signal)
         {
-            passiveManager.SendData(signal, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+            character.passiveManager.SendData(signal, gameObject, CombatManager.combatManager.GetCharactersInCombat());
         }
        
-        #endregion
-
-        #region Health operations
-        public void TakeDamage(float damage, DamageType type)
-        {
-            character.TakeDamage(damage, type);
-        }
         #endregion
 
         #region Card operations
@@ -107,6 +90,7 @@ namespace Combat
                 try
                 {
                     Card card = deck.DrawCard();
+                    character.passiveManager.SendData(PassiveSignal.CardDrawed, gameObject, CombatManager.combatManager.GetCharactersInCombat());
                     if (hand.GetCurrentCardsNumber() < 10)
                         hand.AddCard(card);
                     else
@@ -121,10 +105,9 @@ namespace Combat
 
         private void RechargeDeck()
         {
-            foreach (var card in stack.GetCards())
+            foreach (var item in stack.RemoveAllCards())
             {
-                stack.RemoveCard(card);
-                deck.AddCard(card);
+                deck.AddCard(item);
             }
             TurnPreparationResume();
         }
@@ -169,14 +152,14 @@ namespace Combat
         #endregion
 
         #region Turn management
-        public void TurnPreparationStart()
+        virtual public void TurnPreparationStart()
         {
             turnTime = 0.0f;
             stopTurn = false;
             StartCoroutine(nameof(TurnPreparation));
         }
 
-        public virtual void TurnPreparationResume()
+        public void TurnPreparationResume()
         {
             stopTurn = false;
         }
@@ -186,9 +169,23 @@ namespace Combat
             stopTurn = true;
         }
 
-        public void TurnPreparationStop()
+        virtual public void TurnPreparationStop()
         {
             StopCoroutine(nameof(TurnPreparation));
+        }
+
+        virtual protected void StartOfTurn()
+        {
+            DrawCard(1);
+            character.passiveManager.SendData(PassiveSignal.StartOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+            stopTurn = true;
+            turnTime = 0;
+        }
+
+        virtual protected void EndTurn()
+        {
+            character.passiveManager.SendData(PassiveSignal.EndOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+            TurnPreparationResume();
         }
 
         protected IEnumerator TurnPreparation()
@@ -204,9 +201,7 @@ namespace Combat
                     }
                     else
                     {
-                        prepared = true;
-                        stopTurn = true;
-                        turnTime = 0;
+                        StartOfTurn();
                     }
                 }
                 yield return new WaitForSeconds(0.05f);                
@@ -214,21 +209,5 @@ namespace Combat
             
         }
         #endregion
-
-        #region UI Management
-        protected void EnableHealthBar(bool enable)
-        {
-            healthBar.gameObject.SetActive(true);
-        }
-
-
-        protected void UpdateHealthBar()
-        {
-            healthBar.maxValue = character.GetMaxHealth();
-            healthBar.value = character.GetCurrentHealth();
-        }
-        #endregion
-
     }
-
 }

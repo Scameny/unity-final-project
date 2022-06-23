@@ -11,13 +11,13 @@ namespace Strategies.FilterStrategies
     {
         [TypeFilter("GetFilteredFilterStrategyList")]
         [ListDrawerSettings(Expanded = true)]
-        [SerializeField] public List<FilterStrategy> filterStrategies = new List<FilterStrategy>();
+        [SerializeReference] public List<IFilterStrategy> filterStrategies = new List<IFilterStrategy>();
 
         public IEnumerable<Type> GetFilteredFilterStrategyList()
         {
-            var q = typeof(FilterStrategy).Assembly.GetTypes()
+            var q = typeof(IFilterStrategy).Assembly.GetTypes()
                 .Where(x => !x.IsAbstract)                                          // Excludes BaseClass
-                .Where(x => typeof(FilterStrategy).IsAssignableFrom(x));                 // Excludes classes not inheriting from BaseClass
+                .Where(x => typeof(IFilterStrategy).IsAssignableFrom(x));                 // Excludes classes not inheriting from BaseClass
             return q;
         }
 

@@ -17,21 +17,63 @@ MonoBehaviour:
   fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   fontStyles:
-  - tag: '@'
-    color: {r: 0.26216495, g: 0.4245283, b: 0.22628158, a: 0}
+  - tag: '@Common@'
+    color: {r: 1, g: 1, b: 1, a: 0}
     bold: 1
     italic: 0
     underline: 0
     strikethrough: 0
-  - tag: ~
-    color: {r: 0.8095313, g: 0.8207547, b: 0.26713243, a: 0}
+  - tag: '@Rare@'
+    color: {r: 0.12726949, g: 0.220961, b: 0.41509432, a: 0}
     bold: 1
     italic: 0
     underline: 0
     strikethrough: 0
-  - tag: /
-    color: {r: 0.26666662, g: 0.29124516, b: 0.81960785, a: 0}
+  - tag: '@Epic@'
+    color: {r: 0.23490968, g: 0.06020826, b: 0.31132078, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Legendary@'
+    color: {r: 0.735849, g: 0.48081273, b: 0.05900677, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@statistic@'
+    color: {r: 0.030081892, g: 0.49056602, b: 0.0625866, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Mana@'
+    color: {r: 0.1794081, g: 0.16540584, b: 0.5566038, a: 0}
     bold: 0
-    italic: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@break@'
+    color: {r: 1, g: 1, b: 1, a: 0}
+    bold: 0
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@FireDamage@'
+    color: {r: 0.745283, g: 0.3042631, b: 0.23553754, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@PhysicDamage@'
+    color: {r: 1, g: 1, b: 1, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Intelect@'
+    color: {r: 0.6363475, g: 0.79722613, b: 0.9433962, a: 0}
+    bold: 0
+    italic: 0
     underline: 0
     strikethrough: 0

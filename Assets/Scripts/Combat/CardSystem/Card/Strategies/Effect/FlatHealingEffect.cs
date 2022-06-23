@@ -5,12 +5,13 @@ using UnityEngine;
 
 namespace Strategies.EffectStrategies
 {
+    [System.Serializable]
     public class FlatHealingEffect : EffectStrategy
     {
         [LabelWidth(120)]
-        [SerializeField] public float healing;
+        [SerializeField] public int healing;
 
-        public override void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override public void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
             foreach (var target in targets)
             {

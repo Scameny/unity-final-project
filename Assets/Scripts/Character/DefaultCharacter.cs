@@ -8,6 +8,9 @@ using CardSystem;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Abilities.Passive;
+using Combat;
+using System.Linq;
+using UI;
 
 namespace Character.Character 
 {
@@ -15,23 +18,10 @@ namespace Character.Character
     {
         [SerializeField] protected CharacterClass characterClass;
 
-        [Header("Heal")]
-        [TabGroup("General")]
-        [LabelText("Current health")]
-        [SerializeField] protected float currentHealth;
+        protected Resource health;
 
         [TabGroup("General")]
-        [LabelText("Max health")]
-        [SerializeField] protected float maxHealth;
-
-        [Header("@GetResourceType().ToString()")]
-        [TabGroup("General")]
-        [LabelText("Current resource")]
-        [SerializeField] protected float currentResource;
-
-        [TabGroup("General")]
-        [LabelText("Max resource")]
-        [SerializeField] protected float maxResource;
+        [SerializeField] protected List<Resource> resources = new List<Resource>();
 
 
         [Header("Level")]
@@ -46,12 +36,28 @@ namespace Character.Character
         [TabGroup("Passive abilities")]
         [SerializeField] protected List<Passive> permanentPassiveAbilities = new List<Passive>();
 
+        [HideInInspector]
+        public PassiveManager passiveManager;
+
+        CharacterUI characterUI;
+
         bool isDead;
         protected Traits traits;
 
         private void Awake()
         {
             traits = GetComponent<Traits>();
+            characterUI = GetComponentInChildren<CharacterUI>();
+        }
+
+        virtual protected void Start()
+        {
+            passiveManager = new PassiveManager();
+            health = new Resource();
+            health.resourceType = ResourceType.Health;
+            health.maxResource = GetStatistic(StatType.Health);
+            health.currentAmount = GetStatistic(StatType.Health);
+            InitializeResources();
         }
 
         #region Abilities operations
@@ -115,17 +121,17 @@ namespace Character.Character
         }
 
 
-        public virtual float GetStatistic(StatType type)
+        public virtual int GetStatistic(StatType type)
         {
             return characterClass.GetStatistic(type, level) + traits.GetAdditiveModifier(type);
         }
 
-        public virtual float GetSecondaryStatistic(DamageTypeStat type)
+        public virtual int GetSecondaryStatistic(DamageTypeStat type)
         {
             return traits.GetAdditiveModifier(type);
         }
 
-        protected float GetOffensiveStatViaDamageType(DamageType damageType)
+        protected int GetOffensiveStatViaDamageType(DamageType damageType)
         {
             switch (damageType)
             {
@@ -147,7 +153,7 @@ namespace Character.Character
             throw new KeyValueMissingException(damageType.ToString(), this.name);
         }
 
-        protected float GetDefensiveSecondaryStatViaDamageType(DamageType damageType)
+        protected int GetDefensiveSecondaryStatViaDamageType(DamageType damageType)
         {
             switch (damageType)
             {
@@ -169,36 +175,82 @@ namespace Character.Character
             throw new KeyValueMissingException(damageType.ToString(), this.name);
         }
 
-        protected float ProcessDamageReceived(float damage, DamageType damageType)
+        protected int ProcessDamageReceived(int damage, DamageType damageType)
         {
             return Mathf.Max(0, damage - GetDefensiveSecondaryStatViaDamageType(damageType));
         }
 
-        public float ProcessDamageDone(float damage, DamageType damageType)
+        public int ProcessDamageDone(int damage, DamageType damageType)
         {
             return damage + GetOffensiveStatViaDamageType(damageType);
         }
 
         public void UseResource(int resource, ResourceType resourceType)
         {
-            currentResource -= resource;    
+            if (HaveEnoughResource(resource, resourceType))
+            {
+                GetResourceByResourceType(resourceType).currentAmount -= resource;
+                characterUI.ProcessModifyResourceText(resourceType, -resource, gameObject);
+            }
+            else
+            {
+                throw new NotEnoughResourceException(resourceType);
+            }
+        }
+
+        protected void InitializeResources()
+        {
+            foreach (var item in characterClass.GetResourceTypes())
+            {
+                Resource resource = new Resource();
+                resource.resourceType = item;
+                resource.maxResource = characterClass.GetMaxResourceAmount(level, item);
+                resource.currentAmount = resource.maxResource;
+                resources.Add(resource);
+            }
+            resources.Add(health);
         }
 
         public bool HaveEnoughResource(int resourceAmount, ResourceType resourceType)
         {
-            Debug.Log("Comprobando que tienes recursos coste:" + resourceAmount + " Mana actual : " + currentResource);
-            return resourceAmount < currentResource;
+            return GetResourceByResourceType(resourceType).currentAmount >= resourceAmount;
         }
 
-        public ResourceType GetResourceType()
+
+        public IEnumerable<ResourceType> GetResourceType()
         {
-            return characterClass.GetResourceType();
+            return characterClass.GetResourceTypes();
         }
 
-        public void GainResource(int amount) 
+        public void GainResource(int amount, ResourceType resourceType) 
         {
-            currentResource += amount;
-            currentResource = Mathf.Min(currentResource, maxResource);
+            Resource resource = GetResourceByResourceType(resourceType);
+            resource.currentAmount += amount;
+            characterUI.ProcessModifyResourceText(resourceType, amount, gameObject);
+            resource.currentAmount = Mathf.Min(resource.currentAmount, resource.maxResource);
+        }
+
+
+        protected Resource GetResourceByResourceType(ResourceType resourceType)
+        {
+            if (resources.Any(r => r.resourceType.Equals(resourceType)))
+            {
+                return resources.Find(r => r.resourceType.Equals(resourceType));
+            }
+            else
+            {
+                throw new NotResourceTypeClassException();
+            }
+        }
+
+        public int GetCurrentResource(ResourceType resourceType) 
+        {
+            return GetResourceByResourceType(resourceType).currentAmount;   
+        }
+
+        public int GetMaxValueOfResource(ResourceType resourceType)
+        {
+            return GetResourceByResourceType(resourceType).maxResource;
         }
 
         #endregion
@@ -209,21 +261,23 @@ namespace Character.Character
             return isDead;
         }
 
-        public void TakeDamage(float damage, DamageType type)
+        public void TakeDamage(int damage, DamageType type, GameObject DamageDealer)
         {
-            damage = Mathf.Ceil(ProcessDamageReceived(damage, type));
-            currentHealth -= damage;
+            damage = ProcessDamageReceived(damage, type);
+            health.currentAmount -= damage;
+            characterUI.ProcessModifyResourceText(ResourceType.Health, -damage, gameObject);
             GameDebug.Instance.Log(Color.blue, gameObject.name + " taking " + damage + " damage");
-            if (currentHealth <= 0)
+            if (health.currentAmount <= 0)
                 Die();
         }
 
-        public void Heal(float healAmount)
+        public void Heal(int healAmount)
         {
-            currentHealth += healAmount;
+            health.currentAmount += healAmount;
+            characterUI.ProcessModifyResourceText(ResourceType.Health, healAmount, gameObject);
             GameDebug.Instance.Log(Color.green, gameObject.name + " was healed for " + healAmount + " points");
-            if (currentHealth > maxHealth)
-                currentHealth = maxHealth;
+            if (health.currentAmount > health.maxResource)
+                health.currentAmount = health.maxResource;
         }
 
         private void Die()
@@ -236,15 +290,25 @@ namespace Character.Character
 
         public float GetCurrentHealth()
         {
-            return currentHealth;
+            return health.currentAmount;
         }
 
         public float GetMaxHealth()
         {
-            return maxHealth;
+            return health.maxResource;
         }
         #endregion
 
+    }
+
+    public class Resource
+    {
+        [LabelText("Resource type")]
+        public ResourceType resourceType;
+        [LabelText("Current resource")]
+        public int currentAmount;
+        [LabelText("Max resource")]
+        public int maxResource;
     }
 
 }

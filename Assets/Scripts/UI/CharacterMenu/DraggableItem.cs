@@ -79,7 +79,10 @@ namespace UI
         private void EnableTooltip()
         {
             tooltip.enabled = true;
-            tooltip.infoLeft = item.name + "\n";
+            tooltip.infoLeft = item.GetName() + "\n\n" + ((item.GetItemType() == ItemType.Equipable) ? 
+                                                            ((GearItem) item).GetTooltipText() 
+                                                            : "");
+            tooltip.infoRight = (item.GetItemType() == ItemType.Equipable) ? ((GearItem) item).GetSlotType().ToString() : ""; 
         }
 
         private void DisableTooltip()

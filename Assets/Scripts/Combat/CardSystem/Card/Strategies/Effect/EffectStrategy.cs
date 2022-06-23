@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Strategies.EffectStrategies
 
 {
+    [Serializable]
     public abstract class EffectStrategy
     {
-        public abstract void StartEffect(GameObject user, IEnumerable<GameObject> targets);
+        abstract public void StartEffect(GameObject user, IEnumerable<GameObject> targets);
     }
 }

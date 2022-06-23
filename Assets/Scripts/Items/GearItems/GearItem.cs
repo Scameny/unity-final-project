@@ -32,7 +32,7 @@ namespace Items
         [SerializeField] List<Passive> passiveAbilities = new List<Passive>();
 
 
-        public IEnumerable<float> GetAdditiveModifier(DamageTypeStat stat)
+        public IEnumerable<int> GetAdditiveModifier(DamageTypeStat stat)
         {
             foreach (var givenStat in secondaryStatList.stats)
             {
@@ -43,7 +43,7 @@ namespace Items
             }
         }
 
-        public IEnumerable<float> GetAdditiveModifier(StatType stat)
+        public IEnumerable<int> GetAdditiveModifier(StatType stat)
         {
             foreach (var givenStat in statList.stats)
             {
@@ -81,6 +81,31 @@ namespace Items
                 yield return item;
             }
         }
+
+        public string GetTooltipText()
+        {
+            string statText = "@statistic@";
+            foreach (var item in statList.stats)
+            {
+                statText += "+ " + item.amount + " " + item.statType.ToString() + "@statistic@\n";
+            }
+            foreach (var item in secondaryStatList.stats)
+            {
+                statText += "+ " + item.amount + " " + item.statType.ToString() + "@statistic@\n";
+            }
+            statText += "@break@\n";
+            foreach (var item in abilitiesGiven)
+            {
+                statText += "Equip: (" + item.quantity + ") " + item.usable.GetName() + " - " + item.usable.GetDescription() + "\n";
+            }
+            foreach (var item in passiveAbilities)
+            {
+                statText += "Equip: " + item.passiveAbility.GetName() + " - " + item.passiveAbility.GetDescription() + "\n";
+            }
+
+
+            return statText;
+        }
     }
 
 
@@ -98,7 +123,7 @@ namespace Items
         [HideInInspector]
         public DamageTypeStat statType;
         [LabelText("$statType"), LabelWidth(150)]
-        public float amount;
+        public int amount;
     }
 
 

@@ -23,9 +23,9 @@ namespace Character.Trait
         [TabGroup("UI")]
         public GameObject traitMenu, traitUI;
 
-        public float GetAdditiveModifier(DamageTypeStat stat)
+        public int GetAdditiveModifier(DamageTypeStat stat)
         {
-            float value = 0;
+            int value = 0;
             foreach (var trait in currentTraits.Values)
             {
                 foreach (var givenStat in trait.trait.GetAdditiveModifier(stat))
@@ -36,9 +36,9 @@ namespace Character.Trait
             return value;
         }
 
-        public float GetAdditiveModifier(StatType stat)
+        public int GetAdditiveModifier(StatType stat)
         {
-            float value = 0;
+            int value = 0;
             foreach (var trait in currentTraits.Values)
             {
                 foreach (var givenStat in trait.trait.GetAdditiveModifier(stat))

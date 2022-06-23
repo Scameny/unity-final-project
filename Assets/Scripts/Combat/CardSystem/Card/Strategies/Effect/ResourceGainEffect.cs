@@ -1,20 +1,24 @@
 using Character.Character;
 using Character.Stats;
-using System.Collections;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Strategies.EffectStrategies
 {
+    [System.Serializable]
     public class ResourceGainEffect : EffectStrategy
     {
+        [LabelWidth(120)]
         public ResourceType resourceType;
+        [LabelWidth(120)]
         public int amount;
 
-        public override void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override public void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
-            if (user.GetComponent<DefaultCharacter>().GetResourceType() == resourceType)
-                user.GetComponent<DefaultCharacter>().GainResource(amount);
+            if (user.GetComponent<DefaultCharacter>().GetResourceType().Contains(resourceType))
+                user.GetComponent<DefaultCharacter>().GainResource(amount, resourceType);
         }
     }
 }

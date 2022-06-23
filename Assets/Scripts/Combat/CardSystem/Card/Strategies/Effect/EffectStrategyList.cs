@@ -1,5 +1,4 @@
 using Sirenix.OdinInspector;
-using Strategies.EffectStrategies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,8 @@ namespace Strategies.EffectStrategies
     {
         [TypeFilter("GetFilteredEffectStrategyList")]
         [ListDrawerSettings(Expanded = true)]
-        [SerializeField] public List<EffectStrategy> effectStrategies = new List<EffectStrategy>();
+        [SerializeReference] public List<EffectStrategy> effectStrategies = new List<EffectStrategy>();
+
 
         public IEnumerable<Type> GetFilteredEffectStrategyList()
         {

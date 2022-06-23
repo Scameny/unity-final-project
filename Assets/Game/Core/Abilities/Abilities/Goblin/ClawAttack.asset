@@ -27,56 +27,9 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: filterStrategies
-      Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[Strategies.FilterStrategies.FilterStrategy,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 2|Strategies.FilterStrategies.TagFilter, Assembly-CSharp
-    - Name: tagToFilter
-      Entry: 1
-      Data: Player
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: effectStrategies
-      Entry: 7
-      Data: 3|System.Collections.Generic.List`1[[Strategies.EffectStrategies.EffectStrategy,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 4|Strategies.EffectStrategies.FlatDamageEffect, Assembly-CSharp
-    - Name: damage
-      Entry: 4
-      Data: 3
-    - Name: damageType
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: resourceCosts
       Entry: 7
-      Data: 5|System.Collections.Generic.List`1[[CardSystem.ResourceCost, Assembly-CSharp]],
+      Data: 1|System.Collections.Generic.List`1[[CardSystem.ResourceCost, Assembly-CSharp]],
         mscorlib
     - Name: 
       Entry: 12
@@ -86,10 +39,10 @@ MonoBehaviour:
       Data: CardSystem.ResourceCost, Assembly-CSharp
     - Name: resourceType
       Entry: 3
-      Data: 1
+      Data: 2
     - Name: amount
       Entry: 3
-      Data: 3
+      Data: 6
     - Name: 
       Entry: 8
       Data: 
@@ -101,5 +54,23 @@ MonoBehaviour:
       Data: 
   sprite: {fileID: 21300000, guid: 030d61925e2f98f4d86e171153ec39e1, type: 3}
   Name: Claw attack
-  description: Attack with it's claws doing @physicDamage@ 3 points of physic damage 
+  description: Attack with it's claws doing @PhysicDamage@ 3 points of physic damage 
     @physicDamage@
+  filterStrategiesList:
+    filterStrategies:
+    - id: 0
+  effectStrategiesList:
+    effectStrategies:
+    - id: 1
+  cardEffects: 00000000
+  references:
+    version: 1
+    00000000:
+      type: {class: TagFilter, ns: Strategies.FilterStrategies, asm: Assembly-CSharp}
+      data:
+        tagToFilter: Player
+    00000001:
+      type: {class: FlatDamageEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        damage: 2
+        damageType: 0

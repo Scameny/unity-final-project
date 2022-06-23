@@ -36,7 +36,7 @@ namespace Character.Stats
             toRet += baseStats.maxCards;
             for (int i = 0; i < level; i++)
             {
-                toRet += progression[level - 1].newSlotsHand;
+                toRet += progression[i].newSlotsHand;
             }
             return toRet; ;
         }
@@ -81,6 +81,26 @@ namespace Character.Stats
             }
         }
 
+        public int GetMaxResourceQuantity(int level, ResourceType resourceType)
+        {
+            int quantity = baseStats.stats.GetResourceAmount(resourceType);
+            for (int i = 0; i < level; i++)
+            {
+                quantity += progression[i].stats.GetResourceAmount(resourceType);
+            }
+            return quantity;
+        }
+
+        public int GetResourceQuantityOnLevel(int level, ResourceType resourceType)
+        {
+            return progression[level - 1].stats.GetResourceAmount(resourceType);
+        }
+
+        public IEnumerable<ResourceType> GetResourceTypes()
+        {
+            return baseStats.stats.GetResourceTypes();
+        }
+
         public int GetMaxLevel()
         {
             return progression.Count;
@@ -115,16 +135,18 @@ namespace Character.Stats
             [LabelWidth(120)]
             public int intelect;
             [HorizontalGroup("Top/Statistic/Bottom")]
-            public int resourceAmount;
+
+            [Space(15)]
+            public List<ResourceAmount> resources = new List<ResourceAmount>();
 
 
             [Space(15)]
             [ListDrawerSettings(Expanded = true)]
-            public List<UsableCard> abilities;
+            public List<UsableCard> abilities = new List<UsableCard>();
 
             [Space(15)]
             [ListDrawerSettings(Expanded = true)]
-            public List<Passive> passives;
+            public List<Passive> passives = new List<Passive>();
 
 
             public int GetStatistic(StatType type)
@@ -164,6 +186,26 @@ namespace Character.Stats
                     yield return item;
                 }
             }
+
+            public int GetResourceAmount(ResourceType resourceType)
+            {
+                if (ResourceType.Health.Equals(resourceType))
+                    return GetStatistic(StatType.Health);
+                foreach (var item in resources)
+                {
+                    if (item.resourceType.Equals(resourceType))
+                        return item.amount;
+                }
+                return 0;
+            }
+
+            public IEnumerable<ResourceType> GetResourceTypes()
+            {
+                foreach (var item in resources)
+                {
+                    yield return item.resourceType;
+                }
+            }
         }
 
         [System.Serializable]
@@ -190,6 +232,20 @@ namespace Character.Stats
             public int expNextLevel;
             [HideInInspector]
             public string label;
+        }
+
+
+        [System.Serializable]
+        public struct ResourceAmount
+        {
+            public ResourceAmount(ResourceType resourceType)
+            {
+                this.resourceType = resourceType;
+                amount = 0;
+            }
+
+            public ResourceType resourceType;
+            public int amount;
         }
     }
 

@@ -20,7 +20,9 @@ MonoBehaviour:
         agility: 1
         defense: 1
         intelect: 2
-        resourceAmount: 10
+        resources:
+        - resourceType: 0
+          amount: 10
         abilities:
         - usable: {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
           quantity: 4
@@ -36,7 +38,9 @@ MonoBehaviour:
         agility: 0
         defense: 1
         intelect: 1
-        resourceAmount: 4
+        resources:
+        - resourceType: 0
+          amount: 0
         abilities: []
         passives: []
       newSlotsHand: 0
@@ -48,7 +52,9 @@ MonoBehaviour:
         agility: 1
         defense: 0
         intelect: 2
-        resourceAmount: 6
+        resources:
+        - resourceType: 0
+          amount: 4
         abilities:
         - usable: {fileID: 11400000, guid: ef524300efb6ad046851336b2f800589, type: 2}
           quantity: 2
@@ -64,7 +70,9 @@ MonoBehaviour:
         agility: 0
         defense: 1
         intelect: 2
-        resourceAmount: 6
+        resources:
+        - resourceType: 0
+          amount: 3
         abilities: []
         passives: []
       newSlotsHand: 0
@@ -76,10 +84,11 @@ MonoBehaviour:
         agility: 1
         defense: 1
         intelect: 2
-        resourceAmount: 8
+        resources:
+        - resourceType: 0
+          amount: 4
         abilities: []
         passives: []
       newSlotsHand: 1
       expNextLevel: 80
       label: Level 4
-  resourceType: 0

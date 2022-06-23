@@ -55,3 +55,13 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: d458d6401a9a38b4f995aac2a582e498, type: 3}
   Name: Serenity of Fire
   description: Infuse the mage mind with fire and draw 2 cards
+  effectStrategiesList:
+    effectStrategies:
+    - id: 0
+  cardEffects: 
+  references:
+    version: 1
+    00000000:
+      type: {class: DrawCardsEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        numCards: 2

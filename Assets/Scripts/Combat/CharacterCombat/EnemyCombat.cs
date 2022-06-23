@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 using Character.Stats;
 using Character.Character;
 using CardSystem;
@@ -7,9 +8,7 @@ namespace Combat
 {
     public class EnemyCombat : TurnCombat
     {
-        HeroCombat target;
         // Data of the enemy class , level, etc..
-
 
         private void Awake()
         {
@@ -18,7 +17,6 @@ namespace Combat
 
         private void Start()
         {
-            target = GameObject.FindGameObjectWithTag("Player").GetComponent<HeroCombat>();
             turnSpeed = character.GetStatistic(StatType.Agility);
         }
 
@@ -29,14 +27,13 @@ namespace Combat
             {
                 CombatManager.combatManager.EnemyDeath(this);
             }
-            if (prepared)
-            {
-                prepared = false;
-                TurnPreparationPause();
-                DrawCard(1);
-                UseCard();
-            }
             base.Update();
+        }
+
+        protected override void StartOfTurn()
+        {
+            base.StartOfTurn();
+            EnemyIA();
         }
 
         #region Cards operations
@@ -46,16 +43,40 @@ namespace Combat
             base.InitDeck();
         }
 
-        private void UseCard()
+        private void EnemyIA()
         {
-            try
-            {
-                Card card = hand.RemoveNextCard();
-                card.UseCard();
-            } catch (EmptyCardContainerException e) 
-            {
-                TurnPreparationResume();
+            while(hand.GetCurrentCardsNumber() > 0)
+            {            
+                try
+                {
+                    UseCard(hand.GetNextCard());
+                }
+                catch (NotEnoughResourceException e)
+                {
+                    break;
+                }
             }
+            EndTurn();
+        }
+
+        private Card SearchCardOfType(CardEffectType effectType)
+        {
+            foreach (var item in hand.GetCards())
+            {
+                if (item.GetCardEffect().Any(e => e.Equals(effectType)))
+                {
+                    if (item.GetResourceCost().All(r => character.GetResourceType().Contains(r.resourceType)))
+                        return item;
+                }
+                    
+            }
+            return null;
+        }
+
+        private void UseCard(Card card)
+        {
+            hand.RemoveCard(card);
+            card.UseCard();
         }
         #endregion
     }

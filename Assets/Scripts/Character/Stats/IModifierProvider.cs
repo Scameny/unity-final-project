@@ -7,9 +7,9 @@ namespace Character.Stats
 {
     public interface IModifierProvider
     {
-        IEnumerable<float> GetAdditiveModifier(StatType stat);
+        IEnumerable<int> GetAdditiveModifier(StatType stat);
 
-        IEnumerable<float> GetAdditiveModifier(DamageTypeStat stat);
+        IEnumerable<int> GetAdditiveModifier(DamageTypeStat stat);
 
     }
 

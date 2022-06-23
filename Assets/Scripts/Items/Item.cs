@@ -48,7 +48,8 @@ namespace Items
 
         public string GetName()
         {
-            return Name;
+            return "@" + GetItemRarity().ToString() +
+                "@" + Name + "@" + GetItemRarity().ToString() + "@";
         }
     }
 

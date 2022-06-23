@@ -1,18 +1,20 @@
 using Abilities.Passive;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Strategies.PassiveEffectStrategies
 {
+    [System.Serializable]
     public abstract class PassiveEffectStrategy
     {
-        protected PassiveSignal signal;
 
-        abstract public void Evaluate(PassiveSignal signal, GameObject user, IEnumerable<GameObject> targets);
+        [SerializeField] PassiveSignal passiveSignal;
+        public abstract void Evaluate(PassiveSignal signal, GameObject user, IEnumerable<GameObject> targets);
 
-        abstract protected void EffectActivation(GameObject user, IEnumerable<GameObject> targets);
+        public PassiveSignal GetPassiveSignal()
+        {
+            return passiveSignal;
+        }
     }
 
 }

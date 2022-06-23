@@ -18,7 +18,7 @@ namespace CardSystem
         {
             return currentDeck.Remove(card);
         }
-        public Card RemoveNextCard()
+        public Card GetNextCard()
         {
             if (currentDeck.Count > 0)
             {
@@ -75,6 +75,11 @@ namespace CardSystem
                 currentDeck.Remove(card);
                 Destroy(card.gameObject);
             }
+        }
+
+        public IEnumerable<Card> RemoveAllCards()
+        {
+            throw new System.NotImplementedException();
         }
     }
     static class ShuffleClass

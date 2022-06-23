@@ -18,12 +18,11 @@ namespace CardSystem
             else
                 return false;
         }
-        public Card RemoveNextCard()
+        public Card GetNextCard()
         {
             if (currentHand.Count > 0)
             {
                 Card card = currentHand[currentHand.Count - 1];
-                currentHand.Remove(card);
                 return card;
             }
             throw new EmptyCardContainerException(GetType().Name);
@@ -65,6 +64,11 @@ namespace CardSystem
                 currentHand.Remove(card);
                 Destroy(card.gameObject);
             }
+        }
+
+        public IEnumerable<Card> RemoveAllCards()
+        {
+            throw new System.NotImplementedException();
         }
     }
 

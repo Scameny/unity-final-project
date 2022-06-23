@@ -20,9 +20,15 @@ MonoBehaviour:
     stats:
     - statType: 1
       amount: 2
+    - statType: 3
+      amount: 1
   secondaryStatList:
     stats:
     - statType: 1
       amount: 2
-  abilitiesGiven: []
+  abilitiesGiven:
+  - usable: {fileID: 11400000, guid: 6b91e06bea894914587f3a8cc01fdd86, type: 2}
+    quantity: 1
+  passiveAbilities:
+  - passiveAbility: {fileID: 11400000, guid: 3f0da193c38d40d449751a86e259e628, type: 2}
   slot: 0

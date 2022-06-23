@@ -12,19 +12,18 @@ namespace Character.Character
 
         public bool isDead { get; private set; }
 
-        private void Start()
+        override protected void Start()
         {
-            currentHealth = GetStatistic(StatType.Health);
-            maxHealth = currentHealth;
+            base.Start();
             LoadAbilities();
         }
 
-        override public float GetStatistic(StatType type)
+        override public int GetStatistic(StatType type)
         {
             return base.GetStatistic(type);
         }
 
-        override public float GetSecondaryStatistic(DamageTypeStat type)
+        override public int GetSecondaryStatistic(DamageTypeStat type)
         {
             return base.GetSecondaryStatistic(type);
         }

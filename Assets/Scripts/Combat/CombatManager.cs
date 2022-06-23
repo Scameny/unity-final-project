@@ -122,7 +122,7 @@ public class CombatManager : MonoBehaviour
         foreach (var enemy in enemies)
         {
             enemy.SetActive(true);
-            enemy.GetComponent<TurnCombat>().GetCharacter().Heal(999.0f);
+            enemy.GetComponent<TurnCombat>().GetCharacter().Heal(999);
         }
     }
     #endregion

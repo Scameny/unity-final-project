@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Strategies.FilterStrategies
 {
-    public class TagFilter : FilterStrategy
+    public class TagFilter : IFilterStrategy
     {
         [LabelWidth(90)]
         public string tagToFilter;
 
-        public override IEnumerable<GameObject> Filter(IEnumerable<GameObject> objectsToFilter)
+        public IEnumerable<GameObject> Filter(IEnumerable<GameObject> objectsToFilter)
         {
             foreach (var gameObject in objectsToFilter)
             {

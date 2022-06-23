@@ -9,7 +9,6 @@ namespace Character.Classes
     public abstract class CharacterClass : ScriptableObject
     {
         [SerializeField] protected Progression progression;
-        [SerializeField] protected ResourceType resourceType;
 
         public int GetStatistic(StatType type, int level)
         {
@@ -32,7 +31,6 @@ namespace Character.Classes
             }
         }
 
-
         public IEnumerable<Usable> GetAllAbilitesAvaliable(int level)
         {
             return progression.GetAllAbilitesAvaliable(level);
@@ -48,9 +46,19 @@ namespace Character.Classes
             return progression.GetMaxCardsHand(level);
         }
 
-        public ResourceType GetResourceType()
+        public IEnumerable<ResourceType> GetResourceTypes()
         {
-            return resourceType;
+            return progression.GetResourceTypes();
+        }
+
+        public int GetMaxResourceAmount(int level, ResourceType resourceType)
+        {
+            return progression.GetMaxResourceQuantity(level, resourceType);
+        }
+
+        public int GetResourceAmount(int level, ResourceType resourceType)
+        {
+            return progression.GetResourceQuantityOnLevel(level, resourceType);
         }
     }
 }

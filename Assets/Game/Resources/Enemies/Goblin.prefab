@@ -194,6 +194,7 @@ GameObject:
   - component: {fileID: 652534504523178239}
   - component: {fileID: 652534504523178236}
   - component: {fileID: 652534504523178237}
+  - component: {fileID: 7277254169044685030}
   m_Layer: 0
   m_Name: EnemyUI
   m_TagString: Untagged
@@ -282,7 +283,20 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 63
+--- !u!114 &7277254169044685030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652534504523178235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a179781bd7089458fff4d4a5f4909f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floatingTextPrefab: {fileID: 4558373330407085539, guid: 72008eb063bbc9e4882c288d9a057828, type: 3}
 --- !u!1 &652534504523513277
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &652534504889341989
 RectTransform:
   m_ObjectHideFlags: 0
@@ -415,7 +429,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -435,7 +449,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 652534505181427184}
   m_HandleRect: {fileID: 0}
@@ -552,8 +566,6 @@ MonoBehaviour:
   hand: {fileID: 5845595273678529638}
   stack: {fileID: 1552339265}
   cardPrefab: {fileID: 3908558191448106145, guid: 6dfda3565cfcbf34195cf36b91ca5e3a, type: 3}
-  healthBar: {fileID: 652534504889341988}
-  selector: {fileID: 652534504036226467}
 --- !u!114 &652534504946285571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,26 +618,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f712a285d67bb63449ae1bfbad562b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: resources
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Character.Character.Resource, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: passiveManager
+      Entry: 6
+      Data: 
   characterClass: {fileID: 11400000, guid: 99e57164f9e9f43409962b2e933e1dd0, type: 2}
-  gear:
-    head:
-      item: {fileID: 0}
-    chest:
-      item: {fileID: 0}
-    legs:
-      item: {fileID: 0}
-    weapon:
-      item: {fileID: 11400000, guid: 05719fabe8da7ba46a868b2ecbc3c2b8, type: 2}
-    gloves:
-      item: {fileID: 0}
-    firstRing:
-      item: {fileID: 0}
-    secondRing:
-      item: {fileID: 0}
-  traits: {fileID: 0}
-  currentHealth: 0
-  maxHealth: 0
   level: 1
+  permanentCards: []
+  permanentPassiveAbilities: []
   reward: {fileID: 11400000, guid: f9dad667c2dd3474a9527ec0e3189468, type: 2}
 --- !u!1 &652534505181427185
 GameObject:
@@ -660,7 +681,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -746,7 +767,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDeck: []
-  permanentDeck: []
 --- !u!1 &2052670087543455967
 GameObject:
   m_ObjectHideFlags: 0

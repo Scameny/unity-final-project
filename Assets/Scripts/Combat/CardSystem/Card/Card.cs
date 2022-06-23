@@ -1,10 +1,11 @@
-using Character.Character;
 using Combat;
+using System.Collections.Generic;
 using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utils;
 
 namespace CardSystem
 {
@@ -12,8 +13,9 @@ namespace CardSystem
     {
 
         [SerializeField] Image cardImage;
-        [SerializeField] TextMeshProUGUI cardName;
+        [SerializeField] TextMeshProUGUI cardName, cardDescription;
         [SerializeField] GameObject cost;
+        [SerializeField] SimpleTooltipStyle style;
 
         bool oneUse;
         Usable cardEffect;
@@ -27,6 +29,7 @@ namespace CardSystem
             cardEffect = cardUse;
             cardImage.sprite = cardUse.GetSprite();
             cardName.text = (cardUse).GetName();
+            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles((cardUse).GetDescription(), style);
             if (cardUse.GetResourceCosts().Count > 0)
             {
                 //TODO add support to more than one resource cost
@@ -65,11 +68,25 @@ namespace CardSystem
             {
                 user.GetComponent<TurnCombat>().SendToStack(this);
             }
+            
         }
 
         public void CancelCardUse()
         {
             gameObject.SetActive(true);
+        }
+
+        public IEnumerable<CardEffectType> GetCardEffect()
+        {
+            foreach (var item in cardEffect.GetCardEffectTypes())
+            {
+                yield return item;
+            }
+        }
+
+        public List<ResourceCost> GetResourceCost() 
+        {
+            return cardEffect.GetResourceCosts();
         }
 
         #region UI management

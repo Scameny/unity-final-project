@@ -6,12 +6,13 @@ using UnityEngine;
 
 namespace Strategies.EffectStrategies
 {
+    [System.Serializable]
     public class ApplyBuffEffect : EffectStrategy
     {
         [LabelWidth(120)]
         public BaseTrait trait;
 
-        public override void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override public void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
             foreach (var target in targets)
             {

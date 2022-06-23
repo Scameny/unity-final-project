@@ -54,12 +54,14 @@ namespace CardSystem
         [HorizontalGroup("Bottom")]
         [SerializeField] List<ResourceCost> resourceCosts = new List<ResourceCost>();
 
+        [SerializeField] List<CardEffectType> cardEffects = new List<CardEffectType>();
+
 
         public void Use(GameObject user, IEnumerable<GameObject> targets, Card card)
         {
             foreach (var cost in resourceCosts)
             {
-                if (user.GetComponent<DefaultCharacter>().HaveEnoughResource(cost.amount, cost.resourceType))
+                if (!user.GetComponent<DefaultCharacter>().HaveEnoughResource(cost.amount, cost.resourceType))
                     throw new NotEnoughResourceException(cost.resourceType);
             }
 
@@ -126,7 +128,12 @@ namespace CardSystem
         public List<ResourceCost> GetResourceCosts()
         {
             return resourceCosts;
-        } 
+        }
+
+        public List<CardEffectType> GetCardEffectTypes()
+        {
+            return cardEffects;
+        }
 
         abstract public CardType GetCardType();
 
@@ -197,5 +204,15 @@ namespace CardSystem
     {
         public ResourceType resourceType;
         public int amount;
+    }
+
+    public enum CardEffectType
+    {
+        Damage,
+        Buff,
+        Debuff,
+        Heal,
+        ResourceGain,
+        DrawCards
     }
 }

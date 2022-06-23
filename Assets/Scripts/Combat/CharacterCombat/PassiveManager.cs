@@ -8,7 +8,12 @@ namespace Combat
 { 
     public class PassiveManager : IObservable<PassiveData>
     {
-        List<IObserver<PassiveData>> observers = new List<IObserver<PassiveData>>();
+        private List<IObserver<PassiveData>> observers;
+
+        public PassiveManager()
+        {
+            observers = new List<IObserver<PassiveData>>();
+        }
 
         public IDisposable Subscribe(IObserver<PassiveData> observer)
         {

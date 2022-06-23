@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 
 namespace Strategies.EffectStrategies
 { 
+    [System.Serializable]
     public class StatScaleDamage : EffectStrategy
     {
         [LabelWidth(120)]
@@ -15,14 +16,14 @@ namespace Strategies.EffectStrategies
         [LabelWidth(120)]
         [SerializeField] public DamageType damageType;
 
-        public override void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override public void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
-            float damageDone = user.GetComponent<DefaultCharacter>().GetStatistic(stat) * scaleCoef;
+            int damageDone = Mathf.FloorToInt(user.GetComponent<DefaultCharacter>().GetStatistic(stat) * scaleCoef);
             damageDone = user.GetComponent<DefaultCharacter>().ProcessDamageDone(damageDone, damageType);
             foreach (var enemy in targets)
             {
                 DefaultCharacter character = enemy.GetComponent<DefaultCharacter>();
-                character.TakeDamage(damageDone, damageType);
+                character.TakeDamage(damageDone, damageType, user);
             }
         }
     }

@@ -12,7 +12,6 @@ namespace UI
             if (d != null)
             {
                 d.OnZoneDropExit();
-                UIManager.manager.ActivateCombatUI(false);
                 d.UseCard();
             }
         }

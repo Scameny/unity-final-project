@@ -11,7 +11,7 @@ namespace Strategies.PassiveEffectStrategies
     {
         [TypeFilter("GetFilteredPassiveEffectStrategyList")]
         [ListDrawerSettings(Expanded = true)]
-        [SerializeField] List<PassiveEffectStrategy> effectStrategies = new List<PassiveEffectStrategy>();
+        [SerializeReference] List<PassiveEffectStrategy> effectStrategies = new List<PassiveEffectStrategy>();
 
         public List<PassiveEffectStrategy> GetPassiveEffectStrategies()
         {
