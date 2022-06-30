@@ -1,4 +1,5 @@
 using CardSystem;
+using Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,13 +7,20 @@ namespace UI
 {
     public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        HeroCombat player;
+
+        private void Start()
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<HeroCombat>();
+        }
+
         public void OnDrop(PointerEventData eventData)
         {
             Card d = eventData.pointerDrag.GetComponent<Card>();
             if (d != null)
             {
                 d.OnZoneDropExit();
-                d.UseCard();
+                player.AddCardToQueue(d);
             }
         }
 

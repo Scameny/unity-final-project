@@ -53,7 +53,9 @@ MonoBehaviour:
         resources:
         - resourceType: 2
           amount: 3
-        abilities: []
+        abilities:
+        - usable: {fileID: 11400000, guid: 39672ac5156b49c4e9d613bd088077cb, type: 2}
+          quantity: 2
         passives: []
       newSlotsHand: 0
       expNextLevel: 0

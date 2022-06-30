@@ -4,14 +4,16 @@ using Character.Stats;
 using System.Collections;
 using UI;
 using Character.Character;
+using CardSystem;
+using System.Collections.Generic;
 
 namespace Combat 
 {
     public class HeroCombat : TurnCombat
     {
-        [HideInInspector]
-        public int targetIndex;
-
+        Queue<Card> cardsQueue = new Queue<Card>();
+        Card nextCardToPlay;
+        Coroutine queueCoroutine;
 
         private void Awake()
         {
@@ -20,7 +22,6 @@ namespace Combat
         
         private void Start()
         {
-            targetIndex = 0;
             turnSpeed = character.GetStatistic(StatType.Agility);
         }
 
@@ -31,11 +32,6 @@ namespace Combat
                 CombatManager.combatManager.HeroDeath();
             }
             base.Update();
-        }
-
-        public void StartCoroutine(Action<IEnumerator> coroutine)
-        {
-            StartCoroutine(coroutine);
         }
 
         public override void TurnPreparationStart()
@@ -55,16 +51,47 @@ namespace Combat
         {
             base.EndTurn();
             UIManager.manager.CombatUIInteractable(false);
-            CombatManager.combatManager.ResumeCombat();
         }
 
         protected override void StartOfTurn()
         {
             base.StartOfTurn();
             UIManager.manager.CombatUIInteractable(true);
-            CombatManager.combatManager.PauseCombat();
         }
 
+        public override void CardUsed(Card card)
+        {
+            nextCardToPlay = null;
+            base.CardUsed(card);
+        }
+
+        public void AddCardToQueue(Card card)
+        {
+            cardsQueue.Enqueue(card);
+            if (queueCoroutine == null)
+                queueCoroutine = StartCoroutine(UseCardsInQueue());
+            card.SetVisibility(false);
+        }
+
+        private IEnumerator UseCardsInQueue()
+        {
+            while (cardsQueue.Count > 0)
+            {
+                yield return new WaitUntil(() => nextCardToPlay == null);
+                nextCardToPlay = cardsQueue.Peek();
+                try
+                {
+                    nextCardToPlay.UseCard();
+                    cardsQueue.Dequeue();
+                }
+                catch
+                {
+                    cardsQueue.Dequeue().SetVisibility(true);
+                    nextCardToPlay = null;
+                }
+            }
+            queueCoroutine = null;
+        }
     }
 
 }

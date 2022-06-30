@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Utils;
 using GameManagement;
 using Sirenix.OdinInspector;
+using System.Collections;
 
 public class CombatManager : MonoBehaviour
 {
@@ -16,9 +17,12 @@ public class CombatManager : MonoBehaviour
     [Header("Debug")]
     public List<GameObject> enemiesForTest = new List<GameObject>();
 
+    [SerializeField] float timeToResumeCombat = 0.5f;
+
     protected List<GameObject> enemies = new List<GameObject>();
     protected List<GameObject> charactersInCombat = new List<GameObject>();
 
+    bool turnPaused;
     List<Item> itemsStored = new List<Item>();
     int expStored;
     HeroCombat player;
@@ -41,6 +45,7 @@ public class CombatManager : MonoBehaviour
         this.enemies = enemies;
         charactersInCombat.AddRange(enemies);
         charactersInCombat.Add(player.gameObject);
+        turnPaused = false;
         foreach (GameObject character in charactersInCombat)
         {
             character.GetComponent<TurnCombat>().enabled = true;
@@ -60,6 +65,7 @@ public class CombatManager : MonoBehaviour
 
     public void PauseCombat()
     {
+        turnPaused = true;
         foreach (GameObject character in charactersInCombat)
         {
             character.GetComponent<TurnCombat>().TurnPreparationPause();
@@ -69,12 +75,24 @@ public class CombatManager : MonoBehaviour
 
     public void ResumeCombat()
     {
-        foreach (GameObject enemy in enemies)
+        StartCoroutine(ResumeCombatCoroutine());
+    }
+
+    private IEnumerator ResumeCombatCoroutine()
+    {
+        yield return new WaitForSeconds(timeToResumeCombat);
+        turnPaused = false;
+        foreach (GameObject character in charactersInCombat)
         {
-            if (enemy.activeInHierarchy)
-                enemy.GetComponent<EnemyCombat>().TurnPreparationResume();
+            if (character.activeInHierarchy)
+                character.GetComponent<TurnCombat>().TurnPreparationResume();
         }
         combatActive = true;
+    }
+
+    public bool IsTurnPaused()
+    {
+        return turnPaused;
     }
     #endregion
 
@@ -125,6 +143,10 @@ public class CombatManager : MonoBehaviour
             enemy.GetComponent<TurnCombat>().GetCharacter().Heal(999);
         }
     }
+    #endregion
+
+    #region Getters
+
     #endregion
 
 

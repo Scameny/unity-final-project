@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75db2f2efac6dc34f84a15cb5966fd71, type: 3}
+  m_Name: TooltipStyle
+  m_EditorClassIdentifier: 
+  slicedSprite: {fileID: 21300000, guid: 4edbc5539b441f049966c07e2ba12186, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  fontStyles:
+  - tag: '@Common@'
+    color: {r: 1, g: 1, b: 1, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Rare@'
+    color: {r: 0.12726949, g: 0.220961, b: 0.41509432, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Epic@'
+    color: {r: 0.23490968, g: 0.06020826, b: 0.31132078, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Legendary@'
+    color: {r: 0.735849, g: 0.48081273, b: 0.05900677, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@statistic@'
+    color: {r: 0.030081892, g: 0.49056602, b: 0.0625866, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Mana@'
+    color: {r: 0.1794081, g: 0.16540584, b: 0.5566038, a: 0}
+    bold: 0
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@break@'
+    color: {r: 1, g: 1, b: 1, a: 0}
+    bold: 0
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@FireDamage@'
+    color: {r: 0.745283, g: 0.3042631, b: 0.23553754, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@PhysicDamage@'
+    color: {r: 1, g: 1, b: 1, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@NatureDamage@'
+    color: {r: 0.18845674, g: 0.3301887, b: 0.24001251, a: 0}
+    bold: 0
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Intelect@'
+    color: {r: 0.6363475, g: 0.79722613, b: 0.9433962, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0
+  - tag: '@Strength@'
+    color: {r: 0.3773585, g: 0.23636165, b: 0.094339624, a: 0}
+    bold: 1
+    italic: 0
+    underline: 0
+    strikethrough: 0

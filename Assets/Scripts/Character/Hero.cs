@@ -132,7 +132,7 @@ namespace Character.Character
             Debug.Log("Level up. Reached level " + level);
             foreach (var item in resources)
             {
-                item.currentAmount += characterClass.GetResourceAmount(level, item.resourceType);
+                item.currentAmount = characterClass.GetMaxResourceAmount(level, item.resourceType);
             }
             AddAbilityCards(characterClass.GetAbilitiesOnLevel(level));
             AddPassiveAbilities(characterClass.GetPassiveAbilitiesOnLevel(level));

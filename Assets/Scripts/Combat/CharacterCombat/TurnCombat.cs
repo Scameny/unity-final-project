@@ -135,6 +135,18 @@ namespace Combat
             DrawCard(character.GetMaxCardsInHand());
         }
 
+        virtual public void CardUsed(Card card)
+        {
+            if (card.IsOneUse())
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                SendToStack(card);
+            }
+        }
+
         protected void ClearCards()
         {
             deck.ClearCards();
@@ -176,16 +188,16 @@ namespace Combat
 
         virtual protected void StartOfTurn()
         {
+            CombatManager.combatManager.PauseCombat();
             DrawCard(1);
             character.passiveManager.SendData(PassiveSignal.StartOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat());
-            stopTurn = true;
             turnTime = 0;
         }
 
         virtual protected void EndTurn()
         {
             character.passiveManager.SendData(PassiveSignal.EndOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat());
-            TurnPreparationResume();
+            CombatManager.combatManager.ResumeCombat();
         }
 
         protected IEnumerator TurnPreparation()
@@ -199,12 +211,12 @@ namespace Combat
                     {
                         turnTime += turnSpeed;
                     }
-                    else
+                    else if (!CombatManager.combatManager.IsTurnPaused())
                     {
                         StartOfTurn();
                     }
                 }
-                yield return new WaitForSeconds(0.05f);                
+                yield return new WaitForSeconds(0.1f);                
             }
             
         }

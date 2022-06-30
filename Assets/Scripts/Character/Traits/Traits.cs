@@ -73,15 +73,17 @@ namespace Character.Trait
 
         public void ReduceTurnInTemporaryTraits()
         {
-            foreach (var pair in currentTraits)
+            List<string> keys = new List<string>();
+            keys.AddRange(currentTraits.Keys);
+            foreach (var key in keys)
             {
-                if (pair.Value.trait.IsTemporary)
+                if (currentTraits[key].trait.IsTemporary)
                 {
-                    currentTraits[pair.Key].remainingTurns -= 1;
-                    if (currentTraits[pair.Key].remainingTurns == 0)
-                        RemoveTrait(pair.Key);
+                    currentTraits[key].remainingTurns -= 1;
+                    if (currentTraits[key].remainingTurns == 0)
+                        RemoveTrait(key);
                     else
-                        UpdateTraitElements(pair.Key, pair.Value);
+                        UpdateTraitElements(key, currentTraits[key]);
                 }
             }
         }

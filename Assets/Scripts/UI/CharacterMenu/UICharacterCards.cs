@@ -15,10 +15,8 @@ namespace UI
                 player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
             foreach (var usable in player.GetUsableCards())
             {
-                Debug.Log(usable.name);
                 GameObject card = Instantiate(cardPrefab, transform);
-                SimpleTooltip tooltip = card.GetComponent<SimpleTooltip>();
-                tooltip.infoLeft = usable.name + "\n" + usable.GetDescription();
+                card.GetComponent<UICard>().InitializeCard(usable);
             }
         }
 

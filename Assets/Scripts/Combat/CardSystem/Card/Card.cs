@@ -15,7 +15,6 @@ namespace CardSystem
         [SerializeField] Image cardImage;
         [SerializeField] TextMeshProUGUI cardName, cardDescription;
         [SerializeField] GameObject cost;
-        [SerializeField] SimpleTooltipStyle style;
 
         bool oneUse;
         Usable cardEffect;
@@ -24,12 +23,13 @@ namespace CardSystem
         Vector3 position;
         bool onDropZone = false;
 
+
         public void InitializeCard(Usable cardUse, GameObject user, bool oneUse)
         {
             cardEffect = cardUse;
             cardImage.sprite = cardUse.GetSprite();
             cardName.text = (cardUse).GetName();
-            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles((cardUse).GetDescription(), style);
+            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles((cardUse).GetDescription(), UIManager.manager.tooltipStyle);
             if (cardUse.GetResourceCosts().Count > 0)
             {
                 //TODO add support to more than one resource cost
@@ -39,7 +39,7 @@ namespace CardSystem
             this.user = user;
             this.oneUse = oneUse;
         }
-      
+
         public void SetVisibility(bool visible)
         {
             gameObject.SetActive(visible);
@@ -47,33 +47,12 @@ namespace CardSystem
 
         public void UseCard()
         {
-            try
-            {
-                cardEffect.Use(user, CombatManager.combatManager.GetCharactersInCombat(), this);
-            } 
-            catch (NotEnoughResourceException e)
-            {
-                Debug.Log("Not enough " + e.resource.ToString());
-                CancelCardUse();
-            }
+            cardEffect.Use(user, CombatManager.combatManager.GetCharactersInCombat(), this);
         }
 
         public void CardEffectFinished()
         {
-            if (oneUse)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                user.GetComponent<TurnCombat>().SendToStack(this);
-            }
-            
-        }
-
-        public void CancelCardUse()
-        {
-            gameObject.SetActive(true);
+            user.GetComponent<TurnCombat>().CardUsed(this);
         }
 
         public IEnumerable<CardEffectType> GetCardEffect()
@@ -84,9 +63,19 @@ namespace CardSystem
             }
         }
 
-        public List<ResourceCost> GetResourceCost() 
+        public List<ResourceCost> GetResourceCost()
         {
             return cardEffect.GetResourceCosts();
+        }
+
+        public bool IsOneUse()
+        {
+            return oneUse;
+        }
+        
+        public Usable GetUsable()
+        {
+            return cardEffect;
         }
 
         #region UI management

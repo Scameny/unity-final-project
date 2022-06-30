@@ -1,10 +1,13 @@
+using Animations;
 using Character.Character;
 using Character.Stats;
+using Combat;
 using Sirenix.OdinInspector;
 using Strategies.EffectStrategies;
 using Strategies.FilterStrategies;
 using Strategies.TargetingStrategies;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,6 +34,9 @@ namespace CardSystem
         [Space(4)]
         [SerializeField] string description;
 
+        [VerticalGroup("Base/Right")]
+        [SerializeField] UserAnimationType animationType;
+
         [HorizontalGroup("Middle")]
 
         [BoxGroup("Middle/Strategies")]
@@ -54,9 +60,7 @@ namespace CardSystem
         [HorizontalGroup("Bottom")]
         [SerializeField] List<ResourceCost> resourceCosts = new List<ResourceCost>();
 
-        [SerializeField] List<CardEffectType> cardEffects = new List<CardEffectType>();
-
-
+        #region Use operations
         public void Use(GameObject user, IEnumerable<GameObject> targets, Card card)
         {
             foreach (var cost in resourceCosts)
@@ -74,28 +78,36 @@ namespace CardSystem
                 {
                     if (targetAquired)
                     {
-                        TargetAquired(user, targets);
-                        card.CardEffectFinished();
+                        TargetAquired(user, targets, card);
                     }
-                    else
-                        card.CancelCardUse();
                 });
 
         }
 
-        private void TargetAquired(GameObject user, IEnumerable<GameObject> targets)
+        private void TargetAquired(GameObject user, IEnumerable<GameObject> targets, Card card)
         {
+            user.GetComponent<TurnCombat>().StartCoroutine(EffectExecution(user, targets, card));
+        }
+
+        private IEnumerator EffectExecution(GameObject user, IEnumerable<GameObject> targets, Card card)
+        {
+            user.GetComponent<Animator>().Play(animationType.ToString());
+            yield return new WaitForSeconds(user.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.length);
+
             foreach (var effectStrategy in effectStrategiesList.effectStrategies)
             {
-                effectStrategy.StartEffect(user, targets);
+                effectStrategy.UseEffect(user, targets);
             }
 
             foreach (var resource in resourceCosts)
             {
                 user.GetComponent<DefaultCharacter>().UseResource(resource.amount, resource.resourceType);
             }
+
+            card.CardEffectFinished();
         }
 
+        #endregion
 
         #region Resource operations
         public bool CanBeUsed(List<ResourceType> userResources)
@@ -130,11 +142,50 @@ namespace CardSystem
             return resourceCosts;
         }
 
-        public List<CardEffectType> GetCardEffectTypes()
+        public IEnumerable<CardEffectType> GetCardEffectTypes()
         {
-            return cardEffects;
+            foreach (var item in effectStrategiesList.effectStrategies)
+            {
+                foreach (var type in item.GetCardEffectType())
+                {
+                    yield return type;
+                }
+            }
         }
 
+        #region simulation operations
+
+        public int GetSimulatedDamage(GameObject user) 
+        {
+            int totalDamage = 0;
+            foreach (var item in effectStrategiesList.effectStrategies)
+            {
+                if (item.GetCardEffectType().Contains(CardEffectType.Damage))
+                    totalDamage += (item as DamageEffectStrategy).GetTotalDamage(user);
+            }
+            return totalDamage;
+        }
+
+        public int GetSimulatedResourceGained(GameObject user, ResourceType resourceType)
+        {
+            int resourceGained = 0;
+            foreach (var item in effectStrategiesList.effectStrategies)
+            {
+                if (item.GetCardEffectType().Contains(CardEffectType.ResourceGain) && (item as ResourceGainEffectStrategy).GetResourceType().Equals(resourceType))
+                    resourceGained += (item as ResourceGainEffectStrategy).GetResourceAmountGained();
+            }
+            return resourceGained;
+        }
+
+        public IEnumerable<ResourceType> GetResourceGained()
+        {
+            foreach (var item in effectStrategiesList.effectStrategies)
+            {
+                yield return (item as ResourceGainEffectStrategy).GetResourceType();
+            }
+        }
+
+        #endregion
         abstract public CardType GetCardType();
 
         #endregion
@@ -214,5 +265,12 @@ namespace CardSystem
         Heal,
         ResourceGain,
         DrawCards
+    }
+
+    public enum UserAnimationType
+    {
+        PhysicAttack,
+        Cast,
+        Hurt
     }
 }

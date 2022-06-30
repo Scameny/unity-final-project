@@ -9,12 +9,19 @@ namespace UI
     public class UIManager : MonoBehaviour
     {
         public static UIManager manager;
-        public GameObject combatMenu, endTurnButton, dropZone;
+        public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu;
         public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton;
+
+        public SimpleTooltipStyle tooltipStyle;
 
         private void Awake()
         {
             manager = this;
+        }
+
+        private void Start()
+        {
+            tooltipStyle = Resources.Load<SimpleTooltipStyle>("UI/TooltipStyle");
         }
 
         public void ActivateCombatUI(bool enable)
@@ -43,6 +50,7 @@ namespace UI
             inventory.SetActive(enable);
             openCharacterMenuButton.SetActive(!enable);
             closeCharacterMenuButton.SetActive(enable);
+            resourcesMenu.SetActive(!enable);
         }
 
     }

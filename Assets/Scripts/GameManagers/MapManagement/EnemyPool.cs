@@ -15,7 +15,7 @@ namespace FloorManagement
             int maxWeigth = 0;
             foreach (var enemy in enemies)
             {
-                maxWeigth = enemy.weigth;
+                maxWeigth += enemy.weigth;
             }
             int index = 0;
             int lastIndex = enemies.Length - 1;

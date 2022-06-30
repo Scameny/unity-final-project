@@ -56,13 +56,13 @@ MonoBehaviour:
   Name: Fire burst
   description: Bursts an enemy in fire dealing 2 + @Intelect@ 20% of your INT @break@
     as @FireDamage@ fire damage @break@
+  animationType: 1
   filterStrategiesList:
     filterStrategies:
     - id: 0
   effectStrategiesList:
     effectStrategies:
     - id: 1
-  cardEffects: 
   references:
     version: 1
     00000000:
@@ -72,7 +72,13 @@ MonoBehaviour:
     00000001:
       type: {class: FlatAndScaleDamageEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
       data:
+        spellAnimation:
+          id: 2
         stat: 3
         scaleCoef: 0.2
         flatDamage: 3
         damageType: 1
+    00000002:
+      type: {class: TargetSpellAnimation, ns: Animations, asm: Assembly-CSharp}
+      data:
+        particles: {fileID: 4328794491255316129, guid: 09c9f27a5fb499e41ad64f844258631c, type: 3}

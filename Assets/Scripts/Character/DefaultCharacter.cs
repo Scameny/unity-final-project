@@ -261,10 +261,11 @@ namespace Character.Character
             return isDead;
         }
 
-        public void TakeDamage(int damage, DamageType type, GameObject DamageDealer)
+        public void TakeDamage(int damage, DamageType type)
         {
             damage = ProcessDamageReceived(damage, type);
             health.currentAmount -= damage;
+            GetComponent<Animator>().Play("Hurt");
             characterUI.ProcessModifyResourceText(ResourceType.Health, -damage, gameObject);
             GameDebug.Instance.Log(Color.blue, gameObject.name + " taking " + damage + " damage");
             if (health.currentAmount <= 0)
@@ -284,16 +285,17 @@ namespace Character.Character
         {
             if (isDead) return;
             isDead = true;
+            GetComponent<Animator>().Play("Die");
             GameDebug.Instance.Log(Color.red, gameObject.name + " dies");
             // Animation
         }
 
-        public float GetCurrentHealth()
+        public int GetCurrentHealth()
         {
             return health.currentAmount;
         }
 
-        public float GetMaxHealth()
+        public int GetMaxHealth()
         {
             return health.maxResource;
         }
