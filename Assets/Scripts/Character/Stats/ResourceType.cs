@@ -9,6 +9,7 @@ namespace Character.Stats
         Mana,
         Health,
         Energy,
+        Armor,
         None
     }
 }

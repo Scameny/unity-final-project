@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace FloorManagement
@@ -44,6 +42,5 @@ namespace FloorManagement
         public float width;
         public bool onlyOneWay;
         public bool needKey;
-        public bool canSpawnEnemies;        
     }
 }

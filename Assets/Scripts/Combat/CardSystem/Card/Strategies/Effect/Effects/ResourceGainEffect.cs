@@ -1,5 +1,4 @@
 using Character.Character;
-using Character.Stats;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +19,7 @@ namespace Strategies.EffectStrategies
 
         override protected void StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
-            if (user.GetComponent<DefaultCharacter>().GetResourceType().Contains(resourceType))
-                user.GetComponent<DefaultCharacter>().GainResource(amount, resourceType);
+            user.GetComponent<DefaultCharacter>().GainResource(amount, resourceType);
         }
     }
 }

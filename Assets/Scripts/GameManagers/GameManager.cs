@@ -11,6 +11,7 @@ namespace GameManagement
         // current floor
 
         public RoomPool roomPoolToTest;
+        public float combatTurnWait { private set; get; } = 0.1f;
 
 
         public static GameManager gm;
@@ -44,21 +45,14 @@ namespace GameManagement
             }
         }
 
-
-
         private void GoToRoom(Direction dir)
         {
             currentRoom = floorGenerator.GetRoom(currentRoom, dir);
-            player.transform.position = currentRoom.playerSlot.transform.position;
             int x = 0;
             int y = 0;
             UtilsClass.instance.GetDirection(dir, ref x, ref y);
             Camera.main.transform.position = Camera.main.transform.position + new Vector3(18 * x, 10 * y, 0);
-            if (currentRoom.enemies.Count > 0) 
-            {
-                CombatManager.combatManager.StartCombat(currentRoom.enemies);
-                isInCombat = true;
-            }
+            currentRoom.EnterOnRoom(player);
         }
 
         public void EndCombat()
@@ -71,6 +65,11 @@ namespace GameManagement
         {
             floorGenerator.GenerateFloor(8, roomPoolToTest);
             currentRoom = floorGenerator.GetBaseRoom();
+        }
+
+        public void SetInCombat(bool isInCombat)
+        {
+            this.isInCombat = isInCombat;
         }
     }
 }

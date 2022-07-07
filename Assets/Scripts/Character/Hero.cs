@@ -29,19 +29,12 @@ namespace Character.Character
             OnGameStart();
         }
 
-        private void Update()
-        {
-            foreach (var item in resources)
-            {
-                item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
-            }
-        }
-
         private void OnGameStart()
         {
             AddAbilityCards(GetAllClassAbilitiesAvaliable());
             AddPassiveAbilities(GetClassPasiveAbilitiesAvaliable());
         }
+
 
         #region Abilities
 
@@ -84,6 +77,7 @@ namespace Character.Character
                 permanentCards.Add(ability);
             }
         }
+
 
         #endregion
 

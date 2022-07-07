@@ -58,7 +58,6 @@ namespace Combat
             IA_CardsDraw();
             IA_KillPlayerIfPossible();
             IA_UseDamageCards();
-            EndTurn();
         }
 
         private void IA_KillPlayerIfPossible()
@@ -113,10 +112,16 @@ namespace Combat
         private void IA_UseBuffsAndDebuffs()
         {
             List<Card> cards = SearchCardsOfType(CardEffectType.Buff);
+            List<Usable> cardsUsed = new List<Usable>();
             cards.AddRange(SearchCardsOfType(CardEffectType.Debuff));
             while (cards.Count > 0)
             {
-                AddCardToQueue(cards[0]);
+                if (!cardsUsed.Contains(cards[0].GetUsable()))
+                {
+                    AddCardToQueue(cards[0]);
+                    cardsUsed.Add(cards[0].GetUsable());
+                }
+                    
                 cards.RemoveAt(0);
             }
         }
@@ -248,9 +253,9 @@ namespace Combat
                         nextCardToPlay.UseCard();
                     else
                         cardsQueue.Dequeue();
-
                 }
             }
+            EndTurn();
         }
 
         private void AddCardToQueue(Card card)

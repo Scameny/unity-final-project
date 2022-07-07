@@ -13,15 +13,9 @@ namespace Strategies.PassiveEffectStrategies
         [LabelWidth(120)]
         [SerializeField] public DamageType damageType;
 
-        override public void Evaluate(PassiveSignal signal, GameObject user, IEnumerable<GameObject> targets)
+        protected override void EffectAction(PassiveData passiveData)
         {
-            if (signal.Equals(GetPassiveSignal()))
-                EffectActivation(user, targets);
-        }
-
-        void EffectActivation(GameObject user, IEnumerable<GameObject> targets)
-        {
-            user.GetComponent<DefaultCharacter>().TakeDamage(damage, damageType);
+            passiveData.user.GetComponent<DefaultCharacter>().TakeDamage(damage, damageType);
         }
     }
 

@@ -37,8 +37,8 @@ namespace UI
                 if (item.incomingType == type)
                     return item.color;
             }
-            Debug.LogError("Doesn't exist color for the incoming type " + type.ToString());
-            throw new MissingRequiredParameterException(type.ToString(), name);
+            Debug.LogWarning("Doesn't exist color for the incoming type " + type.ToString() + ". Using default color (grey)");
+            return Color.grey;
         }
     }
 

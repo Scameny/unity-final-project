@@ -1,12 +1,11 @@
 using Abilities.Passive;
-using CardSystem;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace OdinEditor
 {
     public class PassiveAbilityDrawer<TPassive> : OdinValueDrawer<TPassive>
        where TPassive : PassiveAbility

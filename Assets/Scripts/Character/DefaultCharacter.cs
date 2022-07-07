@@ -20,6 +20,8 @@ namespace Character.Character
 
         protected Resource health;
 
+        protected Resource armor;
+
         [TabGroup("General")]
         [SerializeField] protected List<Resource> resources = new List<Resource>();
 
@@ -53,11 +55,16 @@ namespace Character.Character
         virtual protected void Start()
         {
             passiveManager = new PassiveManager();
-            health = new Resource();
-            health.resourceType = ResourceType.Health;
-            health.maxResource = GetStatistic(StatType.Health);
-            health.currentAmount = GetStatistic(StatType.Health);
             InitializeResources();
+        }
+
+        private void Update()
+        {
+            foreach (var item in resources)
+            {
+                if (!item.temporaryResource)
+                    item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
+            }
         }
 
         #region Abilities operations
@@ -87,6 +94,20 @@ namespace Character.Character
         #endregion
 
         #region Cards operations
+
+        public void RemovePermanentCard(Usable usable)
+        {
+            permanentCards.Remove(usable);
+        }
+
+        public IEnumerable<Usable> GetPermanentCards()
+        {
+            foreach (var item in permanentCards)
+            {
+                yield return item;
+            }
+        }
+
         virtual public IEnumerable<Usable> GetUsableCards()
         {
             foreach (var card in traits.GetUsableCards())
@@ -102,6 +123,11 @@ namespace Character.Character
         #endregion
 
         #region Traits operations
+        public void RemoveTemporaryTraits()
+        {
+            traits.RemoveTemporaryTraits();
+        }
+
         public void ReduceTurnInTemporaryTraits()
         {
             traits.ReduceTurnInTemporaryTraits();
@@ -109,7 +135,14 @@ namespace Character.Character
 
         public void AddNewTrait(BaseTrait trait)
         {
-            traits.NewTrait(trait);
+            if (traits.NewTrait(trait))
+            {
+                foreach (var item in trait.GetPasiveAbilities())
+                {
+                    IDisposable disposable = passiveManager.Subscribe(item);
+                    item.SetDisposable(disposable);
+                }
+            }
         }
 
         #endregion
@@ -200,6 +233,16 @@ namespace Character.Character
 
         protected void InitializeResources()
         {
+            health = new Resource();
+            health.resourceType = ResourceType.Health;
+            health.maxResource = GetStatistic(StatType.Health);
+            health.currentAmount = GetStatistic(StatType.Health);
+            armor = new Resource();
+            armor.resourceType = ResourceType.Armor;
+            // Use constants
+            armor.maxResource = 999;
+            armor.currentAmount = 0;
+            armor.temporaryResource = true;
             foreach (var item in characterClass.GetResourceTypes())
             {
                 Resource resource = new Resource();
@@ -209,6 +252,7 @@ namespace Character.Character
                 resources.Add(resource);
             }
             resources.Add(health);
+            resources.Add(armor);
         }
 
         public bool HaveEnoughResource(int resourceAmount, ResourceType resourceType)
@@ -225,6 +269,8 @@ namespace Character.Character
         public void GainResource(int amount, ResourceType resourceType) 
         {
             Resource resource = GetResourceByResourceType(resourceType);
+            
+            passiveManager.SendData(new PassiveDataResourceInteraction(PassiveSignal.ResourceGained, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount));
             resource.currentAmount += amount;
             characterUI.ProcessModifyResourceText(resourceType, amount, gameObject);
             resource.currentAmount = Mathf.Min(resource.currentAmount, resource.maxResource);
@@ -264,12 +310,29 @@ namespace Character.Character
         public void TakeDamage(int damage, DamageType type)
         {
             damage = ProcessDamageReceived(damage, type);
-            health.currentAmount -= damage;
-            GetComponent<Animator>().Play("Hurt");
-            characterUI.ProcessModifyResourceText(ResourceType.Health, -damage, gameObject);
-            GameDebug.Instance.Log(Color.blue, gameObject.name + " taking " + damage + " damage");
-            if (health.currentAmount <= 0)
-                Die();
+            if (damage > 0)
+            {
+                GameDebug.Instance.Log(Color.blue, gameObject.name + " taking " + damage + " damage");
+                if (armor.currentAmount < damage)
+                {
+                    if (armor.currentAmount > 0)
+                    {
+                        damage -= armor.currentAmount;
+                        characterUI.ProcessModifyResourceText(ResourceType.Armor, -armor.currentAmount, gameObject);
+                        armor.currentAmount = 0;
+                    }
+                    health.currentAmount -= damage;
+                    characterUI.ProcessModifyResourceText(ResourceType.Health, -damage, gameObject);
+                }
+                else
+                {
+                    armor.currentAmount -= damage;
+                    characterUI.ProcessModifyResourceText(ResourceType.Armor, -damage, gameObject);
+                }
+                GetComponent<Animator>().Play("Hurt");
+                if (health.currentAmount <= 0)
+                    Die();
+            }
         }
 
         public void Heal(int healAmount)
@@ -311,6 +374,7 @@ namespace Character.Character
         public int currentAmount;
         [LabelText("Max resource")]
         public int maxResource;
+        public bool temporaryResource;
     }
 
 }

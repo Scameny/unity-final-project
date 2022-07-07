@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c948812536d4a4b9ded0590b3d76d1, type: 3}
+  m_Name: IceBarrier
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: targetingStrategy
+      Entry: 7
+      Data: 0|SelfUseTargeting, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: resourceCosts
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[CardSystem.ResourceCost, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: CardSystem.ResourceCost, Assembly-CSharp
+    - Name: resourceType
+      Entry: 3
+      Data: 0
+    - Name: amount
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  sprite: {fileID: 21300000, guid: 2bccd332882fcd14b9e4c377e432c587, type: 3}
+  Name: Ice barrier
+  description: Gives the user 4 points of armor
+  animationType: 1
+  abilityType: 2
+  filterStrategiesList:
+    filterStrategies: []
+  effectStrategiesList:
+    effectStrategies:
+    - id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: ResourceGainEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 1
+        resourceType: 3
+        amount: 6
+    00000001:
+      type: {class: TargetSpellAnimation, ns: Animations, asm: Assembly-CSharp}
+      data:
+        particles: {fileID: 5555700961651305609, guid: 8a6fe09790452bc4b8de8ec258f851d2, type: 3}

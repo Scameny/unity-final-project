@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
+using System.Collections.Generic;
 
 namespace Abilities.Passive
 {
@@ -10,15 +11,12 @@ namespace Abilities.Passive
         [HideLabel]
         public PassiveAbility passiveAbility;
         protected IDisposable disposable;
-
-        public Passive(PassiveAbility ability)
-        {
-            passiveAbility = ability;
-        }
+        protected List<PassiveData> dataStored = new List<PassiveData>();
 
         #region Observer operations
         public void OnCompleted()
         {
+            dataStored.Clear();
             disposable.Dispose();
         }
 
@@ -29,10 +27,7 @@ namespace Abilities.Passive
 
         public void OnNext(PassiveData value)
         {
-            foreach (var effect in passiveAbility.GetPassiveEffectStrategyList())
-            {
-                effect.Evaluate(value.signalType, value.user, value.targets);
-            }
+            passiveAbility.Evaluate(dataStored, value);
         }
 
         public void SetDisposable(IDisposable disposable)

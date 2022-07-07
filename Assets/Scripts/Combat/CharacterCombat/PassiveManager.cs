@@ -1,8 +1,6 @@
 using Abilities.Passive;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Combat
 { 
@@ -24,21 +22,17 @@ namespace Combat
 
         public void Unsubscribe()
         {
-            foreach (var item in observers)
+            while (observers.Count > 0)
             {
-                item.OnCompleted();
+                observers[0].OnCompleted();
             }
         }
 
-        public void SendData(PassiveSignal signal, GameObject user, IEnumerable<GameObject> targets)
+        public void SendData(PassiveData passiveData)
         {
-            PassiveData data;
-            data.signalType = signal;
-            data.user = user;
-            data.targets = targets;
             foreach (var item in observers)
             {
-                item.OnNext(data);
+                item.OnNext(passiveData);
             }
         }
 

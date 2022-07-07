@@ -1,11 +1,9 @@
 using Abilities.Passive;
 using CardSystem;
 using Character.Stats;
+using Items;
 using Sirenix.OdinInspector;
-using Strategies.EffectStrategies;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Character.Trait
@@ -16,15 +14,16 @@ namespace Character.Trait
         [HorizontalGroup("Main")]
 
         [BoxGroup("Main/General Settings")]
-        public string name;
+        [SerializeField] string name;
         [HorizontalGroup("Main/General Settings/Split")]
         [VerticalGroup("Main/General Settings/Split/Left")]
-        public bool IsTemporary;
+        [SerializeField] bool temporary;
         [ShowIf("IsTemporary")]
         [HorizontalGroup("Main/General Settings/Split")]
         [VerticalGroup("Main/General Settings/Split/Right")]
         [LabelWidth(60)]
-        public int turns;
+        [SerializeField] int turns;
+        public Sprite icon;
 
         [HorizontalGroup("Middle")]
 
@@ -85,6 +84,38 @@ namespace Character.Trait
             }
         }
 
+        #region getters
+        
+        public string GetName()
+        {
+            return name;
+        }
+
+        public int GetTurns()
+        {
+            return turns;
+        }
+
+        public bool IsTemporary()
+        {
+            return temporary;
+        }
+
+        public IEnumerable<StatisticGiven> GetStatistic()
+        {
+            return statList.stats;
+        }
+
+        public IEnumerable<GearSecondaryStat> GetSecondaryStatistic()
+        {
+            return secondaryStatList.stats;
+        }
+
+        public IEnumerable<UsableCard> GetCards()
+        {
+            return cards;
+        }
+        #endregion
 
         #region Object operations
         public override bool Equals(object obj)

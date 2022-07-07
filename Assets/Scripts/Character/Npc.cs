@@ -10,7 +10,7 @@ namespace Character.Character
 {
     public class Npc : DefaultCharacter {
 
-        public NpcReward reward;
+        [SerializeField] NpcReward reward;
         [MinValue(0.1), MaxValue(1.0)]
         [SerializeField] float iaPercentageForHealing = 0.2f;
 

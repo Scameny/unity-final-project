@@ -49,6 +49,12 @@ namespace Combat
 
         protected override void EndTurn()
         {
+            StartCoroutine(EndTurnCoroutine());
+        }
+
+        private IEnumerator EndTurnCoroutine()
+        {
+            yield return new WaitUntil(() => cardsQueue.Count == 0);
             base.EndTurn();
             UIManager.manager.CombatUIInteractable(false);
         }
@@ -71,6 +77,12 @@ namespace Combat
             if (queueCoroutine == null)
                 queueCoroutine = StartCoroutine(UseCardsInQueue());
             card.SetVisibility(false);
+        }
+
+        override public void CancelCardUse(Card card)
+        {
+            nextCardToPlay = null;
+            card.SetVisibility(true);
         }
 
         private IEnumerator UseCardsInQueue()

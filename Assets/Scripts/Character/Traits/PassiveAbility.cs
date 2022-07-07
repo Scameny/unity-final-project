@@ -1,6 +1,8 @@
-using Character.Trait;
+using CardSystem;
+using Character.Stats;
 using Sirenix.OdinInspector;
 using Strategies.PassiveEffectStrategies;
+using Strategies.SignalDecoderStrategy;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,13 +28,23 @@ namespace Abilities.Passive
         [SerializeField] string description;
 
         [InlineProperty, HideLabel]
-        [SerializeField] PassiveEffectStrategyList passiveEffectStrategiesList;
+        [SerializeReference] SignalDecoderStrategy signalDecoderStrategy;
+
+        [InlineProperty, HideLabel]
+        [SerializeField] PassiveEffectStrategyList passiveEffectStrategyList;
 
         #region Object operations
 
-        public List<PassiveEffectStrategy> GetPassiveEffectStrategyList()
+        public void Evaluate(List<PassiveData> passiveDataStored, PassiveData passiveData)
         {
-            return passiveEffectStrategiesList.GetPassiveEffectStrategies();
+            if (signalDecoderStrategy.SignalEvaluate(passiveDataStored, passiveData))
+            {
+                Debug.Log("Passive ability " + Name + " proced");
+                foreach (var item in passiveEffectStrategyList.GetPassiveEffectStrategies())
+                {
+                    item.EffectActivation(passiveData);
+                }
+            }
         }
 
         public string GetDescription()
@@ -66,11 +78,44 @@ namespace Abilities.Passive
         #endregion
     }
 
-    public struct PassiveData
+
+    public class PassiveData
     {
         public PassiveSignal signalType;
         public GameObject user;
         public IEnumerable<GameObject> targets;
+
+        public PassiveData(PassiveSignal signalType, GameObject user, IEnumerable<GameObject> targets)
+        {
+            this.signalType = signalType;
+            this.user = user;
+            this.targets = targets;
+        }
+    }
+
+    public class PassiveDataCardInteraction : PassiveData
+    {
+        public Card card;
+
+        public PassiveDataCardInteraction(PassiveSignal signalType, GameObject user, IEnumerable<GameObject> targets, Card card) : base(signalType, user, targets)
+        {
+            this.card = card;
+        }
+    }
+
+    public class PassiveDataResourceInteraction : PassiveData
+    {
+        public ResourceType resourceType;
+        public int resourceAmount;
+        public int resourceBeforeGain;
+
+        public PassiveDataResourceInteraction(PassiveSignal signalType, GameObject user, IEnumerable<GameObject> targets, ResourceType resourceType, int resourceAmount, int resourceBeforeGain) : base(signalType, user, targets)
+        {
+            this.resourceType= resourceType;
+            this.resourceAmount= resourceAmount;
+            this.resourceBeforeGain= resourceBeforeGain;
+
+        }
     }
 
     public enum PassiveSignal
@@ -79,7 +124,8 @@ namespace Abilities.Passive
         EndOfTurn,
         CardDrawed,
         CardPlayed,
-        DamageReceived
+        DamageReceived,
+        ResourceGained
     }
 
 }

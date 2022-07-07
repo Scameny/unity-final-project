@@ -1,4 +1,3 @@
-using Animations;
 using Character.Character;
 using Character.Stats;
 using Combat;
@@ -36,6 +35,9 @@ namespace CardSystem
 
         [VerticalGroup("Base/Right")]
         [SerializeField] UserAnimationType animationType;
+
+        [VerticalGroup("Base/Right")]
+        [SerializeField] AbilityType abilityType;
 
         [HorizontalGroup("Middle")]
 
@@ -79,6 +81,10 @@ namespace CardSystem
                     if (targetAquired)
                     {
                         TargetAquired(user, targets, card);
+                    }
+                    else
+                    {
+                        user.GetComponent<TurnCombat>().CancelCardUse(card);
                     }
                 });
 
@@ -137,6 +143,11 @@ namespace CardSystem
             return description;
         }
 
+        public AbilityType GetAbilityType()
+        {
+            return abilityType;
+        }
+
         public List<ResourceCost> GetResourceCosts()
         {
             return resourceCosts;
@@ -152,6 +163,8 @@ namespace CardSystem
                 }
             }
         }
+        abstract public CardType GetCardType();
+        #endregion
 
         #region simulation operations
 
@@ -184,9 +197,6 @@ namespace CardSystem
                 yield return (item as ResourceGainEffectStrategy).GetResourceType();
             }
         }
-
-        #endregion
-        abstract public CardType GetCardType();
 
         #endregion
 
@@ -272,5 +282,16 @@ namespace CardSystem
         PhysicAttack,
         Cast,
         Hurt
+    }
+
+    public enum AbilityType
+    {
+        Physic,
+        Fire,
+        Ice,
+        Electic,
+        Arcane,
+        Nature,
+        None
     }
 }

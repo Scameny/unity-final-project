@@ -8,6 +8,7 @@ namespace Character.Classes
 {
     public abstract class CharacterClass : ScriptableObject
     {
+        [SerializeField] string Name;
         [SerializeField] protected Progression progression;
 
         public int GetStatistic(StatType type, int level)
@@ -59,6 +60,11 @@ namespace Character.Classes
         public int GetResourceAmount(int level, ResourceType resourceType)
         {
             return progression.GetResourceQuantityOnLevel(level, resourceType);
+        }
+
+        public string GetName()
+        {
+            return Name;
         }
     }
 }

@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c948812536d4a4b9ded0590b3d76d1, type: 3}
+  m_Name: AcidSpray
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: targetingStrategy
+      Entry: 7
+      Data: 0|EnemyTargeting, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: resourceCosts
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[CardSystem.ResourceCost, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: CardSystem.ResourceCost, Assembly-CSharp
+    - Name: resourceType
+      Entry: 3
+      Data: 2
+    - Name: amount
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  sprite: {fileID: 21300000, guid: 824a48daf7b55394e80e1df5048db839, type: 3}
+  Name: Acid spray
+  description: 'Does 2 points of @NatureDamage@ nature damage @break@ each turn for
+    two turns  '
+  animationType: 1
+  abilityType: 5
+  filterStrategiesList:
+    filterStrategies:
+    - id: 0
+  effectStrategiesList:
+    effectStrategies:
+    - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: TagFilter, ns: Strategies.FilterStrategies, asm: Assembly-CSharp}
+      data:
+        tagToFilter: Player
+    00000001:
+      type: {class: ApplyBuffEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 2
+        trait:
+          name: Acid spray
+          temporary: 1
+          turns: 2
+          icon: {fileID: 21300000, guid: 824a48daf7b55394e80e1df5048db839, type: 3}
+          statList:
+            stats: []
+          secondaryStatList:
+            stats: []
+          cards: []
+          passiveList:
+          - passiveAbility: {fileID: 11400000, guid: b225edb0b27b0c249a1d86b0c72982de, type: 2}
+    00000002:
+      type: {class: , ns: , asm: }

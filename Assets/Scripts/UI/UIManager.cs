@@ -1,5 +1,3 @@
-using CardSystem;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +7,7 @@ namespace UI
     public class UIManager : MonoBehaviour
     {
         public static UIManager manager;
-        public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu;
+        public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu, permanentCardsRemoveWindow;
         public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton;
 
         public SimpleTooltipStyle tooltipStyle;
@@ -51,6 +49,17 @@ namespace UI
             openCharacterMenuButton.SetActive(!enable);
             closeCharacterMenuButton.SetActive(enable);
             resourcesMenu.SetActive(!enable);
+        }
+
+        public void NPCInteraction(bool enable)
+        {
+            openCharacterMenuButton.SetActive(enable);
+            resourcesMenu.SetActive(enable);
+        }
+
+        public void EnablePermanentCardsRemoveWindow(bool enable)
+        {
+            permanentCardsRemoveWindow.SetActive(enable);
         }
 
     }

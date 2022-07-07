@@ -1,10 +1,9 @@
 using Character.Character;
-using Combat;
 using UnityEngine;
 
 namespace UI
 {
-    public class UICharacterCards : MonoBehaviour
+    public class UICharacterCards : UICardMenu
     {
         [SerializeField] GameObject cardPrefab;
         Hero player;
@@ -22,11 +21,10 @@ namespace UI
 
         private void OnDisable()
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Destroy(transform.GetChild(i).gameObject);
-            }
+            RemoveUICards();
         }
+
+       
     }
 
 }

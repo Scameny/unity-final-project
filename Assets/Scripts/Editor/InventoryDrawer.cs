@@ -5,7 +5,7 @@ using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
 
-namespace editor
+namespace OdinEditor
 {
     internal sealed class InventoryDrawer<TArray> : TwoDimensionalArrayDrawer<TArray, Item>
            where TArray : System.Collections.IList

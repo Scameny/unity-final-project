@@ -4,28 +4,19 @@ using UnityEngine;
 
 namespace FloorManagement
 {
-    public class RoomManager : MonoBehaviour
+    public abstract class RoomManager : MonoBehaviour
     {
         public Door[] doors = new Door[4] { new Door(Direction.Up), new Door(Direction.Down) , new Door(Direction.Left) , new Door(Direction.Right) };
-        public GameObject[] enemySlots = new GameObject[4];
-        public GameObject bossSlot;
         public GameObject playerSlot;
-
-        [HideInInspector]
-        public List<GameObject> enemies = new List<GameObject>();
-        [HideInInspector]
-        public List<EnemyInfo> enemiesGenerated = new List<EnemyInfo>();
+        
         private List<DoorInfo> activeDoors = new List<DoorInfo>();
 
-        public void EnableEnemies()
+        public virtual void EnterOnRoom(GameObject player)
         {
-            int count = 0;
-            foreach (var enemy in enemiesGenerated)
-            {
-                enemies.Add(Instantiate(enemy.gameObject, enemySlots[count].transform.position, Quaternion.identity, transform));
-                count++;
-            }
+            player.transform.position = playerSlot.transform.position;
         }
+
+        abstract public void OnCreate();
 
         public Direction GetDirectionOfDoor(GameObject doorSelected)
         {
@@ -109,6 +100,8 @@ namespace FloorManagement
         }
 
 
+        public abstract RoomType GetRoomType();
+
 
         private class DoorInfo
         {
@@ -139,5 +132,14 @@ namespace FloorManagement
         public GameObject doorOpen;
         public GameObject doorClosed;
         public GameObject doorClosedWithKey;
+    }
+
+
+    public enum RoomType
+    {
+        EnemyRoom,
+        InteractionRoom,
+        BossRoom,
+        initialRoom
     }
 }

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b8d99412a0239c4f8d3dfb49af4621c, type: 3}
+  m_Name: RoomPool
+  m_EditorClassIdentifier: 
+  rooms:
+  - roomGameObject: {fileID: 6245226342220383230, guid: ddc6f6d4b16dc2a4dacb7e1ed886cd94, type: 3}
+    maxNumberOfRooms: 10
+    weigth: 0
+    heigth: 10
+    width: 18
+    onlyOneWay: 0
+    needKey: 0
+  bossRoom:
+    roomGameObject: {fileID: 6245226342220383230, guid: ddc6f6d4b16dc2a4dacb7e1ed886cd94, type: 3}
+    maxNumberOfRooms: 1
+    weigth: 0
+    heigth: 10
+    width: 18
+    onlyOneWay: 0
+    needKey: 0
+  baseRoom:
+    roomGameObject: {fileID: 6245226342220383230, guid: b6dcb9a125b06984a9c8dd1a7f392fb0, type: 3}
+    maxNumberOfRooms: 1
+    weigth: 0
+    heigth: 10
+    width: 18
+    onlyOneWay: 0
+    needKey: 0
+  enemyPool: {fileID: 11400000, guid: a2c050ba1e898614ba8d80eb5e009249, type: 2}

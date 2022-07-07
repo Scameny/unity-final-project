@@ -82,6 +82,7 @@ namespace CardSystem
         public void OnBeginDrag(PointerEventData eventData)
         {
             position = GetComponent<RectTransform>().position;
+            UIManager.manager.dropZone.GetComponent<Image>().raycastTarget = true;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -95,6 +96,7 @@ namespace CardSystem
             {
                 this.transform.position = position;
             }
+            UIManager.manager.dropZone.GetComponent<Image>().raycastTarget = false;
         }
 
         public void OnZoneDropEnter()

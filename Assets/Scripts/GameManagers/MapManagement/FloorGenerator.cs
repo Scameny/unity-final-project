@@ -31,7 +31,7 @@ namespace FloorManagement {
             {
                 EnableDoors(room);
             }
-            GenerateEnemies();
+            OnCreated();
         }
 
         public RoomManager GetBaseRoom()
@@ -184,52 +184,60 @@ namespace FloorManagement {
             room.gameObject.GetComponent<RoomManager>().ActiveDoors(normalDoors, keyDoors);
         }
 
-        private void GenerateEnemies()
+        private void OnCreated()
         {
             foreach (var item in rooms)
             {
                 RoomManager room = item.gameObject.GetComponent<RoomManager>();
-                if (item.roomInfo.canSpawnEnemies)
+                switch (room.GetRoomType())
                 {
-                    int numEnemies = Random.Range(0, 3);
-                    List<EnemyInfo> enemies = new List<EnemyInfo>();
-                    for (int i = 0; i < numEnemies; i++)
-                    {
-                        EnemyInfo enemy = roomPool.enemyPool.GetRandomEnemy();
-                        while (enemy.hasMaxNumPerRoom && room.enemiesGenerated.Count(e => e.gameObject.name.Equals(enemy.gameObject.name)) == enemy.maxNumPerRoom)
+                    case RoomType.EnemyRoom:
+                        EnemyRoomManager enemyRoom = room as EnemyRoomManager;
+                        int numEnemies = Random.Range(0, 3);
+                        List<EnemyInfo> enemies = new List<EnemyInfo>();
+                        for (int i = 0; i < numEnemies; i++)
                         {
-                            enemy = roomPool.enemyPool.GetRandomEnemy();
+                            EnemyInfo enemy = roomPool.enemyPool.GetRandomEnemy();
+                            while (enemy.hasMaxNumPerRoom && enemyRoom.enemiesGenerated.Count(e => e.gameObject.name.Equals(enemy.gameObject.name)) == enemy.maxNumPerRoom)
+                            {
+                                enemy = roomPool.enemyPool.GetRandomEnemy();
+                            }
+                            enemyRoom.enemiesGenerated.Add(enemy);
                         }
-                        room.enemiesGenerated.Add(enemy);
-                    }
+                        break;
+                    case RoomType.InteractionRoom:
+                        break;
+                    case RoomType.BossRoom:
+                        break;
+                    case RoomType.initialRoom:
+                        break;
                 }
-                room.EnableEnemies();
+                room.OnCreate();
             }
         }
     }
 
     public class Room
-    {
-        public Room(RoomInfo roomInfo, int i, int j)
         {
-            this.roomInfo = roomInfo;
-            this.i = i;
-            this.j = j;
+            public Room(RoomInfo roomInfo, int i, int j)
+            {
+                this.roomInfo = roomInfo;
+                this.i = i;
+                this.j = j;
+            }
+            public GameObject gameObject;
+            public RoomInfo roomInfo;
+            public int i;
+            public int j;
         }
-        public GameObject gameObject;
-        public RoomInfo roomInfo;
-        public int i;
-        public int j;
-    }
 
-    public enum Direction
-    {
-        Up,
-        Down,
-        Right,
-        Left,
-        None
-    }   
-
+        public enum Direction
+        {
+            Up,
+            Down,
+            Right,
+            Left,
+            None
+        }
 
 }

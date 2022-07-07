@@ -5,6 +5,8 @@ using Character.Character;
 using CardSystem;
 using Abilities.Passive;
 using System;
+using System.Collections.Generic;
+using GameManagement;
 
 namespace Combat
 {
@@ -22,7 +24,6 @@ namespace Combat
         public GameObject cardPrefab;
 
 
-        [HideInInspector]
         protected DefaultCharacter character = null;
 
         protected float turnSpeed;
@@ -43,11 +44,13 @@ namespace Combat
         {
             TurnPreparationStop();
             ClearCards();
+            RemoveTemporaryTraits();
+            DisposePassiveAbilities();
         }
+
 
         virtual protected void Update()
         {
-            EvaluateTraits();
         }
 
         public DefaultCharacter GetCharacter()
@@ -66,11 +69,20 @@ namespace Combat
             }
         }
 
-        protected void SendPassiveData(PassiveSignal signal)
+        public void RegisterNewPassiveAbilityInCombat(IEnumerable<Passive> passives)
         {
-            character.passiveManager.SendData(signal, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+            foreach (var item in passives)
+            {
+                IDisposable disposable = character.passiveManager.Subscribe(item);
+                item.SetDisposable(disposable);
+            }            
         }
-       
+
+        protected void DisposePassiveAbilities()
+        {
+            character.passiveManager.Unsubscribe();
+        }
+
         #endregion
 
         #region Card operations
@@ -90,7 +102,7 @@ namespace Combat
                 try
                 {
                     Card card = deck.DrawCard();
-                    character.passiveManager.SendData(PassiveSignal.CardDrawed, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+                    character.passiveManager.SendData(new PassiveData(PassiveSignal.CardDrawed, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
                     if (hand.GetCurrentCardsNumber() < 10)
                         hand.AddCard(card);
                     else
@@ -137,6 +149,7 @@ namespace Combat
 
         virtual public void CardUsed(Card card)
         {
+            character.passiveManager.SendData(new PassiveDataCardInteraction(PassiveSignal.CardPlayed, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
             if (card.IsOneUse())
             {
                 Destroy(gameObject);
@@ -145,6 +158,11 @@ namespace Combat
             {
                 SendToStack(card);
             }
+        }
+
+        virtual public void CancelCardUse(Card card)
+        {
+
         }
 
         protected void ClearCards()
@@ -157,6 +175,12 @@ namespace Combat
         #endregion
 
         #region Traits operation
+
+        protected void RemoveTemporaryTraits()
+        {
+            character.RemoveTemporaryTraits();
+        }
+
         protected void EvaluateTraits()
         {
             character.ReduceTurnInTemporaryTraits();
@@ -189,14 +213,15 @@ namespace Combat
         virtual protected void StartOfTurn()
         {
             CombatManager.combatManager.PauseCombat();
+            character.passiveManager.SendData(new PassiveData(PassiveSignal.StartOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+            EvaluateTraits();
             DrawCard(1);
-            character.passiveManager.SendData(PassiveSignal.StartOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat());
             turnTime = 0;
         }
 
         virtual protected void EndTurn()
         {
-            character.passiveManager.SendData(PassiveSignal.EndOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat());
+            character.passiveManager.SendData(new PassiveData(PassiveSignal.EndOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
             CombatManager.combatManager.ResumeCombat();
         }
 
@@ -216,7 +241,7 @@ namespace Combat
                         StartOfTurn();
                     }
                 }
-                yield return new WaitForSeconds(0.1f);                
+                yield return new WaitForSeconds(GameManager.gm.combatTurnWait);                
             }
             
         }

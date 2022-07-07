@@ -5,7 +5,7 @@ using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace OdinEditor
 {
     public class ItemDrawer<TGearItem> : OdinValueDrawer<TGearItem>
        where TGearItem : Item

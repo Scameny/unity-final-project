@@ -5,6 +5,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -22,6 +23,9 @@ namespace Character.Trait
 
         [TabGroup("UI")]
         public GameObject traitMenu, traitUI;
+
+        SimpleTooltipStyle tooltipStyle;
+
 
         public int GetAdditiveModifier(DamageTypeStat stat)
         {
@@ -71,13 +75,24 @@ namespace Character.Trait
             }
         }
 
-        public void ReduceTurnInTemporaryTraits()
+        public void RemoveTemporaryTraits()
         {
-            List<string> keys = new List<string>();
-            keys.AddRange(currentTraits.Keys);
+            List<string> keys = new List<string>(currentTraits.Keys);
             foreach (var key in keys)
             {
-                if (currentTraits[key].trait.IsTemporary)
+                if (currentTraits[key].trait.IsTemporary())
+                {
+                    RemoveTrait(key);
+                }
+            }
+        }
+
+        public void ReduceTurnInTemporaryTraits()
+        {
+            List<string> keys = new List<string>(currentTraits.Keys);
+            foreach (var key in keys)
+            {
+                if (currentTraits[key].trait.IsTemporary())
                 {
                     currentTraits[key].remainingTurns -= 1;
                     if (currentTraits[key].remainingTurns == 0)
@@ -88,18 +103,20 @@ namespace Character.Trait
             }
         }
 
-        public void NewTrait(BaseTrait trait)
+        public bool NewTrait(BaseTrait trait)
         {
-            if (currentTraits.ContainsKey(trait.name))
+            if (currentTraits.ContainsKey(trait.GetName()))
             {
-                if (trait.IsTemporary)
+                if (trait.IsTemporary())
                 {
-                    currentTraits[trait.name].remainingTurns = trait.turns;
+                    currentTraits[trait.GetName()].remainingTurns = trait.GetTurns();
                 }
+                return false;
             }
             else
             {
-                currentTraits[trait.name] = new TraitInfo(trait, trait.turns, NewTraitUIElement(trait));
+                currentTraits[trait.GetName()] = new TraitInfo(trait, trait.GetTurns(), NewTraitUIElement(trait));
+                return true;
             }
         }
 
@@ -118,7 +135,32 @@ namespace Character.Trait
         public GameObject NewTraitUIElement(BaseTrait trait)
         {
             GameObject element = Instantiate(traitUI, traitMenu.transform);
-            element.GetComponent<Text>().text = trait.name;
+            if (tooltipStyle == null)
+                tooltipStyle = UIManager.manager.tooltipStyle;
+            element.transform.Find("Icon").GetComponent<Image>().sprite = trait.icon;
+            SimpleTooltip tooltip = element.GetComponent<SimpleTooltip>(); 
+            tooltip.simpleTooltipStyle = tooltipStyle;
+            tooltip.infoLeft = trait.GetName() + "\n";
+            foreach (var passive in trait.GetPasiveAbilities()) {
+                tooltip.infoLeft += "\n@passiveeffect@Passiveeffect@break@: " + passive.passiveAbility.GetDescription();
+            }
+            foreach (var item in trait.GetCards())
+            {
+                tooltip.infoLeft += "\n@cards@Card@break@: (" + item.quantity + ") " + item.usable.GetName();
+            }
+            tooltip.infoLeft += "@statistic@";
+            foreach (var item in trait.GetStatistic())
+            {
+                tooltip.infoLeft += (item.amount>0 ?"+" :"") + item.amount + " " + item.statType.ToString() + "\n";
+            }
+            foreach (var item in trait.GetSecondaryStatistic())
+            {
+                tooltip.infoLeft += "+ " + item.amount + " " + item.statType.ToString() + "\n";
+            }
+            if (trait.IsTemporary())
+                tooltip.infoRight = trait.GetTurns() + " remaining turns";
+            else
+                tooltip.infoRight = "Permanent";
             return element;
         }
 
@@ -129,16 +171,15 @@ namespace Character.Trait
 
         public void UpdateTraitElements(string trait, TraitInfo info)
         {
-            if (info.trait.IsTemporary)
-                info.uiElement.GetComponent<Text>().text = trait + " " + info.remainingTurns + " secs";
-            else
-                info.uiElement.GetComponent<Text>().text = trait;
+            if (info.trait.IsTemporary())
+                info.uiElement.GetComponent<SimpleTooltip>().infoRight= trait + " " + info.remainingTurns + " turns";
+    
         }
         #endregion
 
     }
 
-    [System.Serializable]
+    [Serializable]
     public class TraitInfo
     {
         public TraitInfo(BaseTrait trait, int remainingTurns, GameObject uiElement)
@@ -150,7 +191,6 @@ namespace Character.Trait
 
         public TraitInfo()
         {
-
         }
 
         public BaseTrait trait;
