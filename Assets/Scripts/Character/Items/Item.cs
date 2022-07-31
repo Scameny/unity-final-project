@@ -51,6 +51,8 @@ namespace Items
             return "@" + GetItemRarity().ToString() +
                 "@" + Name + "@" + GetItemRarity().ToString() + "@";
         }
+
+        abstract public void SetTooltipText(SimpleTooltip tooltip);
     }
 
 

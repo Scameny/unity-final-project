@@ -1,21 +1,28 @@
-using DialogueEditor;
+using GameManagement;
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
+using Utils;
 
 namespace FloorManagement
 {
     public class NpcRoomManager : RoomManager
     {
-        public List<GameObject> interactableObjects = new List<GameObject>();
-
+        [SerializeField] List<PoolObject<GameObject>> interactableObjectsPool = new List<PoolObject<GameObject>>();
+        [SerializeField] List<GameObject> npcSlots = new List<GameObject>();
+        List<GameObject> npcs = new List<GameObject>();
 
         public override void EnterOnRoom(GameObject player)
         {
             base.EnterOnRoom(player);
-            foreach (var item in interactableObjects)
+            EnableSelectors(true);
+        }
+
+        public void EnableSelectors(bool enable)
+        {
+            foreach (var item in npcs)
             {
-                item.GetComponentInChildren<CharacterUI>().EnableSelector(true);
+                item.GetComponentInChildren<CharacterUI>().EnableSelector(enable);
             }
         }
 
@@ -26,7 +33,13 @@ namespace FloorManagement
 
         public override void OnCreate()
         {
-            throw new System.NotImplementedException();
+            List<GameObject> interactableObjectList = UtilsClass.instance.GetListFromPool(interactableObjectsPool, npcSlots.Count);
+            int count = 0;
+            foreach (var item in interactableObjectList)
+            {
+                npcs.Add(Instantiate(item, npcSlots[count].transform.position, Quaternion.identity, npcSlots[count].transform));
+                count++;
+            }
         }
     }
 }

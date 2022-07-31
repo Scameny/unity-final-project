@@ -142,7 +142,7 @@ namespace Character.Character
                 {
                     AddItem(item);
                 } 
-                catch (MaxItemQuantityException e)
+                catch (MaxItemQuantityException)
                 {
                     Debug.Log("Reached max quantity of item " + item.name);
                 }
@@ -150,9 +150,9 @@ namespace Character.Character
         }
 
 
-        public void AddItem(Item item, int i, int j)
+        public void AddItem(Item item, int i)
         {
-            inventory.AddItem(item, i, j);
+            inventory.AddItem(item, i);
         }
 
         public void AddItem(Item item)
@@ -180,9 +180,19 @@ namespace Character.Character
         /// Returns all items in the inventory
         /// </summary>
         /// <returns></returns>
-        public Item[,] GetAllStoredItems()
+        public Item[] GetAllStoredItems()
         {
             return inventory.items;
+        }
+
+        public bool UseCoins(int usedCoins)
+        {
+            return inventory.UseCoins(usedCoins);
+        }
+
+        public int GetCoins()
+        {
+            return inventory.GetCurrentCoins();
         }
 
 

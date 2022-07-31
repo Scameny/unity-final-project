@@ -119,14 +119,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0101090000007200650073006f00750072006300650073002f00000000015c000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e004c00690073007400600031005b005b004300680061007200610063007400650072002e004300680061007200610063007400650072002e005200650073006f0075007200630065002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c00690062000000000006000000000000000007052d010e00000070006100730073006900760065004d0061006e006100670065007200
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: resources
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Character.Character.Resource, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: passiveManager
+      Entry: 6
+      Data: 
   characterClass: {fileID: 11400000, guid: 3c9cbff58722f454cabd6dbc3703225f, type: 2}
   level: 1
   permanentCards: []
@@ -184,7 +200,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1932752992969972098}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d760e408a6cc2d447b74389e15485bef, type: 3}
   m_Name: 
@@ -262,7 +278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6621224849685482281, guid: 78e79fe87ef597d42ab980ac1dcf17c4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6621224850138070640, guid: 78e79fe87ef597d42ab980ac1dcf17c4, type: 3}
       propertyPath: m_Pivot.x

@@ -6,9 +6,8 @@ namespace FloorManagement
     [CreateAssetMenu(fileName = "EnemyPool", menuName = "Map/Enemy pool")]
     public class EnemyPool : ScriptableObject
     {
-        public EnemyInfo[] enemies;
-        public EnemyInfo boss;
-
+        [SerializeField] EnemyInfo[] enemies;
+        [SerializeField] EnemyInfo boss;
 
         public EnemyInfo GetRandomEnemy()
         {

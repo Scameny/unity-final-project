@@ -7,8 +7,7 @@ namespace FloorManagement {
     
     public class FloorGenerator : MonoBehaviour
     {
-        [HideInInspector]
-        public List<Room> rooms { get; private set; } = new List<Room>();
+        List<Room> rooms = new List<Room>();
 
         [Header("Weigths for generation")]
         public float pathContinue = 65.0f;
@@ -20,13 +19,23 @@ namespace FloorManagement {
         private int maxX;
         private int maxY;
         private bool bossRoom = false;
-
+        private List<RoomInfo> roomPoolCopy;
 
         public void GenerateFloor(int maxNumOfRooms, RoomPool roomPool)
         {
             this.maxNumOfRooms = maxNumOfRooms;
             this.roomPool = roomPool;
-            BuildBaseFloor(roomPool.baseRoom);
+            roomPoolCopy = new List<RoomInfo>();
+            
+            foreach (var item in roomPool.GetRooms())
+            {
+                for (int i = 0; i < item.maxNumberOfRooms; i++)
+                {
+                    roomPoolCopy.Add(item);
+                }
+            }
+
+            BuildBaseFloor(roomPool.GetBaseRoom());
             foreach (var room in rooms)
             {
                 EnableDoors(room);
@@ -71,14 +80,16 @@ namespace FloorManagement {
             RoomInfo roomToInstantiate = null;
             if (bossRoom)
             {
-                roomToInstantiate = roomPool.bossRoom;
+                roomToInstantiate = roomPool.GetBossRoom();
             }
             else
             {
                 roomToInstantiate = GetNewRoom();
             }
-            Room newRoom = new Room(roomToInstantiate, room.i + x, room.j + y);
-            newRoom.gameObject = Instantiate(roomToInstantiate.roomGameObject, room.gameObject.transform.position + new Vector3(room.roomInfo.width * x, room.roomInfo.heigth * y, 0), Quaternion.identity);
+            Room newRoom = new Room(roomToInstantiate, room.i + x, room.j + y)
+            {
+                gameObject = Instantiate(roomToInstantiate.roomGameObject, room.gameObject.transform.position + new Vector3(room.width * x, room.heigth * y, 0), Quaternion.identity)
+            };
             rooms.Add(newRoom);
 
             if (rooms.Count < maxNumOfRooms)
@@ -88,9 +99,8 @@ namespace FloorManagement {
                     maxX = newRoom.i;
                     maxY = newRoom.j;
                 }
-                
 
-                if (room.roomInfo.onlyOneWay)
+                if (newRoom.onlyOneWay)
                 {
                     BuildNewRoom(room, pathContInd);
                 }
@@ -100,7 +110,12 @@ namespace FloorManagement {
                 }
                 else
                 {
-                    BuildNewRoom(rooms[Random.Range(0, rooms.Count)], 0);
+                    int randomRoomNumber = Random.Range(0, rooms.Count);
+                    while (rooms[randomRoomNumber].onlyOneWay)
+                    {
+                        randomRoomNumber = Random.Range(0, rooms.Count);
+                    }
+                    BuildNewRoom(rooms[randomRoomNumber], 0);
                 }
             }
             else if (!bossRoom)
@@ -112,13 +127,28 @@ namespace FloorManagement {
 
         private RoomInfo GetNewRoom()
         {
-            RoomInfo roomToInstantiate = roomPool.GetRoom();
-            while (rooms.Count(r => r.roomInfo.Equals(roomToInstantiate)) == roomToInstantiate.maxNumberOfRooms)
+            int maxWeigth = 0;
+            foreach (var room in roomPoolCopy)
             {
-                roomToInstantiate = roomPool.GetRoom();
+                maxWeigth += room.weigth;
             }
-            return roomToInstantiate;
+            int index = 0;
+            int lastIndex = roomPoolCopy.Count - 1;
+            while (index < lastIndex)
+            {
+                if (Random.Range(0, maxWeigth) < roomPoolCopy[index].weigth)
+                {
+                    return roomPoolCopy[index];
+                }
+                maxWeigth -= roomPoolCopy[index].weigth;
+                index++;
+            }
+            RoomInfo toRet = roomPoolCopy[index];
+            roomPoolCopy.RemoveAt(index);
+            return toRet;
         }
+
+       
 
         private void GetRandomDirection(ref int x, ref int y)
         {
@@ -152,7 +182,7 @@ namespace FloorManagement {
             Room roomToEvaluate = rooms.FirstOrDefault(r => r.i == room.i + 1 && r.j == room.j);
             if (roomToEvaluate != null)
             {
-                if (roomToEvaluate.roomInfo.needKey)
+                if (roomToEvaluate.needKey)
                     keyDoors.Add(Direction.Right);
                 else
                     normalDoors.Add(Direction.Right);
@@ -160,7 +190,7 @@ namespace FloorManagement {
             roomToEvaluate = rooms.FirstOrDefault(r => r.i == room.i - 1 && r.j == room.j);
             if (roomToEvaluate != null)
             {
-                if (roomToEvaluate.roomInfo.needKey)
+                if (roomToEvaluate.needKey)
                     keyDoors.Add(Direction.Left);
                 else
                     normalDoors.Add(Direction.Left);
@@ -168,7 +198,7 @@ namespace FloorManagement {
             roomToEvaluate = rooms.FirstOrDefault(r => r.i == room.i && r.j == room.j + 1);
             if (roomToEvaluate != null)
             {
-                if (roomToEvaluate.roomInfo.needKey)
+                if (roomToEvaluate.needKey)
                     keyDoors.Add(Direction.Up);
                 else
                     normalDoors.Add(Direction.Up);
@@ -176,7 +206,7 @@ namespace FloorManagement {
             roomToEvaluate = rooms.FirstOrDefault(r => r.i == room.i && r.j == room.j - 1);
             if (roomToEvaluate != null)
             {
-                if (roomToEvaluate.roomInfo.needKey)
+                if (roomToEvaluate.needKey)
                     keyDoors.Add(Direction.Down);
                 else
                     normalDoors.Add(Direction.Down);
@@ -197,10 +227,10 @@ namespace FloorManagement {
                         List<EnemyInfo> enemies = new List<EnemyInfo>();
                         for (int i = 0; i < numEnemies; i++)
                         {
-                            EnemyInfo enemy = roomPool.enemyPool.GetRandomEnemy();
+                            EnemyInfo enemy = roomPool.GetEnemyPool().GetRandomEnemy();
                             while (enemy.hasMaxNumPerRoom && enemyRoom.enemiesGenerated.Count(e => e.gameObject.name.Equals(enemy.gameObject.name)) == enemy.maxNumPerRoom)
                             {
-                                enemy = roomPool.enemyPool.GetRandomEnemy();
+                                enemy = roomPool.GetEnemyPool().GetRandomEnemy();
                             }
                             enemyRoom.enemiesGenerated.Add(enemy);
                         }
@@ -215,18 +245,29 @@ namespace FloorManagement {
                 room.OnCreate();
             }
         }
+
+        public List<Room> GetRooms()
+        {
+            return rooms;
+        }
     }
 
     public class Room
         {
             public Room(RoomInfo roomInfo, int i, int j)
             {
-                this.roomInfo = roomInfo;
+                heigth = roomInfo.heigth;
+                width = roomInfo.width;
+                onlyOneWay = roomInfo.onlyOneWay;
+                needKey = roomInfo.needKey;
                 this.i = i;
                 this.j = j;
             }
             public GameObject gameObject;
-            public RoomInfo roomInfo;
+            public float heigth;
+            public float width;
+            public bool onlyOneWay;
+            public bool needKey;
             public int i;
             public int j;
         }

@@ -1,30 +1,28 @@
-using DialogueEditor;
+using GameManagement;
+using UI;
 using UnityEngine;
 
 namespace Interaction
 {
-    [RequireComponent(typeof(NPCConversation))]
     public abstract class NPCInteractable : MonoBehaviour
     {
 
-        NPCConversation npcConversation;
-
-        private void Awake()
+        virtual public void StartConversation() 
         {
-            npcConversation = GetComponent<NPCConversation>();
-        }
-
-        private void Start()
-        {
-            ConversationManager.Instance.StartConversation(npcConversation);
-        }
-
-        public NPCConversation GetConversation()
-        {
-            return npcConversation;
+            UIManager.manager.NPCInteraction(true);
+            GameManager.gm.EnableSelectorInteraction(false);
+            GameManager.gm.StartInteraction();
         }
 
         public abstract void Interact();
+
+        public virtual void OnEndInteract()
+        {
+            UIManager.manager.NPCInteraction(false);
+            UIManager.manager.EnablePermanentCardsRemoveWindow(false);
+            GameManager.gm.EnableSelectorInteraction(true);
+            GameManager.gm.EndInteraction();
+        }
 
     }
 

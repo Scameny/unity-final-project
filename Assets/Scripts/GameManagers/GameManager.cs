@@ -10,12 +10,14 @@ namespace GameManagement
     {
         // current floor
 
+
         public RoomPool roomPoolToTest;
         public float combatTurnWait { private set; get; } = 0.1f;
 
 
         public static GameManager gm;
 
+        private GameState currentGameState;
 
         FloorGenerator floorGenerator;
         GameObject player;
@@ -32,20 +34,15 @@ namespace GameManagement
             player = GameObject.FindGameObjectWithTag("Player");
         }
 
-
-        private void Update()
+        public void EnableSelectorInteraction(bool enable)
         {
-            if (!isInCombat)
+            if (currentRoom.GetRoomType().Equals(RoomType.InteractionRoom))
             {
-                Direction dir = player.GetComponent<PlayerControllerPC>().SelectDoor(currentRoom);
-                if (!dir.Equals(Direction.None))
-                {
-                    GoToRoom(dir);
-                }
+                (currentRoom as NpcRoomManager).EnableSelectors(enable);
             }
         }
 
-        private void GoToRoom(Direction dir)
+        public void GoToRoom(Direction dir)
         {
             currentRoom = floorGenerator.GetRoom(currentRoom, dir);
             int x = 0;
@@ -57,20 +54,46 @@ namespace GameManagement
 
         public void EndCombat()
         {
-            isInCombat = false;
+            currentGameState = GameState.Moving;
+        }
+
+        public void StartCombat()
+        {
+            currentGameState = GameState.Combat;
+        }
+
+        public void StartInteraction()
+        {
+            currentGameState = GameState.Interacting;
+        }
+
+        public void EndInteraction()
+        {
+            currentGameState = GameState.Moving;
         }
 
         [Button]
         public void StartGame()
         {
             floorGenerator.GenerateFloor(8, roomPoolToTest);
+            currentGameState = GameState.Moving;
             currentRoom = floorGenerator.GetBaseRoom();
         }
 
-        public void SetInCombat(bool isInCombat)
+        public RoomManager GetCurrentRoom()
         {
-            this.isInCombat = isInCombat;
+            return currentRoom;
         }
+
+        public GameState GetCurrentState()
+        {
+            return currentGameState;
+        }
+    }
+
+    public enum GameState
+    {
+        Combat, Interacting, Moving
     }
 }
 

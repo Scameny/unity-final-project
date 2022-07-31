@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IObservable<>
     {
         public static UIManager manager;
-        public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu, permanentCardsRemoveWindow;
-        public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton;
+        public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu, permanentCardsRemoveWindow, vendorFrame;
+        public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton, conversationFrame;
 
         public SimpleTooltipStyle tooltipStyle;
 
@@ -53,13 +53,29 @@ namespace UI
 
         public void NPCInteraction(bool enable)
         {
-            openCharacterMenuButton.SetActive(enable);
-            resourcesMenu.SetActive(enable);
+            openCharacterMenuButton.SetActive(!enable);
+            resourcesMenu.SetActive(!enable);
+            conversationFrame.SetActive(enable);
         }
 
         public void EnablePermanentCardsRemoveWindow(bool enable)
         {
             permanentCardsRemoveWindow.SetActive(enable);
+        }
+
+        public void EnableVendorFrame(bool enable)
+        {
+            vendorFrame.SetActive(enable);
+        }
+
+        public GameObject GetVendorFrame()
+        {
+            return vendorFrame;
+        }
+
+        public GameObject GetPermanentCardsRemoveWindow()
+        {
+            return permanentCardsRemoveWindow;
         }
 
     }

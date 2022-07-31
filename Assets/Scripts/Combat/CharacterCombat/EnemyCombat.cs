@@ -17,6 +17,7 @@ namespace Combat
 
         Queue<Card> cardsQueue = new Queue<Card>();
         Card nextCardToPlay;
+        Coroutine queueCoroutine;
 
         private void Awake()
         {
@@ -45,7 +46,7 @@ namespace Combat
         {
             base.StartOfTurn();
             EnemyIA();
-            StartCoroutine(UseCardsInQueue());
+            queueCoroutine = StartCoroutine(UseCardsInQueue());
         }
 
         #region IA operations
@@ -255,6 +256,7 @@ namespace Combat
                         cardsQueue.Dequeue();
                 }
             }
+            yield return new WaitUntil(() => nextCardToPlay == null);
             EndTurn();
         }
 

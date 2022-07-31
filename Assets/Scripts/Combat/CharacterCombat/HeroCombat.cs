@@ -54,7 +54,7 @@ namespace Combat
 
         private IEnumerator EndTurnCoroutine()
         {
-            yield return new WaitUntil(() => cardsQueue.Count == 0);
+            yield return new WaitUntil(() => queueCoroutine == null);
             base.EndTurn();
             UIManager.manager.CombatUIInteractable(false);
         }

@@ -82,29 +82,29 @@ namespace Items
             }
         }
 
-        public string GetTooltipText()
+        override public void SetTooltipText(SimpleTooltip tooltip)
         {
-            string statText = "@statistic@";
+            tooltip.infoRight = GetSlotType().ToString();
+            string leftTooltipText= GetName();
+            leftTooltipText = "@statistic@";
             foreach (var item in statList.stats)
             {
-                statText += "+ " + item.amount + " " + item.statType.ToString() + "@statistic@\n";
+                leftTooltipText += "+ " + item.amount + " " + item.statType.ToString() + "\n";
             }
             foreach (var item in secondaryStatList.stats)
             {
-                statText += "+ " + item.amount + " " + item.statType.ToString() + "@statistic@\n";
+                leftTooltipText += "+ " + item.amount + " " + item.statType.ToString() + "\n";
             }
-            statText += "@break@\n";
+            leftTooltipText += "@break@\n";
             foreach (var item in abilitiesGiven)
             {
-                statText += "Equip: (" + item.quantity + ") " + item.usable.GetName() + " - " + item.usable.GetDescription() + "\n";
+                leftTooltipText += "Equip: (" + item.quantity + ") " + item.usable.GetName() + " - " + item.usable.GetDescription() + "\n";
             }
             foreach (var item in passiveAbilities)
             {
-                statText += "Equip: " + item.passiveAbility.GetName() + " - " + item.passiveAbility.GetDescription() + "\n";
+                leftTooltipText += "Equip: " + item.passiveAbility.GetName() + " - " + item.passiveAbility.GetDescription() + "\n";
             }
-
-
-            return statText;
+            tooltip.infoLeft = leftTooltipText;
         }
     }
 

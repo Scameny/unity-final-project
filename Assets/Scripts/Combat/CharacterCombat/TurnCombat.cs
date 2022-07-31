@@ -32,7 +32,7 @@ namespace Combat
 
 
 
-        private void OnEnable()
+        public void StartCombat()
         {
             InitDeck();
             DrawInitialHand();
@@ -40,12 +40,12 @@ namespace Combat
             ActivePassiveAbilities();
         }
 
-        private void OnDisable()
+        public void EndCombat()
         {
-            TurnPreparationStop();
-            ClearCards();
-            RemoveTemporaryTraits();
+            StopAllCoroutines();
             DisposePassiveAbilities();
+            RemoveTemporaryTraits();
+            ClearCards();
         }
 
 
@@ -108,7 +108,7 @@ namespace Combat
                     else
                         stack.AddCard(card);
                 }
-                catch (EmptyCardContainerException e)
+                catch (EmptyCardContainerException)
                 {
                     RechargeDeck();
                 }
@@ -121,7 +121,6 @@ namespace Combat
             {
                 deck.AddCard(item);
             }
-            TurnPreparationResume();
         }
 
         /// <summary>

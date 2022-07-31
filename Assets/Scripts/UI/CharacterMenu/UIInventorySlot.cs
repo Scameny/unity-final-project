@@ -1,13 +1,11 @@
 using Items;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UI
 {
     public class UIInventorySlot : UISlot
     {
-        public slotInfo slotInfo;
+        public int position;
 
         protected override void OnDropNewDraggableItem(DraggableItem droppedDraggableItem)
         {
@@ -29,16 +27,10 @@ namespace UI
 
         public override bool OnItemChange(Item itemToinventory)
         {
-            player.AddItem(itemToinventory, slotInfo.i, slotInfo.j);
+            player.AddItem(itemToinventory, position);
             draggableItem.SetItem(itemToinventory);
             return true;
         }
-    }
-
-    public struct slotInfo
-    {
-        public int i;
-        public int j;
     }
 
 }

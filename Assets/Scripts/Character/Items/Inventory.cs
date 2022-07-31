@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
+using UnityEngine;
 
 namespace Items {
     [Serializable]
@@ -7,27 +8,41 @@ namespace Items {
     {
         [LabelText("Inventory")]
         [InlineProperty]
-        public Item[,] items = new Item[8,3];
+        public Item[] items = new Item[24];
+        [SerializeField] int coins;
 
-        public void AddItem(Item itemToAdd, int i, int j)
+        public void AddItem(Item itemToAdd, int i)
         {
-            items[i, j] = itemToAdd;
+            items[i] = itemToAdd;
         }
 
         public void AddItem(Item itemToAdd)
-        {
-            for (int i = 0; i < items.GetLength(0); i++)
+        { 
+            for (int i = 0; i < items.Length; i++)
             {
-                for (int j = 0; j < items.GetLength(1); j++)
+                if (items[i] == null)
                 {
-                    if (items[i,j] == null)
-                    {
-                        items[i, j] = itemToAdd;
-                        return;
-                    }
+                    items[i] = itemToAdd;
+                    return;
                 }
             }
             // inventory full;
+        }
+
+        public int GetCurrentCoins()
+        {
+            return coins;
+        }
+
+        public bool UseCoins(int coinsUsed)
+        {
+            if (coinsUsed > coins)
+                return false;
+            else
+            {
+                coins -= coinsUsed;
+                return true;
+            }
         }
 
 

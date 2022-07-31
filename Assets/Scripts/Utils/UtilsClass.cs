@@ -1,5 +1,5 @@
 using FloorManagement;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,6 +59,65 @@ namespace Utils
             int b = (int)(color.b * 255);
             return r.ToString("X2") + g.ToString("X2") + b.ToString("X2");
         }
+
+        /// <summary>
+        /// Select n elements for the pool taking account their weigth
+        /// </summary>
+        /// <typeparam name="T">Type of items stored in the pool</typeparam>
+        /// <param name="pool">Pool of items</param>
+        /// <param name="numOfElements">Number of elements in the list to return</param>
+        /// <param name="removeOnceSelected">true if once one item is took from the pool should be removed</param>
+        /// <returns></returns>
+        public List<T> GetListFromPool<T>(List<PoolObject<T>> pool, int n, bool removeOnceSelected = true)
+        {
+            int totalWeigth = 0;
+            List<PoolObject<T>> copyOfPool = new List<PoolObject<T>>(pool); 
+            List<T> listToRet = new List<T>(); 
+            foreach (var item in pool)
+            {
+                totalWeigth += item.weigth;
+            }
+            for (int i = 0; i < pool.Count; i++)
+            {
+                int randomNum = UnityEngine.Random.Range(0, totalWeigth);
+                int aux = 0;
+                int indexItemSelected = 0;
+
+                for (int j = 0; j < n; j++)
+                {
+                    if (randomNum < copyOfPool[j].weigth + aux)
+                    {
+                        indexItemSelected = j;
+                        break;
+                    }
+                    else
+                    {
+                        aux += copyOfPool[j].weigth;
+                    }
+                }
+                listToRet.Add(copyOfPool[indexItemSelected].gameObject);
+                if (removeOnceSelected)
+                {
+             
+                    copyOfPool.RemoveAt(indexItemSelected);
+                }
+            }
+            return listToRet;
+        }
+
+    }
+
+    [Serializable]
+    public class PoolObject<T>
+    {
+        public PoolObject(int weigth, T gameObject)
+        {
+            this.gameObject = gameObject;
+            this.weigth = weigth;
+        }
+
+        public int weigth;
+        public T gameObject;
     }
 
 }

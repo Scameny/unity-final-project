@@ -42,7 +42,7 @@ public class CombatManager : MonoBehaviour
     #region Combat management
     public void StartCombat(List<GameObject> enemies)
     {
-        GameManager.gm.SetInCombat(true);
+        GameManager.gm.StartCombat();
         this.enemies = enemies;
         charactersInCombat.AddRange(enemies);
         charactersInCombat.Add(player.gameObject);
@@ -50,19 +50,18 @@ public class CombatManager : MonoBehaviour
         turnPaused = false;
         foreach (GameObject character in charactersInCombat)
         {
-            character.GetComponent<TurnCombat>().enabled = true;
+            character.GetComponent<TurnCombat>().StartCombat();
         }
     }
 
 
     public void EndCombat()
     {
-        GameManager.gm.SetInCombat(false);
-        player.GetComponent<TurnCombat>().enabled = false;
+        GameManager.gm.EndCombat();
+        player.GetComponent<TurnCombat>().EndCombat();
         charactersInCombat.Clear();
         ((Hero)player.GetCharacter()).AddExp(expStored);
         ((Hero)player.GetCharacter()).AddItems(itemsStored);
-        GameManager.gm.EndCombat();
     }
 
 
@@ -106,7 +105,7 @@ public class CombatManager : MonoBehaviour
         itemsStored.AddRange(((Npc)enemy.GetCharacter()).GetRewardItems());
         enemies.Remove(enemy.gameObject);
         Debug.Log("enemy death");
-        enemy.GetComponent<TurnCombat>().enabled = false;
+        enemy.GetComponent<TurnCombat>().EndCombat();
         enemy.gameObject.SetActive(false);
         if (enemies.Count == 0)
         {

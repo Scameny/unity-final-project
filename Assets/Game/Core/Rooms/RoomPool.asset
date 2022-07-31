@@ -14,15 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rooms:
   - roomGameObject: {fileID: 6245226342220383230, guid: ddc6f6d4b16dc2a4dacb7e1ed886cd94, type: 3}
-    maxNumberOfRooms: 10
-    weigth: 0
+    maxNumberOfRooms: 4
+    weigth: 50
+    heigth: 10
+    width: 18
+    onlyOneWay: 0
+    needKey: 0
+  - roomGameObject: {fileID: 6245226342220383230, guid: 453329a76cac3974e8091f4dece033ae, type: 3}
+    maxNumberOfRooms: 1
+    weigth: 5
+    heigth: 10
+    width: 18
+    onlyOneWay: 1
+    needKey: 0
+  - roomGameObject: {fileID: 6245226342220383230, guid: fc6c9b1a181839c48b5fcfd01ef9d71f, type: 3}
+    maxNumberOfRooms: 1
+    weigth: 45
     heigth: 10
     width: 18
     onlyOneWay: 0
     needKey: 0
   bossRoom:
     roomGameObject: {fileID: 6245226342220383230, guid: ddc6f6d4b16dc2a4dacb7e1ed886cd94, type: 3}
-    maxNumberOfRooms: 1
+    maxNumberOfRooms: 0
     weigth: 0
     heigth: 10
     width: 18
@@ -30,7 +44,7 @@ MonoBehaviour:
     needKey: 0
   baseRoom:
     roomGameObject: {fileID: 6245226342220383230, guid: b6dcb9a125b06984a9c8dd1a7f392fb0, type: 3}
-    maxNumberOfRooms: 1
+    maxNumberOfRooms: 0
     weigth: 0
     heigth: 10
     width: 18
