@@ -16,7 +16,7 @@ namespace GameManagement
         CARD_DRAWED,
         CARD_PLAYED,
         DAMAGE_RECEIVED,
-        RESOURCE_GAINED
+        RESOURCE_MODIFY
     }
 
     public class SignalData
@@ -48,6 +48,15 @@ namespace GameManagement
         public CombatCardSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> targets, Card card) : base(signalType, user, targets)
         {
             this.card = card;
+        }
+    }
+
+    public class DamageReceivedSignalData : CombatSignalData
+    {
+        public int damage;
+        public DamageReceivedSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, int damage) : base(signalType, user, charactersInCombat)
+        {
+            this.damage = damage;
         }
     }
 

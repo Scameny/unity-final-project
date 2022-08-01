@@ -223,8 +223,8 @@ namespace Character.Character
         {
             if (HaveEnoughResource(resource, resourceType))
             {
+                SendSignalData(new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, -resource, GetResourceByResourceType(resourceType).currentAmount));
                 GetResourceByResourceType(resourceType).currentAmount -= resource;
-                characterUI.ProcessModifyResourceText(resourceType, -resource, gameObject);
             }
             else
             {
@@ -270,10 +270,8 @@ namespace Character.Character
         public void GainResource(int amount, ResourceType resourceType) 
         {
             Resource resource = GetResourceByResourceType(resourceType);
-
-            passiveManager.SendData(new ResourceSignalData(GameSignal.RESOURCE_GAINED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount));
+            SendSignalData(new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount));
             resource.currentAmount += amount;
-            characterUI.ProcessModifyResourceText(resourceType, amount, gameObject);
             resource.currentAmount = Mathf.Min(resource.currentAmount, resource.maxResource);
         }
 
@@ -313,22 +311,23 @@ namespace Character.Character
             damage = ProcessDamageReceived(damage, type);
             if (damage > 0)
             {
+                SendSignalData(new DamageReceivedSignalData(GameSignal.DAMAGE_RECEIVED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), damage));
                 GameDebug.Instance.Log(Color.blue, gameObject.name + " taking " + damage + " damage");
                 if (armor.currentAmount < damage)
                 {
                     if (armor.currentAmount > 0)
                     {
+                        SendSignalData(new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Armor, -armor.currentAmount, armor.currentAmount));
                         damage -= armor.currentAmount;
-                        characterUI.ProcessModifyResourceText(ResourceType.Armor, -armor.currentAmount, gameObject);
                         armor.currentAmount = 0;
                     }
+                    SendSignalData(new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Health, -damage, health.currentAmount));
                     health.currentAmount -= damage;
-                    characterUI.ProcessModifyResourceText(ResourceType.Health, -damage, gameObject);
                 }
                 else
                 {
                     armor.currentAmount -= damage;
-                    characterUI.ProcessModifyResourceText(ResourceType.Armor, -damage, gameObject);
+                    SendSignalData(new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Armor, -damage, armor.currentAmount));
                 }
                 GetComponent<Animator>().Play("Hurt");
                 if (health.currentAmount <= 0)
@@ -338,8 +337,8 @@ namespace Character.Character
 
         public void Heal(int healAmount)
         {
+            SendSignalData(new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Health, healAmount, health.currentAmount));
             health.currentAmount += healAmount;
-            characterUI.ProcessModifyResourceText(ResourceType.Health, healAmount, gameObject);
             GameDebug.Instance.Log(Color.green, gameObject.name + " was healed for " + healAmount + " points");
             if (health.currentAmount > health.maxResource)
                 health.currentAmount = health.maxResource;

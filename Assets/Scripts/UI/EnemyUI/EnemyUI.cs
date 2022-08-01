@@ -14,17 +14,11 @@ namespace UI
         [SerializeField] GameObject cardPrefab;
         [SerializeField] Transform cardSlot;
         Slider resourceSlider;
-        DefaultCharacter npc;
 
         override protected void Awake()
         {
             base.Awake();
             resourceSlider = GetComponentInChildren<Slider>();
-        }
-
-        private void Start()
-        {
-            npc = GetComponentInParent<DefaultCharacter>();
         }
 
         override protected void Update()
@@ -35,8 +29,8 @@ namespace UI
 
         private void UpdateResourceUnit()
         {
-            resourceSlider.maxValue = npc.GetMaxValueOfResource(ResourceType.Health);
-            resourceSlider.value = npc.GetCurrentResource(ResourceType.Health);
+            resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+            resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
         }
 
         public void ShowCard(Card card)
