@@ -1,5 +1,6 @@
 using CardSystem;
 using Character.Stats;
+using GameManagement;
 using Sirenix.OdinInspector;
 using Strategies.PassiveEffectStrategies;
 using Strategies.SignalDecoderStrategy;
@@ -35,7 +36,7 @@ namespace Abilities.Passive
 
         #region Object operations
 
-        public void Evaluate(List<PassiveData> passiveDataStored, PassiveData passiveData)
+        public void Evaluate(List<SignalData> passiveDataStored, SignalData passiveData)
         {
             if (signalDecoderStrategy.SignalEvaluate(passiveDataStored, passiveData))
             {
@@ -76,56 +77,6 @@ namespace Abilities.Passive
             return hashCode;
         }
         #endregion
-    }
-
-
-    public class PassiveData
-    {
-        public PassiveSignal signalType;
-        public GameObject user;
-        public IEnumerable<GameObject> targets;
-
-        public PassiveData(PassiveSignal signalType, GameObject user, IEnumerable<GameObject> targets)
-        {
-            this.signalType = signalType;
-            this.user = user;
-            this.targets = targets;
-        }
-    }
-
-    public class PassiveDataCardInteraction : PassiveData
-    {
-        public Card card;
-
-        public PassiveDataCardInteraction(PassiveSignal signalType, GameObject user, IEnumerable<GameObject> targets, Card card) : base(signalType, user, targets)
-        {
-            this.card = card;
-        }
-    }
-
-    public class PassiveDataResourceInteraction : PassiveData
-    {
-        public ResourceType resourceType;
-        public int resourceAmount;
-        public int resourceBeforeGain;
-
-        public PassiveDataResourceInteraction(PassiveSignal signalType, GameObject user, IEnumerable<GameObject> targets, ResourceType resourceType, int resourceAmount, int resourceBeforeGain) : base(signalType, user, targets)
-        {
-            this.resourceType= resourceType;
-            this.resourceAmount= resourceAmount;
-            this.resourceBeforeGain= resourceBeforeGain;
-
-        }
-    }
-
-    public enum PassiveSignal
-    {
-        StartOfTurn,
-        EndOfTurn,
-        CardDrawed,
-        CardPlayed,
-        DamageReceived,
-        ResourceGained
     }
 
 }

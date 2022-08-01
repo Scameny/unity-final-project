@@ -1,4 +1,4 @@
-using Abilities.Passive;
+using GameManagement;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,12 +7,12 @@ namespace Strategies.SignalDecoderStrategy
     public abstract class SignalDecoderStrategy
     {
 
-        [SerializeField] PassiveSignal passiveSignal;
+        [SerializeField] GameSignal passiveSignal;
 
 
-        public abstract bool SignalEvaluate(List<PassiveData> passiveDataStored, PassiveData newSignal);
+        public abstract bool SignalEvaluate(List<SignalData> passiveDataStored, SignalData newSignal);
         
-        public PassiveSignal GetPassiveSignal()
+        public GameSignal GetPassiveSignal()
         {
             return passiveSignal;
         }

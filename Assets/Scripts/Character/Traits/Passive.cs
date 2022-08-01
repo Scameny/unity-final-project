@@ -1,3 +1,4 @@
+using GameManagement;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,12 @@ namespace Abilities.Passive
 {
     [Serializable]
     [InlineProperty]
-    public class Passive : IObserver<PassiveData>
+    public class Passive : IObserver<SignalData>
     {
         [HideLabel]
         public PassiveAbility passiveAbility;
         protected IDisposable disposable;
-        protected List<PassiveData> dataStored = new List<PassiveData>();
+        protected List<SignalData> dataStored = new List<SignalData>();
 
         #region Observer operations
         public void OnCompleted()
@@ -25,7 +26,7 @@ namespace Abilities.Passive
             throw new NotImplementedException();
         }
 
-        public void OnNext(PassiveData value)
+        public void OnNext(SignalData value)
         {
             passiveAbility.Evaluate(dataStored, value);
         }

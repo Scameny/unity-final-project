@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine;
 using Character.Character;
 using CardSystem;
@@ -102,7 +101,7 @@ namespace Combat
                 try
                 {
                     Card card = deck.DrawCard();
-                    character.passiveManager.SendData(new PassiveData(PassiveSignal.CardDrawed, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+                    character.passiveManager.SendData(new CombatCardSignalData(GameSignal.CARD_DRAWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
                     if (hand.GetCurrentCardsNumber() < 10)
                         hand.AddCard(card);
                     else
@@ -148,7 +147,7 @@ namespace Combat
 
         virtual public void CardUsed(Card card)
         {
-            character.passiveManager.SendData(new PassiveDataCardInteraction(PassiveSignal.CardPlayed, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+            character.passiveManager.SendData(new CombatCardSignalData(GameSignal.CARD_PLAYED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
             if (card.IsOneUse())
             {
                 Destroy(gameObject);
@@ -212,7 +211,7 @@ namespace Combat
         virtual protected void StartOfTurn()
         {
             CombatManager.combatManager.PauseCombat();
-            character.passiveManager.SendData(new PassiveData(PassiveSignal.StartOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+            character.passiveManager.SendData(new CombatSignalData(GameSignal.START_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
             EvaluateTraits();
             DrawCard(1);
             turnTime = 0;
@@ -220,7 +219,7 @@ namespace Combat
 
         virtual protected void EndTurn()
         {
-            character.passiveManager.SendData(new PassiveData(PassiveSignal.EndOfTurn, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+            character.passiveManager.SendData(new CombatSignalData(GameSignal.END_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
             CombatManager.combatManager.ResumeCombat();
         }
 

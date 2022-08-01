@@ -1,5 +1,5 @@
-using Abilities.Passive;
 using Animations;
+using GameManagement;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -11,17 +11,17 @@ namespace Strategies.PassiveEffectStrategies
     [Serializable]
     public abstract class PassiveEffectStrategy
     {
-        protected abstract void EffectAction(PassiveData passiveData);
+        protected abstract void EffectAction(CombatSignalData passiveData);
 
         [HideLabel, InlineProperty]
         [SerializeReference] IPassiveSpellAnimation spellAnimation;
 
-        public void EffectActivation(PassiveData passiveData)
+        public void EffectActivation(SignalData passiveData)
         {
             if (spellAnimation != null)
-                spellAnimation.PlaySpellAnimation(passiveData, EffectAction);
+                spellAnimation.PlaySpellAnimation(passiveData as CombatSignalData, EffectAction);
             else
-                EffectAction(passiveData);
+                EffectAction(passiveData as CombatSignalData);
         }
 
         public IEnumerable<Type> GetFilteredAnimations()

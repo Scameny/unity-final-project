@@ -1,11 +1,16 @@
+using GameManagement;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class UIManager : MonoBehaviour, IObservable<>
+    public class UIManager : MonoBehaviour, IObservable<SignalData>
     {
+
+        private List<IObserver<SignalData>> observers = new List<IObserver<SignalData>>();
+
         public static UIManager manager;
         public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu, permanentCardsRemoveWindow, vendorFrame;
         public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton, conversationFrame;
@@ -36,7 +41,7 @@ namespace UI
 
         public void ChangeSceneToSelection(IEnumerable<GameObject> targets, bool selection)
         {
-            foreach(var character in targets)
+            foreach (var character in targets)
             {
                 character.GetComponentInChildren<CharacterUI>().EnableSelector(selection);
             }
@@ -78,5 +83,19 @@ namespace UI
             return permanentCardsRemoveWindow;
         }
 
+        public IDisposable Subscribe(IObserver<SignalData> observer)
+        {
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber(observers, observer);
+        }
+
+        public void SendData(SignalData uiData)
+        {
+            foreach (var item in observers)
+            {
+                item.OnNext(uiData);
+            }
+        }
     }
 }

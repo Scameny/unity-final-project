@@ -11,6 +11,7 @@ using Abilities.Passive;
 using Combat;
 using System.Linq;
 using UI;
+using GameManagement;
 
 namespace Character.Character 
 {
@@ -269,8 +270,8 @@ namespace Character.Character
         public void GainResource(int amount, ResourceType resourceType) 
         {
             Resource resource = GetResourceByResourceType(resourceType);
-            
-            passiveManager.SendData(new PassiveDataResourceInteraction(PassiveSignal.ResourceGained, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount));
+
+            passiveManager.SendData(new ResourceSignalData(GameSignal.RESOURCE_GAINED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount));
             resource.currentAmount += amount;
             characterUI.ProcessModifyResourceText(resourceType, amount, gameObject);
             resource.currentAmount = Mathf.Min(resource.currentAmount, resource.maxResource);
@@ -362,6 +363,16 @@ namespace Character.Character
         {
             return health.maxResource;
         }
+        #endregion
+
+        #region Signal operations
+
+        public void SendSignalData(SignalData data)
+        {
+            passiveManager.SendData(data);
+            UIManager.manager.SendData(data);
+        }
+
         #endregion
 
     }

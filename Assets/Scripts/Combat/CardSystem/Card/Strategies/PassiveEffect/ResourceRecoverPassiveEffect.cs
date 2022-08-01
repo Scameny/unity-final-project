@@ -1,6 +1,6 @@
-using Abilities.Passive;
 using Character.Character;
 using Character.Stats;
+using GameManagement;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace Strategies.PassiveEffectStrategies
         [LabelWidth(120)]
         [SerializeField] public ResourceType resourceType;
 
-        protected override void EffectAction(PassiveData passiveData)
+        protected override void EffectAction(CombatSignalData passiveData)
         {
             passiveData.user.GetComponent<DefaultCharacter>().GainResource(quantity, resourceType);
         }

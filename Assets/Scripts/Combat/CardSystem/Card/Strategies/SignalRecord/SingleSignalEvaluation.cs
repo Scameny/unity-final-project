@@ -1,13 +1,13 @@
-using Abilities.Passive;
+using GameManagement;
 using System.Collections.Generic;
 
 namespace Strategies.SignalDecoderStrategy
 {
     public class SingleSignalEvaluation : SignalDecoderStrategy
     {
-        public override bool SignalEvaluate(List<PassiveData> passiveDataStored, PassiveData newSignal)
+        public override bool SignalEvaluate(List<SignalData> passiveDataStored, SignalData newSignal)
         {
-            if (newSignal.signalType.Equals(GetPassiveSignal()))
+            if (newSignal.signal.Equals(GetPassiveSignal()))
                 return true;
             else
                 return false;

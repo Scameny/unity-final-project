@@ -1,19 +1,20 @@
 using Abilities.Passive;
+using GameManagement;
 using System;
 using System.Collections.Generic;
 
 namespace Combat
 { 
-    public class PassiveManager : IObservable<PassiveData>
+    public class PassiveManager : IObservable<SignalData>
     {
-        private List<IObserver<PassiveData>> observers;
+        private List<IObserver<SignalData>> observers;
 
         public PassiveManager()
         {
-            observers = new List<IObserver<PassiveData>>();
+            observers = new List<IObserver<SignalData>>();
         }
 
-        public IDisposable Subscribe(IObserver<PassiveData> observer)
+        public IDisposable Subscribe(IObserver<SignalData> observer)
         {
             if (!observers.Contains(observer))
                 observers.Add(observer);
@@ -28,29 +29,11 @@ namespace Combat
             }
         }
 
-        public void SendData(PassiveData passiveData)
+        public void SendData(SignalData passiveData)
         {
             foreach (var item in observers)
             {
                 item.OnNext(passiveData);
-            }
-        }
-
-        private class Unsubscriber : IDisposable
-        {
-            private List<IObserver<PassiveData>> _observers;
-            private IObserver<PassiveData> _observer;
-
-            public Unsubscriber(List<IObserver<PassiveData>> observers, IObserver<PassiveData> observer)
-            {
-                _observers = observers;
-                _observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
             }
         }
     }
