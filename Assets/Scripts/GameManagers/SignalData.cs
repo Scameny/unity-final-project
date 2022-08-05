@@ -1,5 +1,6 @@
 using CardSystem;
 using Character.Stats;
+using Interaction;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace GameManagement
 {
     public enum GameSignal
     {
+        // GENERIC SIGNALS
         START_COMBAT,
         END_COMBAT,
         ENTER_ROOM,
@@ -16,7 +18,17 @@ namespace GameManagement
         CARD_DRAWED,
         CARD_PLAYED,
         DAMAGE_RECEIVED,
-        RESOURCE_MODIFY
+        RESOURCE_MODIFY,
+        PRIMARY_STAT_MODIFY,
+        SECONDARY_STAT_MODIFY,
+        TURN_PREPARATION_START,
+
+        // UI SPECIFIC SIGNALS
+        ENABLE_UI_ELEMENT,
+        ASSIGN_NPC_UI_ELEMENT,
+        START_CONVERSATION,
+        START_DRAGGING_CARD,
+        END_DRAGGING_CARD
     }
 
     public class SignalData
@@ -73,6 +85,71 @@ namespace GameManagement
             this.resourceBeforeGain = resourceBeforeGain;
 
         }
+    }
+
+    public abstract class ModifyStatisticSignalData : SignalData
+    {
+        public GameObject user;
+        public int amount;
+        public int statBeforeGain;
+
+        public ModifyStatisticSignalData(GameSignal signalType, GameObject user, int amount, int statBeforeGain) : base(signalType)
+        {
+            this.user = user;
+            this.amount = amount;
+            this.statBeforeGain = statBeforeGain;
+        }
+    }
+
+    public class ModifyPrimaryStatisticSignalData : ModifyStatisticSignalData
+    {
+        public StatType statType;
+
+        public ModifyPrimaryStatisticSignalData(GameSignal signalType, GameObject user, StatType statType, int amount, int statBeforeGain) : base(signalType, user, amount, statBeforeGain)
+        {
+            this.statType = statType;
+        }
+
+    }
+
+    public class ModifySecondaryStatisticSignalData : ModifyStatisticSignalData
+    {
+        public DamageTypeStat statType;
+
+        public ModifySecondaryStatisticSignalData(GameSignal signalType, GameObject user, DamageTypeStat statType, int amount, int statBeforeGain) : base(signalType, user, amount, statBeforeGain)
+        {
+            this.statType = statType;
+        }
+    }
+
+    public class UISignalData : SignalData
+    {
+        public UIElement element;
+        public bool enable;
+
+        public UISignalData(GameSignal signalType, UIElement element, bool enable) : base(signalType)
+        {
+            this.element = element;
+            this.enable = enable;
+        }
+    }
+
+    public class UINpcSignalData : UISignalData
+    {
+        public NPCInteractable npc;
+
+        public UINpcSignalData(GameSignal signalType, UIElement element, bool enable, NPCInteractable npc) : base(signalType, element, enable)
+        {
+            this.element = element;
+        }
+    }
+
+    public enum UIElement
+    {
+        RESOURCES_FRAME,
+        MENU_FRAME,
+        REMOVE_CARD_FRAME,
+        VENDOR_FRAME
     }
 
     public class Unsubscriber : IDisposable

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Character.Stats;
 using System.Collections;
@@ -6,6 +5,7 @@ using UI;
 using Character.Character;
 using CardSystem;
 using System.Collections.Generic;
+using GameManagement;
 
 namespace Combat 
 {
@@ -25,6 +25,18 @@ namespace Combat
             turnSpeed = character.GetStatistic(StatType.Agility);
         }
 
+        public override void StartCombat()
+        {
+            base.StartCombat();
+            character.SendSignalData(new CombatSignalData(GameSignal.START_COMBAT, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+        }
+
+        public override void EndCombat()
+        {
+            character.SendSignalData(new CombatSignalData(GameSignal.END_COMBAT, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+            base.EndCombat();
+        }
+
         override protected void Update()
         {
             if (character.IsDead())
@@ -37,17 +49,11 @@ namespace Combat
         public override void TurnPreparationStart()
         {
             base.TurnPreparationStart();
-            UIManager.manager.ActivateCombatUI(true);
-            UIManager.manager.CombatUIInteractable(false);
+            character.SendSignalData(new CombatSignalData(GameSignal.TURN_PREPARATION_START, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
         }
 
-        override public void TurnPreparationStop()
-        {
-            base.TurnPreparationStop();
-            UIManager.manager.ActivateCombatUI(false);
-        }
 
-        protected override void EndTurn()
+        public override void EndTurn()
         {
             StartCoroutine(EndTurnCoroutine());
         }
@@ -56,13 +62,6 @@ namespace Combat
         {
             yield return new WaitUntil(() => queueCoroutine == null);
             base.EndTurn();
-            UIManager.manager.CombatUIInteractable(false);
-        }
-
-        protected override void StartOfTurn()
-        {
-            base.StartOfTurn();
-            UIManager.manager.CombatUIInteractable(true);
         }
 
         public override void CardUsed(Card card)

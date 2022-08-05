@@ -20,10 +20,7 @@ namespace FloorManagement
 
         public void EnableSelectors(bool enable)
         {
-            foreach (var item in npcs)
-            {
-                item.GetComponentInChildren<CharacterUI>().EnableSelector(enable);
-            }
+            UIManager.manager.ChangeSceneToSelection(npcs, enable);
         }
 
         public override RoomType GetRoomType()

@@ -1,23 +1,26 @@
 using CardSystem;
-using Character.Character;
 using Character.Stats;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using GameManagement;
 
 namespace UI
 {
-    public class EnemyUI : CharacterUI
+
+    /// <summary>
+    /// Enemy UI script. Show cards when are played and update health values
+    /// </summary>
+    public class EnemyUI : CombatCharacterUI
     {
         [SerializeField] float timeToFadeCardUsed;
         [SerializeField] GameObject cardPrefab;
         [SerializeField] Transform cardSlot;
         Slider resourceSlider;
 
-        override protected void Awake()
+        override protected void Start()
         {
-            base.Awake();
+            base.Start();
             resourceSlider = GetComponentInChildren<Slider>();
         }
 
@@ -29,11 +32,11 @@ namespace UI
 
         private void UpdateResourceUnit()
         {
-            resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
             resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
+            resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
         }
 
-        public void ShowCard(Card card)
+        private void ShowCard(Card card)
         {
             GameObject cardUI = Instantiate(cardPrefab, cardSlot.transform);
             cardUI.GetComponent<UICard>().InitializeCard(card.GetUsable());
@@ -44,6 +47,16 @@ namespace UI
             {
                 Destroy(cardUI);
             });
+        }
+
+        override public void OnNext(SignalData signalData)
+        {
+            base.OnNext(signalData);
+            if (signalData.signal.Equals(GameSignal.CARD_PLAYED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
+            {
+                ShowCard((signalData as CombatCardSignalData).card);
+            }
+            
         }
     }
 }

@@ -10,7 +10,6 @@ using Sirenix.OdinInspector;
 using Abilities.Passive;
 using Combat;
 using System.Linq;
-using UI;
 using GameManagement;
 
 namespace Character.Character 
@@ -39,18 +38,14 @@ namespace Character.Character
         [TabGroup("Passive abilities")]
         [SerializeField] protected List<Passive> permanentPassiveAbilities = new List<Passive>();
 
-        [HideInInspector]
-        public PassiveManager passiveManager;
-
-        CharacterUI characterUI;
-
+        
         bool isDead;
         protected Traits traits;
+        PassiveManager passiveManager;
 
         private void Awake()
         {
             traits = GetComponent<Traits>();
-            characterUI = GetComponentInChildren<CharacterUI>();
         }
 
         virtual protected void Start()
@@ -369,7 +364,21 @@ namespace Character.Character
         public void SendSignalData(SignalData data)
         {
             passiveManager.SendData(data);
-            UIManager.manager.SendData(data);
+            UI.UIManager.manager.SendData(data);
+        }
+
+        public void DisposePassiveAbilities()
+        {
+            passiveManager.Unsubscribe();
+        }
+
+        public void ActivePassiveAbilities()
+        {
+            foreach (var item in GetCurrentPassiveAbilities())
+            {
+                IDisposable disposable = passiveManager.Subscribe(item);
+                item.SetDisposable(disposable);
+            }
         }
 
         #endregion

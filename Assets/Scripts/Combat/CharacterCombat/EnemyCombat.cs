@@ -12,7 +12,6 @@ namespace Combat
     public class EnemyCombat : TurnCombat
     {
 
-        EnemyUI enemyUI;
         GameObject player;
 
         Queue<Card> cardsQueue = new Queue<Card>();
@@ -22,7 +21,6 @@ namespace Combat
         private void Awake()
         {
             character = GetComponent<Npc>();
-            enemyUI = GetComponentInChildren<EnemyUI>();
         }
 
         private void Start()
@@ -231,7 +229,6 @@ namespace Combat
 
         public override void CardUsed(Card card)
         {
-            enemyUI.ShowCard(card);
             nextCardToPlay = null;
             base.CardUsed(card);
         }

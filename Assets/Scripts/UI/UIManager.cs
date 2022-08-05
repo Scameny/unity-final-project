@@ -47,40 +47,11 @@ namespace UI
             }
         }
 
-        public void ActiveCharacterMenu(bool enable)
-        {
-            characterMenu.SetActive(enable);
-            inventory.SetActive(enable);
-            openCharacterMenuButton.SetActive(!enable);
-            closeCharacterMenuButton.SetActive(enable);
-            resourcesMenu.SetActive(!enable);
-        }
-
         public void NPCInteraction(bool enable)
         {
             openCharacterMenuButton.SetActive(!enable);
             resourcesMenu.SetActive(!enable);
             conversationFrame.SetActive(enable);
-        }
-
-        public void EnablePermanentCardsRemoveWindow(bool enable)
-        {
-            permanentCardsRemoveWindow.SetActive(enable);
-        }
-
-        public void EnableVendorFrame(bool enable)
-        {
-            vendorFrame.SetActive(enable);
-        }
-
-        public GameObject GetVendorFrame()
-        {
-            return vendorFrame;
-        }
-
-        public GameObject GetPermanentCardsRemoveWindow()
-        {
-            return permanentCardsRemoveWindow;
         }
 
         public IDisposable Subscribe(IObserver<SignalData> observer)

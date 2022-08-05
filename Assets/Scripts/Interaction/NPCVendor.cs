@@ -32,15 +32,13 @@ namespace Interaction
 
         public override void Interact()
         {
-            GameObject vendorFrame = UIManager.manager.GetVendorFrame();
-            vendorFrame.GetComponentInChildren<UIVendorFrame>().SetVendorNpc(this);
-            UIManager.manager.EnableVendorFrame(true);
+            UIManager.manager.SendData(new UINpcSignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, true, this));
         }
 
         public override void OnEndInteract()
         {
             base.OnEndInteract();
-            UIManager.manager.EnableVendorFrame(false);
+            UIManager.manager.SendData(new UISignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.VENDOR_FRAME, true));
         }
 
         private void SetVendorItems()

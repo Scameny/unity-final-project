@@ -1,43 +1,31 @@
 using Character.Character;
 using Character.Stats;
 using GameManagement;
-using System;
 using System.Collections;
 using UnityEngine;
 
-namespace UI 
+namespace UI
 {
-    public class CharacterUI : MonoBehaviour, IObserver<SignalData>
+    public class CombatCharacterUI : CharacterUI
     {
         [SerializeField] GameObject floatingTextPrefab;
-
         DefaultCharacter character;
-        GameObject selector;
         float timeToSpawnNextFloatingText = 0;
-        
 
-        virtual protected void Awake()
+        // Start is called before the first frame update
+        protected override void Start()
         {
-            selector = transform.Find("Selector").gameObject;
             character = GetComponentInParent<DefaultCharacter>();
+            base.Start();
         }
 
-        private void Start()
-        {
-            UIManager.manager.Subscribe(this);
-        }
-
+        // Update is called once per frame
         virtual protected void Update()
         {
             if (timeToSpawnNextFloatingText > 0)
                 timeToSpawnNextFloatingText -= Time.deltaTime;
             else if (timeToSpawnNextFloatingText < 0)
                 timeToSpawnNextFloatingText = 0;
-        }
-
-        public void EnableSelector(bool enable)
-        {
-            selector.SetActive(enable);
         }
 
         private IEnumerator CreateFloatingText(ResourceType resourceType, int value, GameObject user, float timeToWait)
@@ -48,19 +36,11 @@ namespace UI
             floatingText.GetComponent<FloatingText>().SetValues(resourceType, value);
         }
 
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
 
-        public void OnError(Exception error)
+        override public void OnNext(SignalData signalData)
         {
-            Debug.LogError("Character UI has an error:" + error.Message);
-        }
-
-        public void OnNext(SignalData signalData)
-        {
-            if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as ResourceSignalData).user.GetInstanceID().Equals(character.gameObject.GetInstanceID()))
+            base.OnNext(signalData);
+            if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as ResourceSignalData).user.Equals(character.gameObject))
             {
                 ResourceSignalData resourceSignalData = signalData as ResourceSignalData;
                 StartCoroutine(CreateFloatingText(resourceSignalData.resourceType, resourceSignalData.resourceAmount, resourceSignalData.user, timeToSpawnNextFloatingText));
@@ -72,4 +52,5 @@ namespace UI
             return character;
         }
     }
+
 }

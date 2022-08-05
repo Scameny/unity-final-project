@@ -1,10 +1,12 @@
 using Character.Character;
+using GameManagement;
 using Interaction;
+using System;
 using UnityEngine;
 
 namespace UI
 {
-    public class PermanentCardsMenu : UICardMenu
+    public class UIPermanentCardsFrame : UICardMenu, IObserver<SignalData>
     {
         [SerializeField] GameObject cardPrefab;
         Hero player;
@@ -24,7 +26,7 @@ namespace UI
 
         private void OnDisable()
         {
-            RemoveUICards();
+            npc = null;
         }
 
         protected void InitializeCards()
@@ -53,6 +55,24 @@ namespace UI
         {
             RemoveUICards();
             npc.OnEndInteract();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            Debug.LogError("Error on the remove card frame: " + error.Message);
+        }
+
+        public void OnNext(SignalData value)
+        {
+            if (value.signal.Equals(GameSignal.ASSIGN_NPC_UI_ELEMENT) && (value as UINpcSignalData).element.Equals(UIElement.REMOVE_CARD_FRAME))
+            {
+                this.npc = (value as UINpcSignalData).npc as NPCRemoveCard;
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 using Combat;
+using GameManagement;
 using System.Collections.Generic;
 using TMPro;
 using UI;
@@ -82,21 +83,21 @@ namespace CardSystem
         public void OnBeginDrag(PointerEventData eventData)
         {
             position = GetComponent<RectTransform>().position;
-            UIManager.manager.dropZone.GetComponent<Image>().raycastTarget = true;
+            UIManager.manager.SendData(new SignalData(GameSignal.START_DRAGGING_CARD));
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            this.transform.position = eventData.position;
+            transform.position = eventData.position;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             if (!onDropZone)
             {
-                this.transform.position = position;
+                transform.position = position;
             }
-            UIManager.manager.dropZone.GetComponent<Image>().raycastTarget = false;
+            UIManager.manager.SendData(new SignalData(GameSignal.END_DRAGGING_CARD));
         }
 
         public void OnZoneDropEnter()

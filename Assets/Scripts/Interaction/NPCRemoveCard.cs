@@ -22,16 +22,13 @@ namespace Interaction
 
         public override void Interact()
         {
-            UIManager.manager.EnablePermanentCardsRemoveWindow(true);
-            GameObject permanentWindow = UIManager.manager.GetPermanentCardsRemoveWindow();
-            permanentWindow.GetComponentInChildren<PermanentCardsMenu>().SetNPCRemoveCard(this);
+            UIManager.manager.SendData(new UINpcSignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, true, this));
         }
 
         public override void OnEndInteract()
         {
             base.OnEndInteract();
-            GameObject permanentWindow = UIManager.manager.GetPermanentCardsRemoveWindow();
-            permanentWindow.GetComponentInChildren<PermanentCardsMenu>().SetNPCRemoveCard(null);
+            UIManager.manager.SendData(new UISignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, true));
         }
 
         public void RemoveCard()

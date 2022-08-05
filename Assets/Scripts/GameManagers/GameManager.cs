@@ -34,7 +34,7 @@ namespace GameManagement
             player = GameObject.FindGameObjectWithTag("Player");
         }
 
-        public void EnableSelectorInteraction(bool enable)
+        public void EnableSelectorInCurrentRoom(bool enable)
         {
             if (currentRoom.GetRoomType().Equals(RoomType.InteractionRoom))
             {
