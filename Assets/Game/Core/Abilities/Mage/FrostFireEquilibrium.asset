@@ -34,7 +34,7 @@ MonoBehaviour:
     00000000:
       type: {class: SpecificCardsTypeUsedSignalEvaluation, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
       data:
-        passiveSignal: 6
+        passiveSignal: 5
         abilityTypes: 0200000001000000
     00000001:
       type: {class: FlatDrawCardsPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}

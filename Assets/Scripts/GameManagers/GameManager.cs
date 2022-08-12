@@ -1,6 +1,6 @@
 using FloorManagement;
-using GameControl;
 using Sirenix.OdinInspector;
+using UI;
 using UnityEngine;
 using Utils;
 
@@ -65,11 +65,13 @@ namespace GameManagement
         public void StartInteraction()
         {
             currentGameState = GameState.Interacting;
+            UIManager.manager.SendData(new SignalData(GameSignal.START_INTERACTION));
         }
 
         public void EndInteraction()
         {
             currentGameState = GameState.Moving;
+            UIManager.manager.SendData(new SignalData(GameSignal.END_INTERACTION));
         }
 
         [Button]
@@ -78,6 +80,7 @@ namespace GameManagement
             floorGenerator.GenerateFloor(8, roomPoolToTest);
             currentGameState = GameState.Moving;
             currentRoom = floorGenerator.GetBaseRoom();
+            UIManager.manager.SendData(new SignalData(GameSignal.START_GAME));
         }
 
         public RoomManager GetCurrentRoom()

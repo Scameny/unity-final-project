@@ -20,7 +20,7 @@ namespace UI
         public void InitializeCard(Usable cardUse, bool interactable = true)
         {
             this.interactable = interactable;
-            this.usable = cardUse;
+            usable = cardUse;
             cardImage.sprite = cardUse.GetSprite();
             cardName.text = (cardUse).GetName();
             cardDescription.text = UtilsClass.instance.ConvertTextWithStyles(cardUse.GetDescription(), UIManager.manager.tooltipStyle);
@@ -56,7 +56,7 @@ namespace UI
         {
             if (!interactable)
                 return;
-            transform.parent.GetComponent<UICardMenu>().OnSelection(usable);
+            transform.GetComponentInParent<UICardMenu>().OnSelection(usable);
         }
     }
 }

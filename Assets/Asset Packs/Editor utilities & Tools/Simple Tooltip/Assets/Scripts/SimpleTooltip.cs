@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
@@ -45,6 +43,12 @@ public class SimpleTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             return;
 
         tooltipController.ShowTooltip();
+    }
+
+    private void OnDisable()
+    {
+        if (cursorInside)
+            tooltipController.HideTooltip();
     }
 
     public static STController AddTooltipPrefabToScene()

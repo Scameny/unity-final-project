@@ -22,13 +22,13 @@ namespace Interaction
 
         public override void Interact()
         {
-            UIManager.manager.SendData(new UINpcSignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, true, this));
+            UIManager.manager.SendData(new UINpcSignalData(GameSignal.ASSIGN_NPC_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, true, this));
         }
 
         public override void OnEndInteract()
         {
             base.OnEndInteract();
-            UIManager.manager.SendData(new UISignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, true));
+            UIManager.manager.SendData(new UISignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.REMOVE_CARD_FRAME, false));
         }
 
         public void RemoveCard()

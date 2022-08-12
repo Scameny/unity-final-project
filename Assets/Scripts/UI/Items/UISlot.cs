@@ -2,7 +2,6 @@ using Character.Character;
 using Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace UI
 {

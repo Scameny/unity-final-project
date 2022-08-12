@@ -45,7 +45,7 @@ namespace Combat
         public void StartCombat(List<GameObject> enemies)
         {
             GameManager.gm.StartCombat();
-            UIManager.manager.ActivateCombatUI(true);
+            UIManager.manager.SendData(new SignalData(GameSignal.START_COMBAT));
             this.enemies = enemies;
             charactersInCombat.AddRange(enemies);
             charactersInCombat.Add(player.gameObject);

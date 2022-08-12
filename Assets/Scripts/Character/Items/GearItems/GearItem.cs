@@ -86,7 +86,7 @@ namespace Items
         {
             tooltip.infoRight = GetSlotType().ToString();
             string leftTooltipText= GetName();
-            leftTooltipText = "@statistic@";
+            leftTooltipText += "\n@statistic@";
             foreach (var item in statList.stats)
             {
                 leftTooltipText += "+ " + item.amount + " " + item.statType.ToString() + "\n";

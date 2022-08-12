@@ -5,7 +5,6 @@ namespace UI
 {
     public class UICharacterCards : UICardMenu
     {
-        [SerializeField] GameObject cardPrefab;
         Hero player;
 
         private void OnEnable()
@@ -14,7 +13,7 @@ namespace UI
                 player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
             foreach (var usable in player.GetUsableCards())
             {
-                GameObject card = Instantiate(cardPrefab, transform);
+                GameObject card = Instantiate(cardPrefab, content);
                 card.GetComponent<UICard>().InitializeCard(usable);
             }
         }
@@ -24,7 +23,6 @@ namespace UI
             RemoveUICards();
         }
 
-       
     }
 
 }

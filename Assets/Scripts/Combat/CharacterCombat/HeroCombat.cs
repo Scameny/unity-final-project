@@ -28,7 +28,6 @@ namespace Combat
         public override void StartCombat()
         {
             base.StartCombat();
-            character.SendSignalData(new CombatSignalData(GameSignal.START_COMBAT, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
         }
 
         public override void EndCombat()

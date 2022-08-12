@@ -33,7 +33,7 @@ namespace UI
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            disposable.Dispose();
         }
 
         public void OnError(Exception error)

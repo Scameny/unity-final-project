@@ -70,6 +70,8 @@ namespace FloorManagement {
 
         private void BuildNewRoom(Room room, int pathContInd)
         {
+            if (roomPoolCopy.Count == 0)
+                return;
             int x = 0;
             int y = 0;
             GetRandomDirection(ref x, ref y);

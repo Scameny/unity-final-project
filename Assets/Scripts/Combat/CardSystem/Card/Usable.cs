@@ -100,14 +100,14 @@ namespace CardSystem
             user.GetComponent<Animator>().Play(animationType.ToString());
             yield return new WaitForSeconds(user.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.length);
 
-            foreach (var effectStrategy in effectStrategiesList.effectStrategies)
-            {
-                effectStrategy.UseEffect(user, targets);
-            }
-
             foreach (var resource in resourceCosts)
             {
                 user.GetComponent<DefaultCharacter>().UseResource(resource.amount, resource.resourceType);
+            }
+
+            foreach (var effectStrategy in effectStrategiesList.effectStrategies)
+            {
+                effectStrategy.UseEffect(user, targets);
             }
 
             card.CardEffectFinished();

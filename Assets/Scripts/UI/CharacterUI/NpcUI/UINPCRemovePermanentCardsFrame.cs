@@ -6,18 +6,19 @@ using UnityEngine;
 
 namespace UI
 {
-    public class UIPermanentCardsFrame : UICardMenu, IObserver<SignalData>
+    public class UINPCRemovePermanentCardsFrame : UICardMenu, IObserver<SignalData>
     {
-        [SerializeField] GameObject cardPrefab;
+
         Hero player;
         NPCRemoveCard npc;
+        IDisposable disposable;
 
-        private void OnEnable()
+        private void Start()
         {
-            if (player == null)
-                player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
-            InitializeCards();
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
+            disposable = UIManager.manager.Subscribe(this);
         }
+
 
         public void SetNPCRemoveCard(NPCRemoveCard npc)
         {
@@ -33,7 +34,7 @@ namespace UI
         {
             foreach (var usable in player.GetPermanentCards())
             {
-                GameObject card = Instantiate(cardPrefab, transform);
+                GameObject card = Instantiate(cardPrefab, content);
                 card.GetComponent<UICard>().InitializeCard(usable);
             }
         }
@@ -41,14 +42,14 @@ namespace UI
         public void RemoveCard()
         {
             player.RemovePermanentCard(GetCardSelected());
-            RemoveUICards();
-            InitializeCards();
             npc.RemoveCard();
             cardSelection.SetActive(false);
+            RemoveUICards();
             if (!npc.CanRemoveCard())
             {
                 npc.OnEndInteract();
             }
+            InitializeCards();
         }
 
         public void CloseMenu()
@@ -59,7 +60,7 @@ namespace UI
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            disposable.Dispose();
         }
 
         public void OnError(Exception error)
@@ -71,7 +72,17 @@ namespace UI
         {
             if (value.signal.Equals(GameSignal.ASSIGN_NPC_UI_ELEMENT) && (value as UINpcSignalData).element.Equals(UIElement.REMOVE_CARD_FRAME))
             {
-                this.npc = (value as UINpcSignalData).npc as NPCRemoveCard;
+                npc = (value as UINpcSignalData).npc as NPCRemoveCard;
+                InitializeCards();
+                gameObject.SetActive((value as UINpcSignalData).enable);
+            }
+            else if(value.signal.Equals(GameSignal.ENABLE_UI_ELEMENT) && (value as UISignalData).element.Equals(UIElement.REMOVE_CARD_FRAME))
+            {
+                gameObject.SetActive((value as UISignalData).enable);
+            } 
+            else if (value.signal.Equals(GameSignal.START_GAME))
+            {
+                gameObject.SetActive(false);
             }
         }
     }

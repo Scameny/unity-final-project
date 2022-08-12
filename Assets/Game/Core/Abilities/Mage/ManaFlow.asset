@@ -34,7 +34,7 @@ MonoBehaviour:
     00000000:
       type: {class: SingleSignalEvaluation, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
       data:
-        passiveSignal: 3
+        passiveSignal: 2
     00000001:
       type: {class: ResourceRecoverPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
       data:

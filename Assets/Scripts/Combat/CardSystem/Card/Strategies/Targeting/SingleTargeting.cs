@@ -5,6 +5,7 @@ using GameControl;
 using System;
 using Combat;
 using UI;
+using GameManagement;
 
 namespace Strategies.TargetingStrategies
 {
@@ -21,7 +22,7 @@ namespace Strategies.TargetingStrategies
             PlayerControllerPC playerController = user.GetComponent<PlayerControllerPC>();
             List<GameObject> toRet = new List<GameObject>();
 
-            UIManager.manager.ActivateCombatUI(false);
+            UIManager.manager.SendData(new UISignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.COMBAT_FRAME, false));
             UIManager.manager.ChangeSceneToSelection(enemies, true);
             while (true)
             {
@@ -42,7 +43,7 @@ namespace Strategies.TargetingStrategies
                     yield return null;
                 }
             }
-            UIManager.manager.ActivateCombatUI(true);
+            UIManager.manager.SendData(new UISignalData(GameSignal.ENABLE_UI_ELEMENT, UIElement.COMBAT_FRAME, true));
             UIManager.manager.ChangeSceneToSelection(enemies, false);
         }
 

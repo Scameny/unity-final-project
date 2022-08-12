@@ -10,10 +10,12 @@ namespace UI
         GameObject player;
         DropZone dropZone;
         Button endTurnButton;
+        IDisposable disposable;
+
 
         private void Start()
         {
-            UIManager.manager.Subscribe(this);
+            disposable = UIManager.manager.Subscribe(this);
             player = GameObject.FindGameObjectWithTag("Player");
             dropZone = GetComponentInChildren<DropZone>();
             endTurnButton = GetComponentInChildren<Button>();
@@ -21,7 +23,7 @@ namespace UI
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            disposable.Dispose();
         }
 
         public void OnError(Exception error)
@@ -33,9 +35,12 @@ namespace UI
         {
             switch (value.signal)
             {
+                case GameSignal.START_GAME:
+                    gameObject.SetActive(false);
+                    break;
                 case GameSignal.START_COMBAT:
-                    if (!gameObject.activeInHierarchy)
-                        gameObject.SetActive(true);
+                    gameObject.SetActive(true);
+                    endTurnButton.interactable = false;
                     break;
 
                 case GameSignal.END_COMBAT:
@@ -61,6 +66,10 @@ namespace UI
                     break;
                 case GameSignal.END_DRAGGING_CARD:
                     dropZone.GetComponent<Image>().raycastTarget = false;
+                    break;
+                case GameSignal.ENABLE_UI_ELEMENT:
+                    if ((value as UISignalData).element.Equals(UIElement.COMBAT_FRAME))
+                        gameObject.SetActive((value as UISignalData).enable);
                     break;
                 default:
                     break;

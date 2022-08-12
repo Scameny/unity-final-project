@@ -18,6 +18,7 @@ namespace UI
         {
             this.player = player;
             this.item = item;
+            icon.sprite = item.item.GetSprite();
             itemName.text = UtilsClass.instance.ConvertTextWithStyles(item.item.GetName(), UIManager.manager.tooltipStyle);
             priceText.text = item.price + " Coins";
             item.item.SetTooltipText(GetComponent<SimpleTooltip>());

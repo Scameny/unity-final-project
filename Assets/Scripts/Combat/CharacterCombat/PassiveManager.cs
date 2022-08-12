@@ -1,4 +1,3 @@
-using Abilities.Passive;
 using GameManagement;
 using System;
 using System.Collections.Generic;
@@ -23,9 +22,9 @@ namespace Combat
 
         public void Unsubscribe()
         {
-            while (observers.Count > 0)
+            for (int i = 0; i < observers.Count; i++)
             {
-                observers[0].OnCompleted();
+                observers[i].OnCompleted();
             }
         }
 

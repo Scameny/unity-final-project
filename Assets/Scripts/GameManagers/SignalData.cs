@@ -9,24 +9,31 @@ namespace GameManagement
 {
     public enum GameSignal
     {
-        // GENERIC SIGNALS
+        // COMBAT SIGNALS
         START_COMBAT,
         END_COMBAT,
-        ENTER_ROOM,
         START_TURN,
         END_TURN,
         CARD_DRAWED,
         CARD_PLAYED,
         DAMAGE_RECEIVED,
         RESOURCE_MODIFY,
+        TURN_PREPARATION_START,
+
+        // GAME SIGNALS
+        START_GAME,
+        ENTER_ROOM,
         PRIMARY_STAT_MODIFY,
         SECONDARY_STAT_MODIFY,
-        TURN_PREPARATION_START,
+        END_INTERACTION,
+        START_INTERACTION,
+
 
         // UI SPECIFIC SIGNALS
         ENABLE_UI_ELEMENT,
         ASSIGN_NPC_UI_ELEMENT,
-        START_CONVERSATION,
+        OPEN_CHARACTER_MENU,
+        CLOSE_CHARACTER_MENU,
         START_DRAGGING_CARD,
         END_DRAGGING_CARD
     }
@@ -141,6 +148,7 @@ namespace GameManagement
         public UINpcSignalData(GameSignal signalType, UIElement element, bool enable, NPCInteractable npc) : base(signalType, element, enable)
         {
             this.element = element;
+            this.npc = npc;
         }
     }
 
@@ -149,7 +157,8 @@ namespace GameManagement
         RESOURCES_FRAME,
         MENU_FRAME,
         REMOVE_CARD_FRAME,
-        VENDOR_FRAME
+        VENDOR_FRAME,
+        COMBAT_FRAME
     }
 
     public class Unsubscriber : IDisposable

@@ -5,7 +5,9 @@ namespace UI
 {
     public class UICardMenu : MonoBehaviour
     {
+        [SerializeField] protected Transform content;
         [SerializeField] protected GameObject cardSelection;
+        [SerializeField] protected GameObject cardPrefab;
 
         public void OnSelection(Usable usable)
         {
@@ -20,9 +22,9 @@ namespace UI
 
         protected void RemoveUICards()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            for (int i = 0; i < content.childCount; i++)
             {
-                Destroy(transform.GetChild(i).gameObject);
+                Destroy(content.GetChild(i).gameObject);
             }
         }
 

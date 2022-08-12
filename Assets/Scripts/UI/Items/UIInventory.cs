@@ -1,16 +1,19 @@
 using Character.Character;
+using GameManagement;
 using Items;
+using System;
 using TMPro;
 using UnityEngine;
 
 
 namespace UI
 {
-    public class UIInventory : MonoBehaviour
+    public class UIInventory : MonoBehaviour, IObserver<SignalData>
     {
         Hero player;
         UIInventorySlot[] slots;
         [SerializeField] TextMeshProUGUI currentCoinsText;
+        IDisposable disposable;
 
         private void Start()
         {
@@ -20,19 +23,37 @@ namespace UI
             {
                 slots[i].position = i;
             }
+            disposable = UIManager.manager.Subscribe(this);
         }
 
-        private void OnEnable()
+        public void OnCompleted()
         {
-            if (player==null)
-                player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
-            currentCoinsText.text = player.GetCoins().ToString();
-            Item[] itemsInInventory = player.GetAllStoredItems();
-            for (int i = 0; i < itemsInInventory.Length; i++)
+            disposable.Dispose();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(SignalData value)
+        {
+            if (value.signal.Equals(GameSignal.OPEN_CHARACTER_MENU))
             {
-                if (itemsInInventory[i] != null)
-                    slots[i].GetDragableItem().SetItem(itemsInInventory[i]);
+                currentCoinsText.text = player.GetCoins().ToString();
+                Item[] itemsInInventory = player.GetAllStoredItems();
+                for (int i = 0; i < itemsInInventory.Length; i++)
+                {
+                    if (itemsInInventory[i] != null)
+                        slots[i].GetDragableItem().SetItem(itemsInInventory[i]);
+                }
+                gameObject.SetActive(true);
+            } 
+            else if (value.signal.Equals(GameSignal.CLOSE_CHARACTER_MENU) || value.signal.Equals(GameSignal.START_GAME))
+            {
+                gameObject.SetActive(false);
             }
+
         }
     }
 

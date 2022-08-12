@@ -2,7 +2,6 @@ using GameManagement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
@@ -32,26 +31,12 @@ namespace UI
             combatMenu.SetActive(enable);
         }
 
-        public void CombatUIInteractable(bool interactable)
-        {
-            endTurnButton.GetComponent<Button>().interactable = interactable;
-            dropZone.SetActive(interactable);
-        }
-
-
         public void ChangeSceneToSelection(IEnumerable<GameObject> targets, bool selection)
         {
             foreach (var character in targets)
             {
                 character.GetComponentInChildren<CharacterUI>().EnableSelector(selection);
             }
-        }
-
-        public void NPCInteraction(bool enable)
-        {
-            openCharacterMenuButton.SetActive(!enable);
-            resourcesMenu.SetActive(!enable);
-            conversationFrame.SetActive(enable);
         }
 
         public IDisposable Subscribe(IObserver<SignalData> observer)
