@@ -1,4 +1,5 @@
 using Combat;
+using GameManagement;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,13 +15,15 @@ namespace Strategies.EffectStrategies
         public int numCards;
 
 
-        override protected void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
+            List<SignalData> signalDatas = new List<SignalData>();
             foreach (var target in targets)
             {
                 TurnCombat characterCombat = target.GetComponent<TurnCombat>();
-                characterCombat.DrawCard(numCards);
+                signalDatas.AddRange(characterCombat.DrawCard(numCards));
             }
+            return signalDatas;
         }
     }
 }

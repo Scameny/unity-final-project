@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 652534504946285570}
   - component: {fileID: 652534504946285582}
   - component: {fileID: 7187575890588117748}
+  - component: {fileID: -452457454512619956}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Enemy
@@ -126,9 +127,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: passiveManager
-      Entry: 6
-      Data: 
   characterClass: {fileID: 11400000, guid: 99e57164f9e9f43409962b2e933e1dd0, type: 2}
   level: 1
   permanentCards: []
@@ -209,6 +207,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-452457454512619956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652534504946285583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a583c665a713c0a4aa3d86861907a200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5975454576096960138
 PrefabInstance:
   m_ObjectHideFlags: 0

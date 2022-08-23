@@ -1,4 +1,3 @@
-using Combat;
 using Character.Character;
 using Items;
 using System.Collections.Generic;
@@ -62,7 +61,7 @@ namespace Combat
         {
             GameManager.gm.EndCombat();
             player.GetComponent<TurnCombat>().EndCombat();
-            UIManager.manager.ActivateCombatUI(false);
+            UIManager.manager.SendData(new SignalData(GameSignal.END_COMBAT));
             charactersInCombat.Clear();
             ((Hero)player.GetCharacter()).AddExp(expStored);
             ((Hero)player.GetCharacter()).AddItems(itemsStored);
@@ -110,7 +109,6 @@ namespace Combat
             enemies.Remove(enemy.gameObject);
             Debug.Log("enemy death");
             enemy.GetComponent<TurnCombat>().EndCombat();
-            enemy.gameObject.SetActive(false);
             if (enemies.Count == 0)
             {
                 EndCombat();
@@ -119,10 +117,7 @@ namespace Combat
 
         public void HeroDeath()
         {
-            foreach (var character in charactersInCombat)
-            {
-                character.SetActive(false);
-            }
+            // Lose
             GameDebug.Instance.Log(Color.red, "You lose");
         }
 

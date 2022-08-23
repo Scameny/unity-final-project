@@ -11,17 +11,18 @@ namespace Strategies.PassiveEffectStrategies
     [Serializable]
     public abstract class PassiveEffectStrategy
     {
-        protected abstract void EffectAction(CombatSignalData passiveData);
+        protected abstract List<SignalData> EffectAction(CombatSignalData passiveData);
 
         [HideLabel, InlineProperty]
         [SerializeReference] IPassiveSpellAnimation spellAnimation;
 
         public void EffectActivation(SignalData passiveData)
         {
+            List<SignalData> signalDatas = EffectAction(passiveData as CombatSignalData);
             if (spellAnimation != null)
-                spellAnimation.PlaySpellAnimation(passiveData as CombatSignalData, EffectAction);
+                spellAnimation.PlaySpellAnimation(passiveData as CombatSignalData, signalDatas);
             else
-                EffectAction(passiveData as CombatSignalData);
+                UI.UIManager.manager.SendData(signalDatas);
         }
 
         public IEnumerable<Type> GetFilteredAnimations()

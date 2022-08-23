@@ -1,7 +1,7 @@
 using Character.Character;
+using GameManagement;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Strategies.EffectStrategies
@@ -17,9 +17,9 @@ namespace Strategies.EffectStrategies
             return amount;
         }
 
-        override protected void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
-            user.GetComponent<DefaultCharacter>().GainResource(amount, resourceType);
+            return user.GetComponent<DefaultCharacter>().GainResource(amount, resourceType);
         }
     }
 }

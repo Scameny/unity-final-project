@@ -1,4 +1,5 @@
 using Character.Character;
+using GameManagement;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,13 +12,15 @@ namespace Strategies.EffectStrategies
         [LabelWidth(120)]
         [SerializeField] public int healing;
 
-        override protected void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
+            List<SignalData> signalDatas = new List<SignalData>();
             foreach (var target in targets)
             {
                 DefaultCharacter character = target.GetComponent<DefaultCharacter>();
-                user.GetComponent<DefaultCharacter>().Heal(healing);
+                signalDatas.AddRange(user.GetComponent<DefaultCharacter>().Heal(healing));
             }
+            return signalDatas;
         }
     }
 }

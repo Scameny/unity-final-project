@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -2491246044007943304}
   - component: {fileID: -741801837482078011}
   - component: {fileID: 4083813934973299289}
+  - component: {fileID: 5977984867270693572}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Enemy
@@ -140,9 +141,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: passiveManager
-      Entry: 6
-      Data: 
   characterClass: {fileID: 11400000, guid: 3c9cbff58722f454cabd6dbc3703225f, type: 2}
   level: 1
   permanentCards: []
@@ -209,6 +207,18 @@ MonoBehaviour:
   hand: {fileID: 7950373356902867763}
   stack: {fileID: 4560703449765090836}
   cardPrefab: {fileID: 3908558191448106145, guid: 6dfda3565cfcbf34195cf36b91ca5e3a, type: 3}
+--- !u!114 &5977984867270693572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932752992969972098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a583c665a713c0a4aa3d86861907a200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4560703450511525717
 PrefabInstance:
   m_ObjectHideFlags: 0

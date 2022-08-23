@@ -53,5 +53,13 @@ namespace UI
                 item.OnNext(uiData);
             }
         }
+
+        public void SendData(List<SignalData> listOfUIData)
+        {
+            foreach (var item in listOfUIData)
+            {
+                SendData(item);
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ using Utils;
 
 namespace CardSystem
 {
-    public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class Card : MonoBehaviour
     {
 
         [SerializeField] Image cardImage;

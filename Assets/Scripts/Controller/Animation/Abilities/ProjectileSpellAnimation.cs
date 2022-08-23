@@ -4,6 +4,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using Combat;
+using GameManagement;
 
 namespace Animations
 {
@@ -13,12 +14,12 @@ namespace Animations
         [SerializeField] GameObject projectile;
         [SerializeField] float speed;
 
-        public void PlaySpellAnimation(GameObject user, IEnumerable<GameObject> targets, Action<GameObject, IEnumerable<GameObject>> function)
+        public void PlaySpellAnimation(GameObject user, IEnumerable<GameObject> targets, List<SignalData> signalDatas)
         {
-            user.GetComponent<TurnCombat>().StartCoroutine(StartSpellAnimation(user, targets, function));
+            user.GetComponent<TurnCombat>().StartCoroutine(StartSpellAnimation(user, targets, signalDatas));
         }
 
-        private IEnumerator StartSpellAnimation(GameObject user, IEnumerable<GameObject> targets, Action<GameObject, IEnumerable<GameObject>> function)
+        private IEnumerator StartSpellAnimation(GameObject user, IEnumerable<GameObject> targets, List<SignalData> signalDatas)
         {
            foreach (var item in targets)
            {
@@ -27,8 +28,8 @@ namespace Animations
                 newProj.transform.DOMove(item.transform.position, speed).OnComplete(() =>
                 {
                     newProj.GetComponent<Animator>().Play("End");
-                    GameObject.Destroy(newProj, newProj.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.length);
-                    function(user, targets);
+                    UnityEngine.Object.Destroy(newProj, newProj.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.length);
+                    UI.UIManager.manager.SendData(signalDatas);
                 });
            }
         }

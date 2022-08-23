@@ -1,5 +1,6 @@
 using Character.Character;
 using Character.Trait;
+using GameManagement;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,13 +13,15 @@ namespace Strategies.EffectStrategies
         [LabelWidth(120)]
         public BaseTrait trait;
 
-        override protected void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
+            List<SignalData> signalDatas = new List<SignalData>();
             foreach (var target in targets)
             {
                 DefaultCharacter character = target.GetComponent<DefaultCharacter>();
-                character.AddNewTrait(trait);
+                signalDatas.AddRange(character.AddNewTrait(trait));
             }
+            return signalDatas;
         }
     }
 }

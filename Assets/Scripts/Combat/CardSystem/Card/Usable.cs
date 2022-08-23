@@ -1,6 +1,7 @@
 using Character.Character;
 using Character.Stats;
 using Combat;
+using GameManagement;
 using Sirenix.OdinInspector;
 using Strategies.EffectStrategies;
 using Strategies.FilterStrategies;

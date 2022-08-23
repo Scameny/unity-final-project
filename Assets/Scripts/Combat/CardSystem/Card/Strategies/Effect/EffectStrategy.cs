@@ -1,5 +1,6 @@
 using Animations;
 using CardSystem;
+using GameManagement;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,16 @@ namespace Strategies.EffectStrategies
         [HideLabel, InlineProperty]
         [SerializeReference] ISpellAnimation spellAnimation;
 
-        abstract protected void StartEffect(GameObject user, IEnumerable<GameObject> targets);
+        abstract protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets);
 
 
         public void UseEffect(GameObject user, IEnumerable<GameObject> targets)
         {
+            List<SignalData> uiData = StartEffect(user, targets);
             if (spellAnimation != null)
-                spellAnimation.PlaySpellAnimation(user, targets, StartEffect);
+                spellAnimation.PlaySpellAnimation(user, targets, uiData);
             else
-                StartEffect(user, targets);
+                UI.UIManager.manager.SendData(uiData);
         }
 
         public List<CardEffectType> GetCardEffectType()

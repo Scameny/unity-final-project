@@ -3,6 +3,7 @@ using Character.Character;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using GameManagement;
 
 namespace Strategies.EffectStrategies
 {
@@ -29,14 +30,16 @@ namespace Strategies.EffectStrategies
             return damageDone;
         }
 
-        override protected void StartEffect(GameObject user, IEnumerable<GameObject> targets)
+        override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
+            List<SignalData> signalDatas = new List<SignalData>();
             int damageDone = GetTotalDamage(user);
             foreach (var enemy in targets)
             {
                 DefaultCharacter character = enemy.GetComponent<DefaultCharacter>();
-                character.TakeDamage(damageDone, damageType);
+                signalDatas.AddRange(character.TakeDamage(damageDone, damageType));
             }
+            return signalDatas;
         }
     }
 }

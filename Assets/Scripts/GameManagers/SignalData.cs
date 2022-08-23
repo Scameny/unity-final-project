@@ -1,5 +1,6 @@
 using CardSystem;
 using Character.Stats;
+using Character.Trait;
 using Interaction;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,13 @@ namespace GameManagement
         END_TURN,
         CARD_DRAWED,
         CARD_PLAYED,
+        RECHARGE_DECK,
         DAMAGE_RECEIVED,
         RESOURCE_MODIFY,
         TURN_PREPARATION_START,
+        NEW_TRAIT,
+        TRAIT_RENEWED,
+        CHARACTER_DIE,
 
         // GAME SIGNALS
         START_GAME,
@@ -91,6 +96,16 @@ namespace GameManagement
             this.resourceAmount = resourceAmount;
             this.resourceBeforeGain = resourceBeforeGain;
 
+        }
+    }
+
+    public class TraitSignalData : CombatSignalData
+    {
+        public BaseTrait trait;
+        
+        public TraitSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, BaseTrait trait) : base(signalType, user, charactersInCombat)
+        {
+            this.trait = trait;
         }
     }
 

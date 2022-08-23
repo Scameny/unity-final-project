@@ -3,6 +3,7 @@ using UnityEngine;
 using Character.Character;
 using CardSystem;
 using GameManagement;
+using System.Collections.Generic;
 
 namespace Combat
 {
@@ -64,24 +65,29 @@ namespace Combat
             deck.ShuffleDeck();
         }
 
-        public void DrawCard(int numCards)
+        public List<SignalData> DrawCard(int numCards, bool sendUISignal = false)
         {
+            List<SignalData> toRet = new List<SignalData>();
             for (int i = 0; i < numCards; i++)
             {
                 try
                 {
                     Card card = deck.DrawCard();
-                    character.SendSignalData(new CombatCardSignalData(GameSignal.CARD_DRAWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+                    // TODO Maybe difference between draw and send to the hand/stack?
                     if (hand.GetCurrentCardsNumber() < 10)
                         hand.AddCard(card);
                     else
                         stack.AddCard(card);
+                    toRet.Add(new CombatCardSignalData(GameSignal.CARD_DRAWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
                 }
                 catch (EmptyCardContainerException)
                 {
                     RechargeDeck();
+                    toRet.Add(new CombatSignalData(GameSignal.RECHARGE_DECK, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
                 }
             }
+            character.SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
 
         private void RechargeDeck()
