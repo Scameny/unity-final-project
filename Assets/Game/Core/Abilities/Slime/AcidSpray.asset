@@ -80,12 +80,15 @@ MonoBehaviour:
           temporary: 1
           turns: 2
           icon: {fileID: 21300000, guid: 824a48daf7b55394e80e1df5048db839, type: 3}
+          maxStacks: 1
           statList:
             stats: []
           secondaryStatList:
             stats: []
           cards: []
           passiveList:
-          - passiveAbility: {fileID: 11400000, guid: b225edb0b27b0c249a1d86b0c72982de, type: 2}
+          - passiveAbility: {fileID: 11400000, guid: a9cc8b2d698501647af2bea19ae02d49, type: 2}
     00000002:
-      type: {class: , ns: , asm: }
+      type: {class: TargetSpellAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
+      data:
+        particles: {fileID: 8704055881949406513, guid: 06eda3833aa5a15429b358934433fc74, type: 3}

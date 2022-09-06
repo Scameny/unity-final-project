@@ -1,4 +1,4 @@
-using Animations;
+using Animations.Ability;
 using CardSystem;
 using GameManagement;
 using Sirenix.OdinInspector;

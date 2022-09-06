@@ -1,6 +1,6 @@
 using CardSystem;
 using Character.Stats;
-using Character.Trait;
+using Character.Buff;
 using Interaction;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,13 @@ namespace GameManagement
         OPEN_CHARACTER_MENU,
         CLOSE_CHARACTER_MENU,
         START_DRAGGING_CARD,
-        END_DRAGGING_CARD
+        END_DRAGGING_CARD,
+        CANCEL_TARGET_SELECTION,
+
+        LEVEL_UP,
+        MAX_RESOURCE_MODIFY,
+        REMOVE_TRAIT,
+        TRAIT_EXPIRED
     }
 
     public class SignalData
@@ -84,13 +90,13 @@ namespace GameManagement
         }
     }
 
-    public class ResourceSignalData : CombatSignalData
+    public class CombatResourceSignalData : CombatSignalData
     {
         public ResourceType resourceType;
         public int resourceAmount;
         public int resourceBeforeGain;
 
-        public ResourceSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, ResourceType resourceType, int resourceAmount, int resourceBeforeGain) : base(signalType, user, charactersInCombat)
+        public CombatResourceSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, ResourceType resourceType, int resourceAmount, int resourceBeforeGain) : base(signalType, user, charactersInCombat)
         {
             this.resourceType = resourceType;
             this.resourceAmount = resourceAmount;
@@ -99,11 +105,27 @@ namespace GameManagement
         }
     }
 
+    public class ResourceSignalData : SignalData
+    {
+        public ResourceType resourceType;
+        public int newResourceMax;
+        public int oldResourceMax;
+        public GameObject user;
+
+        public ResourceSignalData(GameSignal signalType, GameObject user, ResourceType resourceType, int newResourceMax, int oldResourceMax) : base(signalType)
+        {
+            this.resourceType = resourceType;
+            this.newResourceMax = newResourceMax;
+            this.oldResourceMax = oldResourceMax;
+
+        }
+    }
+
     public class TraitSignalData : CombatSignalData
     {
-        public BaseTrait trait;
+        public BaseBuff trait;
         
-        public TraitSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, BaseTrait trait) : base(signalType, user, charactersInCombat)
+        public TraitSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, BaseBuff trait) : base(signalType, user, charactersInCombat)
         {
             this.trait = trait;
         }

@@ -1,4 +1,4 @@
-using Animations;
+using Animations.Ability;
 using GameManagement;
 using Sirenix.OdinInspector;
 using System;
@@ -19,10 +19,13 @@ namespace Strategies.PassiveEffectStrategies
         public void EffectActivation(SignalData passiveData)
         {
             List<SignalData> signalDatas = EffectAction(passiveData as CombatSignalData);
+            if (signalDatas.Count == 0)
+                return;
             if (spellAnimation != null)
                 spellAnimation.PlaySpellAnimation(passiveData as CombatSignalData, signalDatas);
             else
                 UI.UIManager.manager.SendData(signalDatas);
+
         }
 
         public IEnumerable<Type> GetFilteredAnimations()

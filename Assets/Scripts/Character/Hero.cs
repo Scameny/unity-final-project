@@ -7,6 +7,7 @@ using Items;
 using CardSystem;
 using Sirenix.OdinInspector;
 using Abilities.Passive;
+using GameManagement;
 
 namespace Character.Character
 {
@@ -123,6 +124,7 @@ namespace Character.Character
         private void LevelUp()
         {
             level += 1;
+            SendSignalData(new SignalData(GameSignal.LEVEL_UP));
             Debug.Log("Level up. Reached level " + level);
             foreach (var item in resources)
             {

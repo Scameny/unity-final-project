@@ -2,7 +2,7 @@ using Abilities.Passive;
 using System;
 using System.Collections.Generic;
 
-namespace Character.Trait
+namespace Character.Buff
 {
     public interface IPassiveProvider
     {

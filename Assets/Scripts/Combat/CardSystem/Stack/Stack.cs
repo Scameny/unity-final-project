@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CardSystem
@@ -48,7 +49,7 @@ namespace CardSystem
             {
                 Card card = currentStack[0];
                 currentStack.Remove(card);
-                Destroy(card.gameObject);
+                card.DestroyCard();
             }
         }
 
@@ -59,11 +60,10 @@ namespace CardSystem
 
         public IEnumerable<Card> RemoveAllCards()
         {
-            while(currentStack.Count != 0)
+            foreach (var item in currentStack.ToList())
             {
-                Card card = currentStack[0];
-                currentStack.Remove(card);
-                yield return card;
+                currentStack.Remove(item);
+                yield return item;
             }
         }
     }

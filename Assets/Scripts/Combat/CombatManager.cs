@@ -8,12 +8,12 @@ using GameManagement;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UI;
+using Animations;
 
 namespace Combat
 {
     public class CombatManager : MonoBehaviour
     {
-
         public static CombatManager combatManager;
 
         [Header("Debug")]
@@ -57,8 +57,14 @@ namespace Combat
         }
 
 
-        public void EndCombat()
+        private void EndCombat()
         {
+            StartCoroutine(EndCombatCoroutine());
+        }
+
+        private IEnumerator EndCombatCoroutine()
+        {
+            yield return new WaitUntil(() => AnimationQueue.Instance.DoingAnimations());
             GameManager.gm.EndCombat();
             player.GetComponent<TurnCombat>().EndCombat();
             UIManager.manager.SendData(new SignalData(GameSignal.END_COMBAT));
@@ -107,7 +113,7 @@ namespace Combat
             expStored += ((Npc)enemy.GetCharacter()).GetRewardExp();
             itemsStored.AddRange(((Npc)enemy.GetCharacter()).GetRewardItems());
             enemies.Remove(enemy.gameObject);
-            Debug.Log("enemy death");
+            enemy.GetComponent<TurnCombat>().enabled = false;
             enemy.GetComponent<TurnCombat>().EndCombat();
             if (enemies.Count == 0)
             {

@@ -60,6 +60,6 @@ MonoBehaviour:
         resourceType: 0
         amount: 4
     00000001:
-      type: {class: TargetSpellAnimation, ns: Animations, asm: Assembly-CSharp}
+      type: {class: TargetSpellAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
       data:
         particles: {fileID: 5555700961651305609, guid: 8a6fe09790452bc4b8de8ec258f851d2, type: 3}

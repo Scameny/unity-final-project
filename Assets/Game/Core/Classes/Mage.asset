@@ -32,7 +32,7 @@ MonoBehaviour:
         - usable: {fileID: 11400000, guid: 1f65ded39f6fdc541897813503c9763c, type: 2}
           quantity: 2
         passives:
-        - passiveAbility: {fileID: 11400000, guid: 3f0da193c38d40d449751a86e259e628, type: 2}
+        - passiveAbility: {fileID: 11400000, guid: 93da82b90579c9f4784b280529b8f267, type: 2}
         - passiveAbility: {fileID: 11400000, guid: 3f2c677ea232b2c41bb4dd114e1642a9, type: 2}
       maxCards: 3
     progression:

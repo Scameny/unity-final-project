@@ -1,48 +1,48 @@
-using GameManagement;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Animations.Character
 {
-
-    public class CharacterAnimation : MonoBehaviour, IObserver<SignalData>
+    public class CharacterAnimation : MonoBehaviour
     {
 
         Animator animator;
-        IDisposable disposable;
 
         // Start is called before the first frame update
         void Start()
         {
             animator = GetComponent<Animator>();
-            disposable = UI.UIManager.manager.Subscribe(this);
         }
 
-        public void OnCompleted()
+        public void Die()
         {
-            disposable.Dispose();
+            AnimationQueue.Instance.AddAnimationToQueue(DieCoroutine(AnimationQueue.Instance.EndAnimation));
         }
 
-        public void OnError(Exception error)
+        private IEnumerator DieCoroutine(Action endAnimation)
         {
-            throw new NotImplementedException();
+            animator.Play("Die");
+            float time = animator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+            yield return time;
+            endAnimation();
+            gameObject.SetActive(false);
         }
 
-        public void OnNext(SignalData value)
+        public void Hurt()
         {
-            if (value.signal.Equals(GameSignal.CHARACTER_DIE) && (value as CombatSignalData).user.Equals(gameObject))
-            {
-                animator.Play("Die");
-                gameObject.SetActive(false);
-            }
-            if (value.signal.Equals(GameSignal.DAMAGE_RECEIVED) && (value as CombatSignalData).user.Equals(gameObject))
-            {
-                animator.Play("Hurt");
-            }
-
+            AnimationQueue.Instance.AddAnimationToQueue(HurtCoroutine(AnimationQueue.Instance.EndAnimation));
         }
 
-      
+        private IEnumerator HurtCoroutine(Action endAnimation)
+        {
+            animator.Play("Hurt");
+            float time = animator.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+            yield return time;
+            endAnimation();
+        }
+
+
     }
 
 }

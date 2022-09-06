@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes: []
   sprite: {fileID: 21300000, guid: c46be55a65cb30e44b7c89e3c0d531da, type: 3}
   Name: Fury aura
-  description: "\t"
+  description: 
   signalDecoderStrategy:
     id: 0
   passiveEffectStrategyList:
@@ -34,7 +34,7 @@ MonoBehaviour:
     00000000:
       type: {class: SingleSignalEvaluation, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
       data:
-        passiveSignal: 4
+        passiveSignal: 3
     00000001:
       type: {class: ResourceRecoverPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
       data:
@@ -43,6 +43,6 @@ MonoBehaviour:
         quantity: 3
         resourceType: 2
     00000002:
-      type: {class: SelfPassiveEffectAnimation, ns: Animations, asm: Assembly-CSharp}
+      type: {class: SelfPassiveEffectAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
       data:
         particles: {fileID: 5555700961651305609, guid: 8a6fe09790452bc4b8de8ec258f851d2, type: 3}

@@ -1,5 +1,6 @@
 using CardSystem;
 using Combat;
+using UI.Cards;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,11 +17,17 @@ namespace UI
 
         public void OnDrop(PointerEventData eventData)
         {
-            Card d = eventData.pointerDrag.GetComponent<Card>();
+            UICombatCard d = eventData.pointerDrag.GetComponent<UICombatCard>();
             if (d != null)
             {
                 d.OnZoneDropExit();
-                player.AddCardToQueue(d);
+                try 
+                {
+                    d.UseCard();
+                } catch
+                {
+                    d.CancelCardUse();
+                }
             }
         }
 
@@ -28,7 +35,7 @@ namespace UI
         {
             if (eventData.pointerDrag == null)
                 return;
-            Card d = eventData.pointerDrag.GetComponent<Card>();
+            UICombatCard d = eventData.pointerDrag.GetComponent<UICombatCard>();
             if (d!= null)
             {
                 d.OnZoneDropEnter();
@@ -40,7 +47,7 @@ namespace UI
         {
             if (eventData.pointerDrag == null)
                 return;
-            Card d = eventData.pointerDrag.GetComponent<Card>();
+            UICombatCard d = eventData.pointerDrag.GetComponent<UICombatCard>();
             if (d != null)
             {
                 d.OnZoneDropExit();

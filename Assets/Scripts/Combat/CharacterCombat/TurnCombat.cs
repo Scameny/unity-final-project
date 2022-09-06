@@ -41,7 +41,7 @@ namespace Combat
         {
             StopAllCoroutines();
             character.DisposePassiveAbilities();
-            RemoveTemporaryTraits();
+            RemoveTraits();
             ClearCards();
         }
 
@@ -116,27 +116,23 @@ namespace Combat
             deck.CreateCard(gameObject, usable, oneUse, cardPrefab);
         }
 
+
         protected void DrawInitialHand()
         {
-            DrawCard(character.GetMaxCardsInHand());
+            DrawCard(character.GetMaxCardsInHand(), true);
         }
 
         virtual public void CardUsed(Card card)
         {
-            character.SendSignalData(new CombatCardSignalData(GameSignal.CARD_PLAYED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+            character.SendSignalData(new CombatCardSignalData(GameSignal.CARD_PLAYED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card), true);
             if (card.IsOneUse())
             {
-                Destroy(gameObject);
+                card.DestroyCard();
             }
             else
             {
                 SendToStack(card);
             }
-        }
-
-        virtual public void CancelCardUse(Card card)
-        {
-
         }
 
         protected void ClearCards()
@@ -150,9 +146,9 @@ namespace Combat
 
         #region Traits operation
 
-        protected void RemoveTemporaryTraits()
+        protected void RemoveTraits()
         {
-            character.RemoveTemporaryTraits();
+            character.RemoveTraits();
         }
 
         protected void EvaluateTraits()
@@ -187,15 +183,15 @@ namespace Combat
         virtual protected void StartOfTurn()
         {
             CombatManager.combatManager.PauseCombat();
-            character.SendSignalData(new CombatSignalData(GameSignal.START_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+            character.SendSignalData(new CombatSignalData(GameSignal.START_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
             EvaluateTraits();
-            DrawCard(1);
+            DrawCard(1, true);
             turnTime = 0;
         }
 
         virtual public void EndTurn()
         {
-            character.SendSignalData(new CombatSignalData(GameSignal.END_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+            character.SendSignalData(new CombatSignalData(GameSignal.END_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
             CombatManager.combatManager.ResumeCombat();
         }
 

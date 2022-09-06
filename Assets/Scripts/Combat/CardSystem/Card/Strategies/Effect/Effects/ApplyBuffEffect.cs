@@ -1,5 +1,5 @@
 using Character.Character;
-using Character.Trait;
+using Character.Buff;
 using GameManagement;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Strategies.EffectStrategies
     public class ApplyBuffEffect : BuffEffectStrategy
     {
         [LabelWidth(120)]
-        public BaseTrait trait;
+        public BaseBuff trait;
 
         override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {

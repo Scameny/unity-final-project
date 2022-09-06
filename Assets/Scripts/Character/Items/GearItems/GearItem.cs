@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using Sirenix.Utilities;
 using Abilities.Passive;
-using Character.Trait;
+using Character.Buff;
 
 namespace Items
 {

@@ -24,9 +24,8 @@ namespace UI
             resourceSlider = GetComponentInChildren<Slider>();
         }
 
-        override protected void Update()
+        void Update()
         {
-            base.Update();
             UpdateResourceUnit();
         }
 

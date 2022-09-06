@@ -1,7 +1,7 @@
 using GameManagement;
 using System.Collections.Generic;
 
-namespace Animations
+namespace Animations.Ability
 {
     public interface IPassiveSpellAnimation
     {

@@ -1,4 +1,4 @@
-﻿using Character.Trait;
+﻿using Character.Buff;
 using Items;
 using UnityEngine;
 
@@ -20,6 +20,6 @@ namespace RotaryHeart.Lib.SerializableDictionary
         private AudioClip _audioClip;
         [SerializeField]
         private Item _item;
-        private BaseTrait trait = new BaseTrait();
+        private BaseBuff trait = new BaseBuff();
     }
 }

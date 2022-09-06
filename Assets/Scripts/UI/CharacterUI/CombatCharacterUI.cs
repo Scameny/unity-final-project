@@ -1,3 +1,4 @@
+using Character.Buff;
 using Character.Character;
 using Character.Stats;
 using GameManagement;
@@ -8,7 +9,7 @@ namespace UI
 {
     public class CombatCharacterUI : CharacterUI
     {
-        [SerializeField] GameObject floatingTextPrefab;
+        GameObject floatingTextPrefab;
         DefaultCharacter character;
         float timeToSpawnNextFloatingText = 0;
 
@@ -16,10 +17,10 @@ namespace UI
         protected override void Start()
         {
             character = GetComponentInParent<DefaultCharacter>();
+            floatingTextPrefab = Resources.Load<GameObject>("UI/FloatingText");
             base.Start();
         }
 
-        // Update is called once per frame
         virtual protected void Update()
         {
             if (timeToSpawnNextFloatingText > 0)
@@ -28,22 +29,37 @@ namespace UI
                 timeToSpawnNextFloatingText = 0;
         }
 
-        private IEnumerator CreateFloatingText(ResourceType resourceType, int value, GameObject user, float timeToWait)
+
+        private IEnumerator CreateResourceFloatingText(ResourceType resourceType, int value, GameObject user, float timeToWait)
         {
-            timeToSpawnNextFloatingText = floatingTextPrefab.GetComponent<FloatingText>().timeBetweenText;
+            timeToSpawnNextFloatingText += floatingTextPrefab.GetComponent<FloatingText>().GetTimeBetweenText();
             yield return new WaitForSeconds(timeToWait);
             GameObject floatingText = Instantiate(floatingTextPrefab, user.transform.position, Quaternion.identity, transform);
             floatingText.GetComponent<FloatingText>().SetValues(resourceType, value);
         }
 
+        private IEnumerator CreateBuffFloatingText(BaseBuff buff, GameSignal gameSignal, GameObject user, float timeToWait)
+        {
+            timeToSpawnNextFloatingText = floatingTextPrefab.GetComponent<FloatingText>().GetTimeBetweenText();
+            yield return new WaitForSeconds(timeToWait);
+            GameObject floatingText = Instantiate(floatingTextPrefab, user.transform.position, Quaternion.identity, transform);
+            floatingText.GetComponent<FloatingText>().SetValues(buff, gameSignal);
+        }
+
+
 
         override public void OnNext(SignalData signalData)
         {
             base.OnNext(signalData);
-            if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as ResourceSignalData).user.Equals(character.gameObject))
+            if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(character.gameObject))
             {
-                ResourceSignalData resourceSignalData = signalData as ResourceSignalData;
-                StartCoroutine(CreateFloatingText(resourceSignalData.resourceType, resourceSignalData.resourceAmount, resourceSignalData.user, timeToSpawnNextFloatingText));
+                CombatResourceSignalData resourceSignalData = signalData as CombatResourceSignalData;
+                StartCoroutine(CreateResourceFloatingText(resourceSignalData.resourceType, resourceSignalData.resourceAmount, resourceSignalData.user, timeToSpawnNextFloatingText));
+            } 
+            else if ((signalData.signal.Equals(GameSignal.NEW_TRAIT) || signalData.signal.Equals(GameSignal.TRAIT_RENEWED) || signalData.signal.Equals(GameSignal.TRAIT_EXPIRED) || signalData.signal.Equals(GameSignal.REMOVE_TRAIT)) && (signalData as TraitSignalData).user.Equals(character.gameObject))
+            {
+                TraitSignalData traitSignalData = signalData as TraitSignalData;
+                StartCoroutine(CreateBuffFloatingText(traitSignalData.trait, traitSignalData.signal,traitSignalData.user, timeToSpawnNextFloatingText));
             }
         }
 

@@ -77,9 +77,9 @@ MonoBehaviour:
           id: 2
         stat: 3
         scaleCoef: 0.2
-        flatDamage: 3
+        flatDamage: 2
         damageType: 1
     00000002:
-      type: {class: TargetSpellAnimation, ns: Animations, asm: Assembly-CSharp}
+      type: {class: TargetSpellAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
       data:
         particles: {fileID: 4328794491255316129, guid: 09c9f27a5fb499e41ad64f844258631c, type: 3}

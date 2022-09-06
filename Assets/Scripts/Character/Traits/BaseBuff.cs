@@ -6,10 +6,10 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Character.Trait
+namespace Character.Buff
 {
     [System.Serializable]
-    public class BaseTrait : IModifierProvider, ICardGiver, IPassiveProvider
+    public class BaseBuff : IModifierProvider, ICardGiver, IPassiveProvider
     {
         [HorizontalGroup("Main")]
 
@@ -23,7 +23,8 @@ namespace Character.Trait
         [VerticalGroup("Main/General Settings/Split/Right")]
         [LabelWidth(60)]
         [SerializeField] int turns;
-        public Sprite icon;
+        [SerializeField] Sprite icon;
+        [SerializeField] int maxStacks;
 
         [HorizontalGroup("Middle")]
 
@@ -101,6 +102,16 @@ namespace Character.Trait
             return temporary;
         }
 
+        public Sprite GetIcon()
+        {
+            return icon;
+        }
+
+        public int GetMaxStacks()
+        {
+            return maxStacks;
+        }
+
         public IEnumerable<StatisticGiven> GetStatistic()
         {
             return statList.stats;
@@ -120,7 +131,7 @@ namespace Character.Trait
         #region Object operations
         public override bool Equals(object obj)
         {
-            return obj is BaseTrait trait &&
+            return obj is BaseBuff trait &&
                    name == trait.name;
         }
 

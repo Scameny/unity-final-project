@@ -1,7 +1,7 @@
 using Abilities.Passive;
 using CardSystem;
 using Character.Stats;
-using Character.Trait;
+using Character.Buff;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;

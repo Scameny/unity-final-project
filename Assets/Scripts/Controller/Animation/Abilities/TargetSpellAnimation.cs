@@ -1,4 +1,3 @@
-using Combat;
 using GameManagement;
 using Sirenix.OdinInspector;
 using System;
@@ -6,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Animations
+namespace Animations.Ability
 {
     [Serializable]
     public class TargetSpellAnimation : ISpellAnimation
@@ -16,10 +15,10 @@ namespace Animations
 
         public void PlaySpellAnimation(GameObject user, IEnumerable<GameObject> targets, List<SignalData> signalDatas)
         {
-            user.GetComponent<TurnCombat>().StartCoroutine(StartSpellAnimation(user, targets, signalDatas));
+            AnimationQueue.Instance.AddAnimationToQueue(StartSpellAnimation(user, targets, signalDatas, AnimationQueue.Instance.EndAnimation));
         }
 
-        private IEnumerator StartSpellAnimation(GameObject user, IEnumerable<GameObject> targets, List<SignalData> signalDatas)
+        private IEnumerator StartSpellAnimation(GameObject user, IEnumerable<GameObject> targets, List<SignalData> signalDatas, Action endAnimation)
         {
             foreach (var item in targets)
             {
@@ -28,6 +27,7 @@ namespace Animations
                 yield return new WaitForSeconds(time);
                 UnityEngine.Object.Destroy(newParticles);
                 UI.UIManager.manager.SendData(signalDatas);
+                endAnimation();
             }
         }
     }

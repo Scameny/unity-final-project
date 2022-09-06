@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07f86dc407779b94f99d34113e9a1e3a, type: 3}
-  m_Name: AcidSprayPassiveEffect
+  m_Name: AcidSprayDebuff
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -22,9 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   sprite: {fileID: 21300000, guid: 824a48daf7b55394e80e1df5048db839, type: 3}
-  Name: Acid Spray
-  description: Does 2 damage of @NatureDamage@ nature damage @break@ each turn for
-    two turns
+  Name: Acid spray
+  description: Does 2 points of @NatureDamage@ nature damage @break@ each turn
   signalDecoderStrategy:
     id: 0
   passiveEffectStrategyList:
@@ -33,9 +32,7 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: SingleSignalEvaluation, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
-      data:
-        passiveSignal: 3
+      type: {class: , ns: , asm: }
     00000001:
       type: {class: FlatDamagePassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
       data:
@@ -44,6 +41,6 @@ MonoBehaviour:
         damage: 2
         damageType: 5
     00000002:
-      type: {class: SelfPassiveEffectAnimation, ns: Animations, asm: Assembly-CSharp}
+      type: {class: SelfPassiveEffectAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
       data:
         particles: {fileID: 8704055881949406513, guid: 06eda3833aa5a15429b358934433fc74, type: 3}

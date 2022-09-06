@@ -26,8 +26,6 @@ MonoBehaviour:
     stats:
     - statType: 1
       amount: 2
-  abilitiesGiven:
-  - usable: {fileID: 11400000, guid: 6b91e06bea894914587f3a8cc01fdd86, type: 2}
-    quantity: 1
+  abilitiesGiven: []
   passiveAbilities: []
   slot: 0

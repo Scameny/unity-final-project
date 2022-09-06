@@ -1,7 +1,6 @@
 using Character.Character;
 using Character.Stats;
 using Combat;
-using GameManagement;
 using Sirenix.OdinInspector;
 using Strategies.EffectStrategies;
 using Strategies.FilterStrategies;
@@ -85,7 +84,7 @@ namespace CardSystem
                     }
                     else
                     {
-                        user.GetComponent<TurnCombat>().CancelCardUse(card);
+                        card.CancelCardUse();
                     }
                 });
 
@@ -98,13 +97,13 @@ namespace CardSystem
 
         private IEnumerator EffectExecution(GameObject user, IEnumerable<GameObject> targets, Card card)
         {
-            user.GetComponent<Animator>().Play(animationType.ToString());
-            yield return new WaitForSeconds(user.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.length);
-
             foreach (var resource in resourceCosts)
             {
-                user.GetComponent<DefaultCharacter>().UseResource(resource.amount, resource.resourceType);
+                user.GetComponent<DefaultCharacter>().UseResource(resource.amount, resource.resourceType, true);
             }
+
+            user.GetComponent<Animator>().Play(animationType.ToString());
+            yield return new WaitForSeconds(user.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0)[0].clip.length);
 
             foreach (var effectStrategy in effectStrategiesList.effectStrategies)
             {

@@ -42,7 +42,7 @@ MonoBehaviour:
       Data: 2
     - Name: amount
       Entry: 3
-      Data: 5
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -56,6 +56,7 @@ MonoBehaviour:
   Name: Tackle
   description: 
   animationType: 0
+  abilityType: 0
   filterStrategiesList:
     filterStrategies:
     - id: 0

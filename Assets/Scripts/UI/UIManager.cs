@@ -1,6 +1,7 @@
 using GameManagement;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace UI
@@ -48,7 +49,7 @@ namespace UI
 
         public void SendData(SignalData uiData)
         {
-            foreach (var item in observers)
+            foreach (var item in observers.ToList())
             {
                 item.OnNext(uiData);
             }

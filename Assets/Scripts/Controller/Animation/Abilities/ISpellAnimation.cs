@@ -2,7 +2,7 @@ using GameManagement;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Animations
+namespace Animations.Ability
 {
     public interface ISpellAnimation
     {

@@ -1,5 +1,3 @@
-using CardSystem;
-using Character.Stats;
 using GameManagement;
 using Sirenix.OdinInspector;
 using Strategies.PassiveEffectStrategies;

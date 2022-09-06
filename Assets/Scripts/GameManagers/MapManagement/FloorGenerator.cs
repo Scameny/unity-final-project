@@ -74,10 +74,21 @@ namespace FloorManagement {
                 return;
             int x = 0;
             int y = 0;
-            GetRandomDirection(ref x, ref y);
+            List<int> directions = GetRandomDirection(ref x, ref y);
             while (rooms.Any(r => r.i == room.i + x && r.j == room.j + y))
             {
-                GetRandomDirection(ref x, ref y);
+                if (directions.Count == 0)
+                {
+                    int randomRoomNumber = Random.Range(0, rooms.Count);
+                    while (rooms[randomRoomNumber].onlyOneWay)
+                    {
+                        randomRoomNumber = Random.Range(0, rooms.Count);
+                    }
+                    BuildNewRoom(rooms[randomRoomNumber], 0);
+                    return;
+                }
+
+                GetRandomDirection(ref x, ref y, directions);
             }
             RoomInfo roomToInstantiate = null;
             if (bossRoom)
@@ -150,11 +161,18 @@ namespace FloorManagement {
             return toRet;
         }
 
-       
 
-        private void GetRandomDirection(ref int x, ref int y)
+        private List<int> GetRandomDirection(ref int x, ref int y)
         {
-            int dir = Random.Range(0, 4);
+            List<int> directionList = new List<int>() { 0, 1, 2, 3 };
+            GetRandomDirection(ref x, ref y, directionList);
+            return directionList;
+        }
+
+        private void GetRandomDirection(ref int x, ref int y, List<int> directionsAvaliable)
+        {
+            int dir = directionsAvaliable[Random.Range(0, directionsAvaliable.Count)];
+            directionsAvaliable.Remove(dir);
             if (dir == 0)
             {
                 x = 1;

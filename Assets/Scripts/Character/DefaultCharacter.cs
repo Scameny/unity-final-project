@@ -1,7 +1,7 @@
 using System;
 using Character.Classes;
 using Character.Stats;
-using Character.Trait;
+using Character.Buff;
 using UnityEngine;
 using Utils;
 using CardSystem;
@@ -11,6 +11,7 @@ using Abilities.Passive;
 using Combat;
 using System.Linq;
 using GameManagement;
+using Animations.Character;
 
 namespace Character.Character 
 {
@@ -40,12 +41,12 @@ namespace Character.Character
 
         
         bool isDead;
-        protected Traits traits;
+        CharacterBuffs traits;
         PassiveManager passiveManager;
 
         private void Awake()
         {
-            traits = GetComponent<Traits>();
+            traits = GetComponent<CharacterBuffs>();
         }
 
         virtual protected void Start()
@@ -59,7 +60,13 @@ namespace Character.Character
             foreach (var item in resources)
             {
                 if (!item.temporaryResource)
-                    item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
+                {
+                    if (item.maxResource != characterClass.GetMaxResourceAmount(level, item.resourceType))
+                    {
+                        SendSignalData(new ResourceSignalData(GameSignal.MAX_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.maxResource));
+                        item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
+                    }
+                }
             }
         }
 
@@ -119,20 +126,20 @@ namespace Character.Character
         #endregion
 
         #region Traits operations
-        public void RemoveTemporaryTraits()
+        public void RemoveTraits()
         {
-            traits.RemoveTemporaryTraits();
+            traits.RemoveBuffs();
         }
 
         public void ReduceTurnInTemporaryTraits()
         {
-            traits.ReduceTurnInTemporaryTraits();
+            traits.ReduceTurnInTemporaryBuffs();
         }
 
-        public List<SignalData> AddNewTrait(BaseTrait trait, bool sendUISignal = false)
+        public List<SignalData> AddNewTrait(BaseBuff trait, bool sendUISignal = false)
         {
             List<SignalData> toRet = new List<SignalData>();
-            if (traits.NewTrait(trait))
+            if (traits.NewBuff(trait))
             {
                 toRet.Add(new TraitSignalData(GameSignal.NEW_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
                 foreach (var item in trait.GetPasiveAbilities())
@@ -147,6 +154,20 @@ namespace Character.Character
             }
             SendSignalData(toRet, sendUISignal);
             return toRet;
+        }
+
+        public List<SignalData> RemoveTrait(BaseBuff trait, bool sendUISignal = false)
+        {
+            List<SignalData> toRet = new List<SignalData>();
+            if (traits.RemoveBuff(trait.GetName()))
+                toRet.Add(new TraitSignalData(GameSignal.REMOVE_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+            SendSignalData(toRet, sendUISignal);
+            return toRet;
+        }
+
+        public BuffInfo GetTrait(string traitName)
+        {
+            return traits.GetBuff(traitName);
         }
 
         #endregion
@@ -227,7 +248,7 @@ namespace Character.Character
             List<SignalData> toRet = new List<SignalData>();
             if (HaveEnoughResource(resource, resourceType))
             {
-                SignalData resourceSignal = new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, -resource, GetResourceByResourceType(resourceType).currentAmount);
+                SignalData resourceSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, -resource, GetResourceByResourceType(resourceType).currentAmount);
                 toRet.Add(resourceSignal);
                 GetResourceByResourceType(resourceType).currentAmount -= resource;
                 SendSignalData(toRet, sendUISignal);
@@ -280,7 +301,7 @@ namespace Character.Character
             Resource resource = GetResourceByResourceType(resourceType);
             resource.currentAmount += amount;
             resource.currentAmount = Mathf.Min(resource.currentAmount, resource.maxResource);
-            SignalData resourceSignal = new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount);
+            SignalData resourceSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount);
             toRet.Add(resourceSignal);
             SendSignalData(toRet, sendUISignal);
             return toRet;
@@ -324,25 +345,26 @@ namespace Character.Character
             if (damage > 0)
             {
                 SignalData damageReceiveSignal = new DamageReceivedSignalData(GameSignal.DAMAGE_RECEIVED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), damage);
+                GetComponent<CharacterAnimation>().Hurt();
                 toRet.Add(damageReceiveSignal);
                 GameDebug.Instance.Log(Color.blue, gameObject.name + " taking " + damage + " damage");
                 if (armor.currentAmount < damage)
                 {
                     if (armor.currentAmount > 0)
                     {
-                        SignalData armorSignal = new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Armor, -armor.currentAmount, armor.currentAmount);
+                        SignalData armorSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Armor, -armor.currentAmount, armor.currentAmount);
                         toRet.Add(armorSignal);
                         damage -= armor.currentAmount;
                         armor.currentAmount = 0;
                     }
-                    SignalData healthSignal = new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Health, -damage, health.currentAmount);
+                    SignalData healthSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Health, -damage, health.currentAmount);
                     toRet.Add(healthSignal);
                     health.currentAmount -= damage;
                 }
                 else
                 {
                     armor.currentAmount -= damage;
-                    SignalData armorSignal = new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Armor, -damage, armor.currentAmount);
+                    SignalData armorSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Armor, -damage, armor.currentAmount);
                     toRet.Add(armorSignal);
                 }
                 SendSignalData(toRet, sendUISignal);
@@ -367,7 +389,7 @@ namespace Character.Character
             if (health.currentAmount > health.maxResource)
                 health.currentAmount = health.maxResource;
            
-            SignalData healSignal = new ResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Health, healAmount, health.currentAmount);
+            SignalData healSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), ResourceType.Health, healAmount, health.currentAmount);
             toRet.Add(healSignal);
             SendSignalData(toRet, sendUISignal);
             GameDebug.Instance.Log(Color.green, gameObject.name + " was healed for " + healAmount + " points");
@@ -378,7 +400,7 @@ namespace Character.Character
         {
             if (isDead) return;
             isDead = true;
-            GameDebug.Instance.Log(Color.red, gameObject.name + " dies");
+            GetComponent<CharacterAnimation>().Die();
         }
 
         public int GetCurrentHealth()

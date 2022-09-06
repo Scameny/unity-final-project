@@ -1,42 +1,24 @@
 using Combat;
-using GameManagement;
 using System.Collections.Generic;
-using TMPro;
-using UI;
+using UI.Cards;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using Utils;
 
 namespace CardSystem
 {
     public class Card : MonoBehaviour
     {
 
-        [SerializeField] Image cardImage;
-        [SerializeField] TextMeshProUGUI cardName, cardDescription;
-        [SerializeField] GameObject cost;
-
         bool oneUse;
         Usable cardEffect;
         GameObject user;
+        UICombatCard uiCard;
 
-        Vector3 position;
-        bool onDropZone = false;
-
-
+        
         public void InitializeCard(Usable cardUse, GameObject user, bool oneUse)
         {
+            uiCard = GetComponent<UICombatCard>();
             cardEffect = cardUse;
-            cardImage.sprite = cardUse.GetSprite();
-            cardName.text = (cardUse).GetName();
-            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles((cardUse).GetDescription(), UIManager.manager.tooltipStyle);
-            if (cardUse.GetResourceCosts().Count > 0)
-            {
-                //TODO add support to more than one resource cost
-                cost.GetComponentInChildren<TextMeshProUGUI>().text = cardUse.GetResourceCosts()[0].amount.ToString();
-                // TODO add change of resource background depending on resource type
-            }
+            uiCard.InitializeUICard(cardUse, oneUse);
             this.user = user;
             this.oneUse = oneUse;
         }
@@ -46,10 +28,21 @@ namespace CardSystem
             gameObject.SetActive(visible);
         }
 
+        public void DestroyCard()
+        {
+            Destroy(gameObject);
+        }
+
         public void UseCard()
         {
             cardEffect.Use(user, CombatManager.combatManager.GetCharactersInCombat(), this);
         }
+
+        public void CancelCardUse()
+        {
+            uiCard.CancelCardUse();
+        }
+
 
         public void CardEffectFinished()
         {
@@ -79,38 +72,9 @@ namespace CardSystem
             return cardEffect;
         }
 
-        #region UI management
-        public void OnBeginDrag(PointerEventData eventData)
+        public GameObject GetUser()
         {
-            position = GetComponent<RectTransform>().position;
-            UIManager.manager.SendData(new SignalData(GameSignal.START_DRAGGING_CARD));
+            return user;
         }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            transform.position = eventData.position;
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            if (!onDropZone)
-            {
-                transform.position = position;
-            }
-            UIManager.manager.SendData(new SignalData(GameSignal.END_DRAGGING_CARD));
-        }
-
-        public void OnZoneDropEnter()
-        {
-            Color color = GetComponent<Image>().color;
-            GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0.6f);
-        }
-
-        public void OnZoneDropExit()
-        {
-            Color color = GetComponent<Image>().color;
-            GetComponent<Image>().color = new Color(color.r, color.g, color.b, 1);
-        }
-        #endregion
     }
 }
