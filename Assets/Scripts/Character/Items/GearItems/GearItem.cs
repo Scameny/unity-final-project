@@ -9,6 +9,7 @@ using System.Linq;
 using Sirenix.Utilities;
 using Abilities.Passive;
 using Character.Buff;
+using GameManagement;
 
 namespace Items
 {
@@ -105,6 +106,27 @@ namespace Items
                 leftTooltipText += "Equip: " + item.passiveAbility.GetName() + " - " + item.passiveAbility.GetDescription() + "\n";
             }
             tooltip.infoLeft = leftTooltipText;
+        }
+
+        public List<SignalData> GetSignalDatas(GameObject user)
+        {
+            List<SignalData> signalDatas = new List<SignalData>();
+            if (statList.stats.Count > 0)
+            {
+                foreach (var item in statList.stats)
+                {
+                    signalDatas.Add(new ModifyPrimaryStatisticSignalData(GameSignal.PRIMARY_STAT_MODIFY, user, item.statType));
+                }
+            }
+            if (secondaryStatList.stats.Count > 0)
+            {
+                foreach (var item in secondaryStatList.stats)
+                {
+                    signalDatas.Add(new ModifySecondaryStatisticSignalData(GameSignal.PRIMARY_STAT_MODIFY, user, item.statType));
+                }
+            }
+
+            return signalDatas;
         }
     }
 

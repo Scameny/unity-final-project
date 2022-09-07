@@ -109,7 +109,6 @@ namespace Character.Stats
         private void CustomAddFunction()
         {
             progression.Add(new CharacterStatsPerLevel(progression.Count + 1));
-            
         }
 
         [System.Serializable]

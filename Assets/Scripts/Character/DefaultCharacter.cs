@@ -57,17 +57,7 @@ namespace Character.Character
 
         private void Update()
         {
-            foreach (var item in resources)
-            {
-                if (!item.temporaryResource)
-                {
-                    if (item.maxResource != characterClass.GetMaxResourceAmount(level, item.resourceType))
-                    {
-                        SendSignalData(new ResourceSignalData(GameSignal.MAX_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.maxResource));
-                        item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
-                    }
-                }
-            }
+
         }
 
         #region Abilities operations
@@ -139,18 +129,26 @@ namespace Character.Character
         public List<SignalData> AddNewTrait(BaseBuff trait, bool sendUISignal = false)
         {
             List<SignalData> toRet = new List<SignalData>();
-            if (traits.NewBuff(trait))
+            switch (traits.NewBuff(trait))
             {
-                toRet.Add(new TraitSignalData(GameSignal.NEW_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
-                foreach (var item in trait.GetPasiveAbilities())
-                {
-                    IDisposable disposable = passiveManager.Subscribe(item);
-                    item.SetDisposable(disposable);
-                }
-            }
-            else
-            {
-                toRet.Add(new TraitSignalData(GameSignal.TRAIT_RENEWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                case GameSignal.TRAIT_RENEWED:
+                    toRet.Add(new TraitSignalData(GameSignal.TRAIT_RENEWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                    break;
+                case GameSignal.TRAIT_STACK_ADDED:
+                    toRet.Add(new TraitSignalData(GameSignal.TRAIT_STACK_ADDED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                    toRet.AddRange(trait.GetSignalDatas(gameObject));
+                    break;
+                case GameSignal.NEW_TRAIT:
+                    toRet.Add(new TraitSignalData(GameSignal.NEW_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                    toRet.AddRange(trait.GetSignalDatas(gameObject));
+                    foreach (var item in trait.GetPasiveAbilities())
+                    {
+                        IDisposable disposable = passiveManager.Subscribe(item);
+                        item.SetDisposable(disposable);
+                    }
+                    break;
+                default:
+                    break;
             }
             SendSignalData(toRet, sendUISignal);
             return toRet;
@@ -161,6 +159,7 @@ namespace Character.Character
             List<SignalData> toRet = new List<SignalData>();
             if (traits.RemoveBuff(trait.GetName()))
                 toRet.Add(new TraitSignalData(GameSignal.REMOVE_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+            toRet.AddRange(trait.GetSignalDatas(gameObject));
             SendSignalData(toRet, sendUISignal);
             return toRet;
         }
@@ -328,6 +327,20 @@ namespace Character.Character
         public int GetMaxValueOfResource(ResourceType resourceType)
         {
             return GetResourceByResourceType(resourceType).maxResource;
+        }
+
+        public void ResetTemporaryResources()
+        {
+            List<SignalData> toRet = new List<SignalData>();
+            foreach (var item in resources)
+            {
+                if (item.temporaryResource)
+                {
+                    toRet.Add(new ResourceSignalData(GameSignal.OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), 0));
+                    item.currentAmount = 0;
+                }
+            }
+            SendSignalData(toRet, true);
         }
 
         #endregion

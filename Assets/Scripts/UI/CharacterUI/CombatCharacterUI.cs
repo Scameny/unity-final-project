@@ -40,7 +40,7 @@ namespace UI
 
         private IEnumerator CreateBuffFloatingText(BaseBuff buff, GameSignal gameSignal, GameObject user, float timeToWait)
         {
-            timeToSpawnNextFloatingText = floatingTextPrefab.GetComponent<FloatingText>().GetTimeBetweenText();
+            timeToSpawnNextFloatingText += floatingTextPrefab.GetComponent<FloatingText>().GetTimeBetweenText();
             yield return new WaitForSeconds(timeToWait);
             GameObject floatingText = Instantiate(floatingTextPrefab, user.transform.position, Quaternion.identity, transform);
             floatingText.GetComponent<FloatingText>().SetValues(buff, gameSignal);
@@ -51,11 +51,12 @@ namespace UI
         override public void OnNext(SignalData signalData)
         {
             base.OnNext(signalData);
-            if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(character.gameObject))
+            if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && signalData.GetType().Equals(typeof(CombatResourceSignalData)) && 
+                (signalData as CombatResourceSignalData).user.Equals(character.gameObject))
             {
                 CombatResourceSignalData resourceSignalData = signalData as CombatResourceSignalData;
                 StartCoroutine(CreateResourceFloatingText(resourceSignalData.resourceType, resourceSignalData.resourceAmount, resourceSignalData.user, timeToSpawnNextFloatingText));
-            } 
+            }
             else if ((signalData.signal.Equals(GameSignal.NEW_TRAIT) || signalData.signal.Equals(GameSignal.TRAIT_RENEWED) || signalData.signal.Equals(GameSignal.TRAIT_EXPIRED) || signalData.signal.Equals(GameSignal.REMOVE_TRAIT)) && (signalData as TraitSignalData).user.Equals(character.gameObject))
             {
                 TraitSignalData traitSignalData = signalData as TraitSignalData;

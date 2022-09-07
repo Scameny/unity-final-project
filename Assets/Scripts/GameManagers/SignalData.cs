@@ -46,7 +46,11 @@ namespace GameManagement
         LEVEL_UP,
         MAX_RESOURCE_MODIFY,
         REMOVE_TRAIT,
-        TRAIT_EXPIRED
+        TRAIT_EXPIRED,
+        TRAIT_STACK_ADDED,
+        OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY,
+
+        NONE
     }
 
     public class SignalData
@@ -117,6 +121,7 @@ namespace GameManagement
             this.resourceType = resourceType;
             this.newResourceMax = newResourceMax;
             this.oldResourceMax = oldResourceMax;
+            this.user = user;
 
         }
     }
@@ -131,39 +136,29 @@ namespace GameManagement
         }
     }
 
-    public abstract class ModifyStatisticSignalData : SignalData
-    {
-        public GameObject user;
-        public int amount;
-        public int statBeforeGain;
-
-        public ModifyStatisticSignalData(GameSignal signalType, GameObject user, int amount, int statBeforeGain) : base(signalType)
-        {
-            this.user = user;
-            this.amount = amount;
-            this.statBeforeGain = statBeforeGain;
-        }
-    }
-
-    public class ModifyPrimaryStatisticSignalData : ModifyStatisticSignalData
+    public class ModifyPrimaryStatisticSignalData : SignalData
     {
         public StatType statType;
+        public GameObject user;
 
-        public ModifyPrimaryStatisticSignalData(GameSignal signalType, GameObject user, StatType statType, int amount, int statBeforeGain) : base(signalType, user, amount, statBeforeGain)
+        public ModifyPrimaryStatisticSignalData(GameSignal signalType, GameObject user, StatType statType) : base(signalType)
         {
             this.statType = statType;
+            this.user = user;
         }
 
     }
 
-    public class ModifySecondaryStatisticSignalData : ModifyStatisticSignalData
+    public class ModifySecondaryStatisticSignalData : SignalData
     {
         public DamageTypeStat statType;
+        public GameObject user;
 
-        public ModifySecondaryStatisticSignalData(GameSignal signalType, GameObject user, DamageTypeStat statType, int amount, int statBeforeGain) : base(signalType, user, amount, statBeforeGain)
+        public ModifySecondaryStatisticSignalData(GameSignal signalType, GameObject user, DamageTypeStat statType) : base(signalType)
         {
             this.statType = statType;
-        }
+            this.user = user;
+    }
     }
 
     public class UISignalData : SignalData

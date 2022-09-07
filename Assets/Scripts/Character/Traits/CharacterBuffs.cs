@@ -1,6 +1,7 @@
 using Abilities.Passive;
 using CardSystem;
 using Character.Stats;
+using GameManagement;
 using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
 using System;
@@ -105,24 +106,26 @@ namespace Character.Buff
             }
         }
 
-        public bool NewBuff(BaseBuff buff)
+        public GameSignal NewBuff(BaseBuff buff)
         {
             if (currentBuffs.ContainsKey(buff.GetName()))
             {
                 if (buff.IsTemporary())
                 {
                     currentBuffs[buff.GetName()].remainingTurns = buff.GetTurns();
-                } 
+                    return GameSignal.TRAIT_RENEWED;
+                }
                 else if (buff.GetMaxStacks() > currentBuffs[buff.GetName()].stacks)
                 {
                     currentBuffs[buff.GetName()].stacks += 1;
+                    return GameSignal.TRAIT_STACK_ADDED;
                 }
-                return false;
+                return GameSignal.NONE;
             }
             else
             {
                 currentBuffs[buff.GetName()] = new BuffInfo(buff, buff.GetTurns(), NewTraitUIElement(buff));
-                return true;
+                return GameSignal.NEW_TRAIT;
             }
         }
 

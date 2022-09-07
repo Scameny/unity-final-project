@@ -55,14 +55,15 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
   Name: Frost bite
   description: Deals 3 damage and reduce enemy agility by 1 for 2 turns
-  animationType: 0
-  abilityType: 0
+  animationType: 1
+  abilityType: 2
   filterStrategiesList:
     filterStrategies:
     - id: 0
   effectStrategiesList:
     effectStrategies:
     - id: 1
+    - id: 2
   references:
     version: 1
     00000000:
@@ -73,10 +74,33 @@ MonoBehaviour:
       type: {class: FlatDamageEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
       data:
         spellAnimation:
-          id: 2
+          id: 3
         damage: 3
         damageType: 2
     00000002:
+      type: {class: ApplyBuffEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 4
+        trait:
+          name: Frost bite
+          temporary: 1
+          turns: 0
+          icon: {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
+          maxStacks: 1
+          statList:
+            stats:
+            - statType: 2
+              amount: -1
+          secondaryStatList:
+            stats: []
+          cards: []
+          passiveList: []
+    00000003:
       type: {class: TargetSpellAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
       data:
         particles: {fileID: 7412374265367499339, guid: 5f2b5d73a8566244daffd9d52462144f, type: 3}
+    00000004:
+      type: {class: TargetSpellAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
+      data:
+        particles: {fileID: 8704055881949406513, guid: 06eda3833aa5a15429b358934433fc74, type: 3}

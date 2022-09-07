@@ -32,7 +32,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: , ns: , asm: }
+      type: {class: SingleSignalEvaluation, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
+      data:
+        passiveSignal: 2
     00000001:
       type: {class: FlatDamagePassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
       data:

@@ -12,8 +12,6 @@ namespace UI
         private List<IObserver<SignalData>> observers = new List<IObserver<SignalData>>();
 
         public static UIManager manager;
-        public GameObject combatMenu, endTurnButton, dropZone, resourcesMenu, permanentCardsRemoveWindow, vendorFrame;
-        public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton, conversationFrame;
 
         public SimpleTooltipStyle tooltipStyle;
 
@@ -25,11 +23,6 @@ namespace UI
         private void Start()
         {
             tooltipStyle = Resources.Load<SimpleTooltipStyle>("UI/TooltipStyle");
-        }
-
-        public void ActivateCombatUI(bool enable)
-        {
-            combatMenu.SetActive(enable);
         }
 
         public void ChangeSceneToSelection(IEnumerable<GameObject> targets, bool selection)

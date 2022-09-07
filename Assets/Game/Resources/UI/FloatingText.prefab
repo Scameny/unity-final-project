@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 2.5
+  timeBetweenText: 1.25
   resourceTypeColors:
   - incomingType: 0
     color: {r: 0.27367392, g: 0.44844854, b: 0.7735849, a: 1}

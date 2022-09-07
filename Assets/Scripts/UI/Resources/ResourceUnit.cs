@@ -47,7 +47,14 @@ namespace UI
                 resourceSlider.value = player.GetCurrentResource(resourceType);
                 textElement.text = resourceSlider.value.ToString() + "/" + resourceSlider.maxValue.ToString();
             }
-            else if (value.signal.Equals(GameSignal.RESOURCE_MODIFY) && (value as CombatResourceSignalData).resourceType.Equals(resourceType))
+            else if (value.signal.Equals(GameSignal.RESOURCE_MODIFY) && (value as CombatResourceSignalData).user.Equals(player.gameObject) &&
+                (value as CombatResourceSignalData).resourceType.Equals(resourceType))
+            {
+                resourceSlider.value = player.GetCurrentResource(resourceType);
+                textElement.text = resourceSlider.value.ToString() + "/" + resourceSlider.maxValue.ToString();
+            }
+            else if (value.signal.Equals(GameSignal.OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY) && (value as ResourceSignalData).user.Equals(player.gameObject) &&
+                (value as ResourceSignalData).resourceType.Equals(resourceType))
             {
                 resourceSlider.value = player.GetCurrentResource(resourceType);
                 textElement.text = resourceSlider.value.ToString() + "/" + resourceSlider.maxValue.ToString();

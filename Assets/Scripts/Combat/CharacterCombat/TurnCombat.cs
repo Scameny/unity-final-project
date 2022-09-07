@@ -40,6 +40,7 @@ namespace Combat
         virtual public void EndCombat()
         {
             StopAllCoroutines();
+            character.ResetTemporaryResources();
             character.DisposePassiveAbilities();
             RemoveTraits();
             ClearCards();

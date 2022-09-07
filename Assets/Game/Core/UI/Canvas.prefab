@@ -2574,7 +2574,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.75
+  m_fontSize: 24.4
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3777,7 +3777,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 561374420}
   m_HandleRect: {fileID: 1635405398}
   m_Direction: 3
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4711,7 +4711,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.9621268, y: 0.08525189}
   m_AnchorMax: {x: 0.98323023, y: 0.25286344}
-  m_AnchoredPosition: {x: -1.088501, y: -3.5491028}
+  m_AnchoredPosition: {x: -1.088501, y: -3.5490875}
   m_SizeDelta: {x: 1.6161995, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5782167030656411670
@@ -4821,7 +4821,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.15
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5770,9 +5770,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2368d88a6d0c2454faa4bd65978c1c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signalSentOnClick: 18
-  activeSignals: 11000000
-  desactivateSignals: 0900000012000000
+  signalSentOnClick: 22
+  activeSignals: 15000000
+  desactivateSignals: 0d0000001200000000000000
 --- !u!1 &858907154
 GameObject:
   m_ObjectHideFlags: 0
@@ -8180,7 +8180,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1303250349}
   - component: {fileID: 1842769718043018760}
-  - component: {fileID: 1303250351}
   - component: {fileID: 799377780}
   m_Layer: 5
   m_Name: Deck
@@ -8206,7 +8205,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.96125335, y: 1}
   m_AnchoredPosition: {x: -1.296814, y: 0.000030517578}
-  m_SizeDelta: {x: -2.5937004, y: -561.81476}
+  m_SizeDelta: {x: -2.5937004, y: -308.1806}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1842769718043018760
 MonoBehaviour:
@@ -8232,20 +8231,6 @@ MonoBehaviour:
   m_Spacing: {x: 21, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 3
---- !u!114 &1303250351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303250348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ddb883ebfe6ae54284bcb7741c0feb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardSelection: {fileID: 0}
-  cardPrefab: {fileID: 3908558191448106145, guid: 8b68099116be5cc42ab224bd045e00d8, type: 3}
 --- !u!114 &799377780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9771,7 +9756,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: -3.9999695}
   m_SizeDelta: {x: 20, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10669,7 +10654,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 19.85
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -12125,7 +12110,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 14
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -13746,9 +13731,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2368d88a6d0c2454faa4bd65978c1c67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signalSentOnClick: 17
-  activeSignals: 0900000012000000
-  desactivateSignals: 11000000
+  signalSentOnClick: 21
+  activeSignals: 0d00000016000000
+  desactivateSignals: 1200000000000000
 --- !u!1 &2096647565
 GameObject:
   m_ObjectHideFlags: 0
@@ -14587,7 +14572,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.1
+  m_fontSize: 12
   m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -15227,7 +15212,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.65
+  m_fontSize: 12
   m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -15354,7 +15339,7 @@ GameObject:
   - component: {fileID: 2060130450540020240}
   - component: {fileID: 2060130450540020246}
   - component: {fileID: 2060130450540020241}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15723,8 +15708,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.PermanentCardsMenu, Assembly-CSharp
+      - m_Target: {fileID: 1662905984}
+        m_TargetAssemblyTypeName: UI.UINPCRemovePermanentCardsFrame, Assembly-CSharp
         m_MethodName: RemoveCard
         m_Mode: 1
         m_Arguments:
@@ -15895,7 +15880,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1662905984}
         m_TargetAssemblyTypeName: UI.UICardMenu, Assembly-CSharp
         m_MethodName: CancelSelection
         m_Mode: 1
@@ -16569,7 +16554,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.45
+  m_fontSize: 22.85
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16703,10 +16688,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
+  m_fontSize: 28.1
   m_fontSizeBase: 32
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -17307,9 +17292,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf0210e93663a4468f032c4cf45f532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardSelection: {fileID: 0}
-  cardPrefab: {fileID: 3908558191448106145, guid: 8b68099116be5cc42ab224bd045e00d8, type: 3}
   content: {fileID: 650018898811728066}
+  cardSelection: {fileID: 2451287348128945582}
+  cardPrefab: {fileID: 3908558191448106145, guid: 8b68099116be5cc42ab224bd045e00d8, type: 3}
 --- !u!1 &6666550695276785999
 GameObject:
   m_ObjectHideFlags: 0
@@ -17319,6 +17304,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7051707225437793441}
+  - component: {fileID: 1375490539}
   m_Layer: 5
   m_Name: DeckContent
   m_TagString: Untagged
@@ -17347,6 +17333,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0.083984375, y: 0.00076293945}
   m_SizeDelta: {x: -0.16779, y: 0.34}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1375490539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666550695276785999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ddb883ebfe6ae54284bcb7741c0feb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 1303250349}
+  cardSelection: {fileID: 0}
+  cardPrefab: {fileID: 3908558191448106145, guid: 8b68099116be5cc42ab224bd045e00d8, type: 3}
 --- !u!1 &7343056939429008444
 GameObject:
   m_ObjectHideFlags: 0
@@ -17839,7 +17840,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.25
+  m_fontSize: 21.45
   m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -18136,13 +18137,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9fa78e8c3c4f2b4b8f7f77ca8426cca, type: 3}
---- !u!224 &3064969498657414561 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3900108755196472087, guid: d9fa78e8c3c4f2b4b8f7f77ca8426cca, type: 3}
-  m_PrefabInstance: {fileID: 2060130451019904694}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3064969498792144187 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3900108755062758285, guid: d9fa78e8c3c4f2b4b8f7f77ca8426cca, type: 3}
+  m_PrefabInstance: {fileID: 2060130451019904694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &3064969498657414561 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3900108755196472087, guid: d9fa78e8c3c4f2b4b8f7f77ca8426cca, type: 3}
   m_PrefabInstance: {fileID: 2060130451019904694}
   m_PrefabAsset: {fileID: 0}

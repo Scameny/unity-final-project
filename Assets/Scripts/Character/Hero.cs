@@ -123,15 +123,18 @@ namespace Character.Character
 
         private void LevelUp()
         {
+            List<SignalData> toRet = new List<SignalData>();
             level += 1;
-            SendSignalData(new SignalData(GameSignal.LEVEL_UP));
-            Debug.Log("Level up. Reached level " + level);
+            toRet.Add(new SignalData(GameSignal.LEVEL_UP));
             foreach (var item in resources)
             {
+                toRet.Add(new ResourceSignalData(GameSignal.MAX_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.maxResource));
+                toRet.Add(new ResourceSignalData(GameSignal.OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.currentAmount));
                 item.currentAmount = characterClass.GetMaxResourceAmount(level, item.resourceType);
             }
             AddAbilityCards(characterClass.GetAbilitiesOnLevel(level));
             AddPassiveAbilities(characterClass.GetPassiveAbilitiesOnLevel(level));
+            SendSignalData(toRet, true);
         }
         #endregion
 

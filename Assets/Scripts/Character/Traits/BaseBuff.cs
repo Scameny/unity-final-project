@@ -1,6 +1,7 @@
 using Abilities.Passive;
 using CardSystem;
 using Character.Stats;
+using GameManagement;
 using Items;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -85,8 +86,30 @@ namespace Character.Buff
             }
         }
 
+
+        public List<SignalData> GetSignalDatas(GameObject user)
+        {
+            List<SignalData> signalDatas = new List<SignalData>();
+            if (statList.stats.Count > 0)
+            {
+                foreach (var item in statList.stats)
+                {
+                    signalDatas.Add(new ModifyPrimaryStatisticSignalData(GameSignal.PRIMARY_STAT_MODIFY, user, item.statType));
+                }
+            }
+            if (secondaryStatList.stats.Count > 0)
+            {
+                foreach (var item in secondaryStatList.stats)
+                {
+                    signalDatas.Add(new ModifySecondaryStatisticSignalData(GameSignal.PRIMARY_STAT_MODIFY, user, item.statType));
+                }
+            }
+
+            return signalDatas;
+        }
+
         #region getters
-        
+
         public string GetName()
         {
             return name;
@@ -126,6 +149,7 @@ namespace Character.Buff
         {
             return cards;
         }
+
         #endregion
 
         #region Object operations
@@ -139,6 +163,7 @@ namespace Character.Buff
         {
             return 363513814 + EqualityComparer<string>.Default.GetHashCode(name);
         }
+
         #endregion
     }
 

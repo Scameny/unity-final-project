@@ -1,5 +1,6 @@
 using Animations.Ability;
 using CardSystem;
+using Character.Character;
 using GameManagement;
 using Sirenix.OdinInspector;
 using System;
@@ -22,11 +23,19 @@ namespace Strategies.EffectStrategies
 
         public void UseEffect(GameObject user, IEnumerable<GameObject> targets)
         {
+            targets = RemoveDeadTargets(targets);
+            if (targets.Count() == 0)
+                return;
             List<SignalData> uiData = StartEffect(user, targets);
             if (spellAnimation != null)
                 spellAnimation.PlaySpellAnimation(user, targets, uiData);
             else
                 UI.UIManager.manager.SendData(uiData);
+        }
+
+        private IEnumerable<GameObject> RemoveDeadTargets(IEnumerable<GameObject> targets) 
+        {
+            return targets.Where(t => !t.GetComponent<DefaultCharacter>().IsDead());
         }
 
         public List<CardEffectType> GetCardEffectType()
