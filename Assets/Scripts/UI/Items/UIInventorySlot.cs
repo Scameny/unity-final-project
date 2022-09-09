@@ -1,7 +1,7 @@
 using Items;
 using UnityEngine;
 
-namespace UI
+namespace UI.Items
 {
     public class UIInventorySlot : UISlot
     {

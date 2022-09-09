@@ -1,11 +1,10 @@
 using Character.Character;
 using Character.Stats;
-using GameManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.CharacterResources
 {
     public class ResourceIconUnit : MonoBehaviour
     {

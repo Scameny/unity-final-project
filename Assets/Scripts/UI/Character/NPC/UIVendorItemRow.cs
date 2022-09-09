@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 
-namespace UI
+namespace UI.Character.NPC
 {
     public class UIVendorItemRow : MonoBehaviour
     {
@@ -19,7 +19,7 @@ namespace UI
             this.player = player;
             this.item = item;
             icon.sprite = item.item.GetSprite();
-            itemName.text = UtilsClass.instance.ConvertTextWithStyles(item.item.GetName(), UIManager.manager.tooltipStyle);
+            itemName.text = UtilsClass.instance.ConvertTextWithStyles(item.item.GetName(), UIManager.manager.GetTooltipStyle());
             priceText.text = item.price + " Coins";
             item.item.SetTooltipText(GetComponent<SimpleTooltip>());
         }

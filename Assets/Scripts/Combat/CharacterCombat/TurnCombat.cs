@@ -42,7 +42,7 @@ namespace Combat
             StopAllCoroutines();
             character.ResetTemporaryResources();
             character.DisposePassiveAbilities();
-            RemoveTraits();
+            RemoveBuffs();
             ClearCards();
         }
 
@@ -147,9 +147,9 @@ namespace Combat
 
         #region Traits operation
 
-        protected void RemoveTraits()
+        protected void RemoveBuffs()
         {
-            character.RemoveTraits();
+            character.RemoveBuffs();
         }
 
         protected void EvaluateTraits()

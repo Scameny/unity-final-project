@@ -1,6 +1,6 @@
 using Combat;
 using System.Collections.Generic;
-using UI.Cards;
+using UI.Combat;
 using UnityEngine;
 
 namespace CardSystem

@@ -116,14 +116,14 @@ namespace Character.Character
         #endregion
 
         #region Traits operations
-        public void RemoveTraits()
+        public void RemoveBuffs()
         {
-            traits.RemoveBuffs();
+            SendSignalData(traits.RemoveBuffs(gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }
 
         public void ReduceTurnInTemporaryTraits()
         {
-            traits.ReduceTurnInTemporaryBuffs();
+            SendSignalData(traits.ReduceTurnInTemporaryBuffs(gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }
 
         public List<SignalData> AddNewTrait(BaseBuff trait, bool sendUISignal = false)
@@ -132,14 +132,14 @@ namespace Character.Character
             switch (traits.NewBuff(trait))
             {
                 case GameSignal.TRAIT_RENEWED:
-                    toRet.Add(new TraitSignalData(GameSignal.TRAIT_RENEWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                    toRet.Add(new TraitCombatSignalData(GameSignal.TRAIT_RENEWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
                     break;
-                case GameSignal.TRAIT_STACK_ADDED:
-                    toRet.Add(new TraitSignalData(GameSignal.TRAIT_STACK_ADDED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                case GameSignal.TRAIT_MODIFIED:
+                    toRet.Add(new TraitCombatSignalData(GameSignal.TRAIT_MODIFIED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
                     toRet.AddRange(trait.GetSignalDatas(gameObject));
                     break;
                 case GameSignal.NEW_TRAIT:
-                    toRet.Add(new TraitSignalData(GameSignal.NEW_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                    toRet.Add(new TraitCombatSignalData(GameSignal.NEW_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
                     toRet.AddRange(trait.GetSignalDatas(gameObject));
                     foreach (var item in trait.GetPasiveAbilities())
                     {
@@ -158,7 +158,7 @@ namespace Character.Character
         {
             List<SignalData> toRet = new List<SignalData>();
             if (traits.RemoveBuff(trait.GetName()))
-                toRet.Add(new TraitSignalData(GameSignal.REMOVE_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
+                toRet.Add(new TraitCombatSignalData(GameSignal.REMOVE_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
             toRet.AddRange(trait.GetSignalDatas(gameObject));
             SendSignalData(toRet, sendUISignal);
             return toRet;

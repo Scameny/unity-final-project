@@ -1,6 +1,6 @@
 using CardSystem;
 using Combat;
-using UI.Cards;
+using UI.Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

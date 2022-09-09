@@ -2,7 +2,7 @@ using GameManagement;
 using System;
 using UnityEngine;
 
-namespace UI
+namespace UI.Frames
 {
     public class UIResourcesFrame : MonoBehaviour, IObserver<SignalData>
     {

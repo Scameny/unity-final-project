@@ -6,9 +6,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Character.Buff
 {
@@ -20,11 +18,6 @@ namespace Character.Buff
         
         [TabGroup("Traits")]
         public BuffsDictionary currentBuffs;
-
-        [TabGroup("UI")]
-        public GameObject traitMenu, traitUI;
-
-        SimpleTooltipStyle tooltipStyle;
 
 
         public int GetAdditiveModifier(DamageTypeStat stat)
@@ -81,29 +74,40 @@ namespace Character.Buff
             }
         }
 
-        public void RemoveBuffs()
+        public List<SignalData> RemoveBuffs(GameObject user, IEnumerable<GameObject> charactersInCombat)
         {
             List<string> keys = new List<string>(currentBuffs.Keys);
+            List<SignalData> toRet = new List<SignalData>();
             foreach (var key in keys)
             {
-                RemoveBuff(key);
+                BaseBuff buff = currentBuffs[key].buff;
+                if (RemoveBuff(key))
+                {
+                    toRet.Add(new TraitCombatSignalData(GameSignal.REMOVE_TRAIT, user, charactersInCombat, buff));
+                }
             }
+            return toRet;
         }
 
-        public void ReduceTurnInTemporaryBuffs()
+        public List<SignalData> ReduceTurnInTemporaryBuffs(GameObject user, IEnumerable<GameObject> charactersInCombat)
         {
             List<string> keys = new List<string>(currentBuffs.Keys);
+            List<SignalData> toRet = new List<SignalData>();
             foreach (var key in keys)
             {
                 if (currentBuffs[key].buff.IsTemporary())
                 {
-                    currentBuffs[key].remainingTurns -= 1;
-                    if (currentBuffs[key].remainingTurns == 0)
-                        RemoveBuff(key);
-                    else
-                        UpdateTraitElements(key, currentBuffs[key]);
+                    BuffInfo buffInfo = currentBuffs[key];
+                    buffInfo.remainingTurns -= 1;
+                    toRet.Add(new TraitCombatSignalData(GameSignal.TRAIT_MODIFIED, user, charactersInCombat, buffInfo.buff));
+                    if (buffInfo.remainingTurns == 0)
+                    {
+                        if (RemoveBuff(key))
+                            toRet.Add(new TraitCombatSignalData(GameSignal.REMOVE_TRAIT, gameObject, charactersInCombat, buffInfo.buff));
+                    }
                 }
             }
+            return toRet;
         }
 
         public GameSignal NewBuff(BaseBuff buff)
@@ -118,13 +122,13 @@ namespace Character.Buff
                 else if (buff.GetMaxStacks() > currentBuffs[buff.GetName()].stacks)
                 {
                     currentBuffs[buff.GetName()].stacks += 1;
-                    return GameSignal.TRAIT_STACK_ADDED;
+                    return GameSignal.TRAIT_MODIFIED;
                 }
                 return GameSignal.NONE;
             }
             else
             {
-                currentBuffs[buff.GetName()] = new BuffInfo(buff, buff.GetTurns(), NewTraitUIElement(buff));
+                currentBuffs[buff.GetName()] = new BuffInfo(buff, buff.GetTurns());
                 return GameSignal.NEW_TRAIT;
             }
         }
@@ -133,7 +137,6 @@ namespace Character.Buff
         {
             if (!currentBuffs.ContainsKey(buff))
                 return false;
-            DeleteTraitUIElement(currentBuffs[buff].uiElement);
             foreach(var item in currentBuffs[buff].buff.GetPasiveAbilities())
             {
                 item.OnCompleted();
@@ -149,62 +152,15 @@ namespace Character.Buff
             return currentBuffs[buffName];
         }
 
-        #region UI Management
-        public GameObject NewTraitUIElement(BaseBuff trait)
-        {
-            GameObject element = Instantiate(traitUI, traitMenu.transform);
-            if (tooltipStyle == null)
-                tooltipStyle = UIManager.manager.tooltipStyle;
-            element.transform.Find("Icon").GetComponent<Image>().sprite = trait.GetIcon();
-            SimpleTooltip tooltip = element.GetComponent<SimpleTooltip>(); 
-            tooltip.simpleTooltipStyle = tooltipStyle;
-            tooltip.infoLeft = trait.GetName() + "\n";
-            foreach (var passive in trait.GetPasiveAbilities()) {
-                tooltip.infoLeft += "\n@passiveeffect@Passiveeffect@break@: " + passive.passiveAbility.GetDescription();
-            }
-            foreach (var item in trait.GetCards())
-            {
-                tooltip.infoLeft += "\n@cards@Card@break@: (" + item.quantity + ") " + item.usable.GetName();
-            }
-            tooltip.infoLeft += "@statistic@";
-            foreach (var item in trait.GetStatistic())
-            {
-                tooltip.infoLeft += (item.amount>0 ?"+" :"") + item.amount + " " + item.statType.ToString() + "\n";
-            }
-            foreach (var item in trait.GetSecondaryStatistic())
-            {
-                tooltip.infoLeft += "+ " + item.amount + " " + item.statType.ToString() + "\n";
-            }
-            if (trait.IsTemporary())
-                tooltip.infoRight = trait.GetTurns() + " remaining turns";
-            else
-                tooltip.infoRight = "Permanent";
-            return element;
-        }
-
-        public void DeleteTraitUIElement(GameObject uiElement)
-        {
-            Destroy(uiElement);
-        }
-
-        public void UpdateTraitElements(string trait, BuffInfo info)
-        {
-            if (info.buff.IsTemporary())
-                info.uiElement.GetComponent<SimpleTooltip>().infoRight= trait + " " + info.remainingTurns + " turns";
-    
-        }
-        #endregion
-
     }
 
     [Serializable]
     public class BuffInfo
     {
-        public BuffInfo(BaseBuff buff, int remainingTurns, GameObject uiElement, int stacks = 1)
+        public BuffInfo(BaseBuff buff, int remainingTurns, int stacks = 1)
         {
             this.buff = buff;
             this.remainingTurns = remainingTurns;
-            this.uiElement = uiElement;
             this.stacks = stacks;
         }
 
@@ -215,6 +171,13 @@ namespace Character.Buff
         public BaseBuff buff;
         public int remainingTurns;
         public int stacks;
-        public GameObject uiElement;
+
+        public void SetTooltipText(SimpleTooltip tooltip)
+        {
+            tooltip.infoRight = buff.IsTemporary() ? remainingTurns.ToString() + " remaining turns" : "Permanent";
+            string leftTooltipText = buff.GetName();
+            leftTooltipText += "\n" + buff.GetDescription();
+            tooltip.infoLeft = leftTooltipText;
+        }
     }
 }

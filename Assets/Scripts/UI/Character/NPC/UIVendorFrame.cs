@@ -4,7 +4,7 @@ using Interaction;
 using System;
 using UnityEngine;
 
-namespace UI
+namespace UI.Character.NPC
 {
     public class UIVendorFrame : MonoBehaviour, IObserver<SignalData>
     {

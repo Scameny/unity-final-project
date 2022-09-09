@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 
 
-namespace UI
+namespace UI.Items
 {
     public class UIInventory : MonoBehaviour, IObserver<SignalData>
     {

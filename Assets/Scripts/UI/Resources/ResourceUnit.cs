@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.CharacterResources
 {
     public class ResourceUnit : MonoBehaviour, IObserver<SignalData>
     {

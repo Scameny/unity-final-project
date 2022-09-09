@@ -3,7 +3,7 @@ using Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UI
+namespace UI.Items
 {
     public abstract class UISlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {

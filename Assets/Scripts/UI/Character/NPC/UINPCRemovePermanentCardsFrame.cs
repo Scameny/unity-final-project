@@ -2,13 +2,13 @@ using Character.Character;
 using GameManagement;
 using Interaction;
 using System;
+using UI.Cards;
 using UnityEngine;
 
-namespace UI
+namespace UI.Character.NPC
 {
     public class UINPCRemovePermanentCardsFrame : UICardMenu, IObserver<SignalData>
     {
-
         Hero player;
         NPCRemoveCard npc;
         IDisposable disposable;

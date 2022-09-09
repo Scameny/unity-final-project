@@ -85,9 +85,10 @@ MonoBehaviour:
         trait:
           name: Frost bite
           temporary: 1
-          turns: 0
+          turns: 2
           icon: {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
           maxStacks: 1
+          description: Agility reduced by 1
           statList:
             stats:
             - statType: 2

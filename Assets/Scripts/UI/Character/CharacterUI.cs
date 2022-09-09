@@ -2,7 +2,7 @@ using GameManagement;
 using System;
 using UnityEngine;
 
-namespace UI 
+namespace UI.Character
 {
     public class CharacterUI : MonoBehaviour, IObserver<SignalData>
     {

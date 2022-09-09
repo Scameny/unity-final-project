@@ -47,7 +47,7 @@ namespace GameManagement
         MAX_RESOURCE_MODIFY,
         REMOVE_TRAIT,
         TRAIT_EXPIRED,
-        TRAIT_STACK_ADDED,
+        TRAIT_MODIFIED,
         OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY,
 
         NONE
@@ -126,11 +126,11 @@ namespace GameManagement
         }
     }
 
-    public class TraitSignalData : CombatSignalData
+    public class TraitCombatSignalData : CombatSignalData
     {
         public BaseBuff trait;
         
-        public TraitSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, BaseBuff trait) : base(signalType, user, charactersInCombat)
+        public TraitCombatSignalData(GameSignal signalType, GameObject user, IEnumerable<GameObject> charactersInCombat, BaseBuff trait) : base(signalType, user, charactersInCombat)
         {
             this.trait = trait;
         }

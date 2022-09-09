@@ -1,7 +1,7 @@
 using Character.Character;
 using UnityEngine;
 
-namespace UI
+namespace UI.Cards
 {
     public class UICharacterCards : UICardMenu
     {

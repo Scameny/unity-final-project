@@ -2,6 +2,7 @@ using GameManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UI.Character;
 using UnityEngine;
 
 namespace UI
@@ -13,7 +14,7 @@ namespace UI
 
         public static UIManager manager;
 
-        public SimpleTooltipStyle tooltipStyle;
+        SimpleTooltipStyle tooltipStyle;
 
         private void Awake()
         {
@@ -54,6 +55,11 @@ namespace UI
             {
                 SendData(item);
             }
+        }
+
+        public SimpleTooltipStyle GetTooltipStyle()
+        {
+            return tooltipStyle;
         }
     }
 }

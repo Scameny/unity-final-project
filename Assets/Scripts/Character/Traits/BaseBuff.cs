@@ -23,9 +23,12 @@ namespace Character.Buff
         [HorizontalGroup("Main/General Settings/Split")]
         [VerticalGroup("Main/General Settings/Split/Right")]
         [LabelWidth(60)]
+        [MinValue(1)]
         [SerializeField] int turns;
         [SerializeField] Sprite icon;
         [SerializeField] int maxStacks;
+        [TextArea(4, 14)]
+        [SerializeField] string description;
 
         [HorizontalGroup("Middle")]
 
@@ -113,6 +116,11 @@ namespace Character.Buff
         public string GetName()
         {
             return name;
+        }
+        
+        public string GetDescription()
+        {
+            return description;
         }
 
         public int GetTurns()

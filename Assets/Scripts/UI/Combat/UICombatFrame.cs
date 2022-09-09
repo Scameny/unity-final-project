@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Combat
 {
     public class UICombatFrame : MonoBehaviour, IObserver<SignalData>
     {

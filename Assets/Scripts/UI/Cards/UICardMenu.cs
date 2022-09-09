@@ -1,7 +1,7 @@
 using CardSystem;
 using UnityEngine;
 
-namespace UI
+namespace UI.Cards
 {
     public class UICardMenu : MonoBehaviour
     {

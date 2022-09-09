@@ -8,9 +8,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Combat
 {
-    public class FloatingText : MonoBehaviour
+    public class UIFloatingText : MonoBehaviour
     {
         [SerializeField] float duration;
         [SerializeField] float timeBetweenText;

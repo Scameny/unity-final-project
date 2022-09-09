@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using GameManagement;
+using UI.Cards;
 
-namespace UI
+namespace UI.Character
 {
 
     /// <summary>
@@ -23,17 +24,7 @@ namespace UI
             base.Start();
             resourceSlider = GetComponentInChildren<Slider>();
         }
-
-        void Update()
-        {
-            UpdateResourceUnit();
-        }
-
-        private void UpdateResourceUnit()
-        {
-            resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
-            resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
-        }
+      
 
         private void ShowCard(Card card)
         {
@@ -55,7 +46,15 @@ namespace UI
             {
                 ShowCard((signalData as CombatCardSignalData).card);
             }
-            
+            else if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject))
+            {
+                resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+            } 
+            else if (signalData.signal.Equals(GameSignal.MAX_RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject))
+            {
+                resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+            }
+
         }
     }
 }

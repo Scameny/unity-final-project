@@ -58,6 +58,8 @@ MonoBehaviour:
           turns: 0
           icon: {fileID: 21300000, guid: 8ec5b52b09d90074a83d61c1334190f9, type: 3}
           maxStacks: 5
+          description: Every time you use a fire card you receive 2 damage per stack.
+            Each stack also gives +5 fire damage.
           statList:
             stats: []
           secondaryStatList:

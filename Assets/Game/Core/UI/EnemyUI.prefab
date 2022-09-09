@@ -485,7 +485,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 99
   m_TargetDisplay: 0
@@ -511,7 +511,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6621224850138070647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,7 +541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a179781bd7089458fff4d4a5f4909f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatingTextPrefab: {fileID: 4558373330407085539, guid: 72008eb063bbc9e4882c288d9a057828, type: 3}
   timeToFadeCardUsed: 1.75
   cardPrefab: {fileID: 3908558191448106145, guid: 8b68099116be5cc42ab224bd045e00d8, type: 3}
   cardSlot: {fileID: 3710631062940542531}
@@ -719,7 +718,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3799779146156267350}
   - component: {fileID: 3894173260622112126}
-  - component: {fileID: 3269535675866740165}
+  - component: {fileID: 7931348823406478067}
+  - component: {fileID: 2189348688946583812}
   m_Layer: 0
   m_Name: TraitMenu
   m_TagString: Untagged
@@ -743,8 +743,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.546419, y: 0.323}
   m_AnchorMax: {x: 0.68121904, y: 0.381}
-  m_AnchoredPosition: {x: -0.00093078613, y: 0.16500092}
-  m_SizeDelta: {x: -0.50903106, y: -1.2900035}
+  m_AnchoredPosition: {x: -0.13134003, y: 0.16500092}
+  m_SizeDelta: {x: -0.25734, y: -1.29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3894173260622112126
 CanvasRenderer:
@@ -754,7 +754,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6784649842560307026}
   m_CullTransparentMesh: 1
---- !u!114 &3269535675866740165
+--- !u!114 &7931348823406478067
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -763,20 +763,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 6784649842560307026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 15308998494f11d44a3e5c120126799d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2189348688946583812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6784649842560307026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 5
+    m_Left: 0
     m_Right: 0
-    m_Top: 5
-    m_Bottom: 5
-  m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 25, y: 25}
+  m_Spacing: {x: 4, y: 5}
+  m_Constraint: 0
+  m_ConstraintCount: 2

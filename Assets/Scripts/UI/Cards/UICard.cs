@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
-namespace UI
+namespace UI.Cards
 {
     public class UICard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
@@ -23,7 +23,7 @@ namespace UI
             usable = cardUse;
             cardImage.sprite = cardUse.GetSprite();
             cardName.text = (cardUse).GetName();
-            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles(cardUse.GetDescription(), UIManager.manager.tooltipStyle);
+            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles(cardUse.GetDescription(), UIManager.manager.GetTooltipStyle());
             if (cardUse.GetResourceCosts().Count > 0)
             {
                 //TODO add support to more than one resource cost

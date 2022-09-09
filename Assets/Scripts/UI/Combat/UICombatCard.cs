@@ -1,14 +1,13 @@
 using CardSystem;
 using Character.Character;
 using GameManagement;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
-namespace UI.Cards
+namespace UI.Combat
 {
     public class UICombatCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
@@ -34,7 +33,7 @@ namespace UI.Cards
         {
             cardImage.sprite = cardUse.GetSprite();
             cardName.text = cardUse.GetName();
-            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles(cardUse.GetDescription(), UIManager.manager.tooltipStyle);
+            cardDescription.text = UtilsClass.instance.ConvertTextWithStyles(cardUse.GetDescription(), UIManager.manager.GetTooltipStyle());
             if (cardUse.GetResourceCosts().Count > 0)
             {
                 //TODO add support to more than one resource cost
