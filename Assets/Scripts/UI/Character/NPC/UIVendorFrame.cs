@@ -21,7 +21,6 @@ namespace UI.Character.NPC
         {
             disposable = UIManager.manager.Subscribe(this);
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Hero>();
-            gameObject.SetActive(false);
         }
 
 

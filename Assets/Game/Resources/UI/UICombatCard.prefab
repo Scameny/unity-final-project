@@ -221,7 +221,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.050807916, y: 0}
   m_AnchorMax: {x: 0.7583498, y: 0.76000005}
-  m_AnchoredPosition: {x: -1.3737183, y: 0.025115967}
+  m_AnchoredPosition: {x: -1.2867737, y: 0.025115967}
   m_SizeDelta: {x: -0.8422003, y: -0.121799946}
   m_Pivot: {x: 2.1675403, y: -0.20623133}
 --- !u!222 &1316257894166266853
@@ -644,8 +644,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -77.213, y: -113.74}
-  m_SizeDelta: {x: 154.4253, y: 227.4776}
+  m_AnchoredPosition: {x: -67.09119, y: -101.93118}
+  m_SizeDelta: {x: 134.1816, y: 203.86}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1535763453041446558
 CanvasRenderer:
@@ -684,6 +684,8 @@ MonoBehaviour:
   cardDescription: {fileID: 1729640012966840865}
   cost: {fileID: 6619313205330169479}
   usableAura: {fileID: 0}
+  scaleWhenMouseOver: {x: 1.25, y: 1.25, z: 1.25}
+  YmoveWhenMouseOver: 20
 --- !u!114 &9124252093264377380
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ namespace CardSystem
         [Button]
         public void DrawCardDebug()
         {
-            DrawCard();
+
         }
     }
 

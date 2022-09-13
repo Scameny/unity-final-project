@@ -130,6 +130,7 @@ namespace Character.Character
             {
                 toRet.Add(new ResourceSignalData(GameSignal.MAX_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.maxResource));
                 toRet.Add(new ResourceSignalData(GameSignal.OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.currentAmount));
+                item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
                 item.currentAmount = characterClass.GetMaxResourceAmount(level, item.resourceType);
             }
             AddAbilityCards(characterClass.GetAbilitiesOnLevel(level));

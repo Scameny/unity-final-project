@@ -9,15 +9,19 @@ using Utils;
 
 namespace UI.Combat
 {
-    public class UICombatCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class UICombatCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] Image cardImage;
         [SerializeField] TextMeshProUGUI cardName, cardDescription;
         [SerializeField] GameObject cost, usableAura;
+        [SerializeField] Vector3 scaleWhenMouseOver;
+        [SerializeField] int YmoveWhenMouseOver;
 
         bool oneUse;
-        Vector3 position;
+        Vector3 initialPosition, initialRotation;
         bool onDropZone = false;
+        bool isDragging;
+        int siblingIndex;
        
         
         Card card;
@@ -54,23 +58,38 @@ namespace UI.Combat
             gameObject.SetActive(true);
         }
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            siblingIndex = transform.GetSiblingIndex();
+            transform.SetAsLastSibling();
+            transform.localScale = scaleWhenMouseOver;
+            transform.localPosition += new Vector3(0, YmoveWhenMouseOver); 
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            transform.localScale = Vector3.one;
+            GetComponent<RectTransform>().position = initialPosition;
+            transform.SetSiblingIndex(siblingIndex);
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
-            position = GetComponent<RectTransform>().position;
+            isDragging = true;
+            transform.rotation = Quaternion.identity;
             UIManager.manager.SendData(new SignalData(GameSignal.START_DRAGGING_CARD));
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            transform.position = eventData.position;
+            GetComponent<RectTransform>().position = eventData.position;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!onDropZone)
-            {
-                transform.position = position;
-            }
+            GetComponent<RectTransform>().position = initialPosition;
+            transform.rotation = Quaternion.Euler(initialRotation);
+            isDragging = false;
             UIManager.manager.SendData(new SignalData(GameSignal.END_DRAGGING_CARD));
         }
 
@@ -95,6 +114,21 @@ namespace UI.Combat
                     usableAura.SetActive(false);
             }
             usableAura.SetActive(true);
+        }
+
+        public bool IsDragging()
+        {
+            return isDragging;
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            initialPosition = position;
+        }
+
+        public void SetRotation(Vector3 rotation)
+        {
+            initialRotation = rotation;
         }
     }
 

@@ -117,6 +117,20 @@ namespace Combat
             deck.CreateCard(gameObject, usable, oneUse, cardPrefab);
         }
 
+        public void CardPlayed(Card card)
+        {
+            List<SignalData> toRet = new List<SignalData>();
+            toRet.Add(new CombatCardSignalData(GameSignal.CARD_PLAYED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+            character.SendSignalData(toRet, true);
+        }
+
+        public void CancelCardPlayed(Card card)
+        {
+            List<SignalData> toRet = new List<SignalData>();
+            toRet.Add(new CombatCardSignalData(GameSignal.CARD_PLAYED_CANCEL, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+            hand.AddCard(card);
+            character.SendSignalData(toRet, true);
+        }
 
         protected void DrawInitialHand()
         {
@@ -125,7 +139,7 @@ namespace Combat
 
         virtual public void CardUsed(Card card)
         {
-            character.SendSignalData(new CombatCardSignalData(GameSignal.CARD_PLAYED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card), true);
+            character.SendSignalData(new CombatCardSignalData(GameSignal.CARD_USED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card), true);
             if (card.IsOneUse())
             {
                 card.DestroyCard();

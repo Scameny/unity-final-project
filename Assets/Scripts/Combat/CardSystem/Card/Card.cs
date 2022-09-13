@@ -13,7 +13,9 @@ namespace CardSystem
         GameObject user;
         UICombatCard uiCard;
 
-        
+        ICardContainer sourceUsed;
+
+
         public void InitializeCard(Usable cardUse, GameObject user, bool oneUse)
         {
             uiCard = GetComponent<UICombatCard>();
@@ -35,14 +37,19 @@ namespace CardSystem
 
         public void UseCard()
         {
+            sourceUsed = transform.parent.GetComponent<ICardContainer>();
+            transform.parent.GetComponent<ICardContainer>().RemoveCard(this);
+            user.GetComponent<TurnCombat>().CardPlayed(this);
             cardEffect.Use(user, CombatManager.combatManager.GetCharactersInCombat(), this);
         }
 
         public void CancelCardUse()
         {
+            sourceUsed.AddCard(this);
+            sourceUsed = null;
+            user.GetComponent<TurnCombat>().CancelCardPlayed(this);
             uiCard.CancelCardUse();
         }
-
 
         public void CardEffectFinished()
         {

@@ -1,13 +1,16 @@
 using GameManagement;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace UI.Frames
+namespace UI.UIElements 
 {
-    public class UIMenuFrame : MonoBehaviour, IObserver<SignalData>
+    public class UIFrame : MonoBehaviour, IObserver<SignalData>
     {
-
+        [SerializeField] List<GameSignal> activeSignals;
+        [SerializeField] List<GameSignal> desactivateSignals;
         IDisposable disposable;
+
         public void OnCompleted()
         {
             disposable.Dispose();
@@ -20,17 +23,13 @@ namespace UI.Frames
 
         public void OnNext(SignalData value)
         {
-            if (value.signal.Equals(GameSignal.START_INTERACTION))
+            if (desactivateSignals.Exists(s => s.Equals(value.signal)))
             {
                 gameObject.SetActive(false);
             }
-            else if (value.signal.Equals(GameSignal.END_INTERACTION))
+            else if (activeSignals.Exists(s => s.Equals(value.signal)))
             {
                 gameObject.SetActive(true);
-            }
-            else if (value.signal.Equals(GameSignal.ENABLE_UI_ELEMENT) && (value as UISignalData).element.Equals(UIElement.MENU_FRAME))
-            {
-                gameObject.SetActive((value as UISignalData).enable);
             }
         }
 
@@ -38,6 +37,6 @@ namespace UI.Frames
         {
             disposable = UIManager.manager.Subscribe(this);
         }
-    }
 
+    }
 }

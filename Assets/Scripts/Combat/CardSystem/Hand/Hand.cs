@@ -27,11 +27,9 @@ namespace CardSystem
             throw new EmptyCardContainerException(GetType().Name);
         }
 
-        virtual public void AddCard(Card card)
+        public void AddCard(Card card)
         {
             currentHand.Add(card);
-            card.SetVisibility(true);
-            card.transform.SetParent(transform);
         }
 
         public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
@@ -69,6 +67,7 @@ namespace CardSystem
         {
             throw new System.NotImplementedException();
         }
+
     }
 
 }

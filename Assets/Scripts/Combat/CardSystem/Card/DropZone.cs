@@ -26,7 +26,7 @@ namespace UI
                     d.UseCard();
                 } catch
                 {
-                    d.CancelCardUse();
+                    d.GetComponent<Card>().CancelCardUse();
                 }
             }
         }

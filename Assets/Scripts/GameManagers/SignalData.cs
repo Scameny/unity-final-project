@@ -16,7 +16,7 @@ namespace GameManagement
         START_TURN,
         END_TURN,
         CARD_DRAWED,
-        CARD_PLAYED,
+        CARD_USED,
         RECHARGE_DECK,
         DAMAGE_RECEIVED,
         RESOURCE_MODIFY,
@@ -50,7 +50,9 @@ namespace GameManagement
         TRAIT_MODIFIED,
         OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY,
 
-        NONE
+        NONE,
+        CARD_PLAYED,
+        CARD_PLAYED_CANCEL
     }
 
     public class SignalData

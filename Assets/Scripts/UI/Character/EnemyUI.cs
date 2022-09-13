@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using GameManagement;
 using UI.Cards;
+using System;
 
 namespace UI.Character
 {
@@ -23,8 +24,10 @@ namespace UI.Character
         {
             base.Start();
             resourceSlider = GetComponentInChildren<Slider>();
+            resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+            resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
         }
-      
+
 
         private void ShowCard(Card card)
         {
@@ -41,19 +44,28 @@ namespace UI.Character
 
         override public void OnNext(SignalData signalData)
         {
-            base.OnNext(signalData);
-            if (signalData.signal.Equals(GameSignal.CARD_PLAYED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
+            try
             {
-                ShowCard((signalData as CombatCardSignalData).card);
-            }
-            else if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject))
-            {
-                resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+                base.OnNext(signalData);
+                if (signalData.signal.Equals(GameSignal.CARD_USED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
+                {
+                    ShowCard((signalData as CombatCardSignalData).card);
+                }
+                else if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).resourceType.Equals(ResourceType.Health))
+                {
+                    resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
+                }
+                else if (signalData.signal.Equals(GameSignal.MAX_RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).resourceType.Equals(ResourceType.Health))
+                {
+                    resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+                }
             } 
-            else if (signalData.signal.Equals(GameSignal.MAX_RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject))
+            catch (Exception e)
             {
-                resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+                OnError(e);
             }
+
+
 
         }
     }
