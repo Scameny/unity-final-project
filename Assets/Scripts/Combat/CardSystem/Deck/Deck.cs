@@ -1,7 +1,8 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utils;
 
 namespace CardSystem
 {
@@ -49,7 +50,7 @@ namespace CardSystem
             currentDeck.Shuffle();
         }
 
-        virtual public Card DrawCard()
+        public Card DrawCard()
         {
             if (currentDeck.Count > 0)
             {
@@ -73,6 +74,7 @@ namespace CardSystem
             foreach (var item in currentDeck.ToList())
             {
                 currentDeck.Remove(item);
+                item.DestroyCard();
             }
         }
 
@@ -80,20 +82,20 @@ namespace CardSystem
         {
             throw new System.NotImplementedException();
         }
-    }
-    static class ShuffleClass
-    {
-        public static void Shuffle<T>(this IList<T> list)
+
+        public void AddCard(Card card, int index)
         {
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = Random.Range(0, n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+            throw new NotImplementedException();
+        }
+
+        public int GetIndex(Card card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Card GetCardInIndex(int index)
+        {
+            return currentDeck[index];
         }
     }
 

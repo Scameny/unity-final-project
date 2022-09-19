@@ -1,6 +1,4 @@
-using UnityEngine;
 using Character.Stats;
-using System.Collections;
 using Character.Character;
 using CardSystem;
 using GameManagement;
@@ -44,13 +42,6 @@ namespace Combat
             base.TurnPreparationStart();
             character.SendSignalData(new CombatSignalData(GameSignal.TURN_PREPARATION_START, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }
-
-
-        public override void EndTurn()
-        {
-            base.EndTurn();
-        }
-
         public override void CardUsed(Card card)
         {
             base.CardUsed(card);

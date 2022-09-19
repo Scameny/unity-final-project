@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +10,6 @@ namespace CardSystem
 
         virtual public void AddCard(Card card)
         {
-            card.transform.SetParent(transform);
             currentStack.Add(card);
         }
         virtual public bool RemoveCard(Card card)
@@ -45,11 +43,10 @@ namespace CardSystem
 
         public void ClearCards()
         {
-            while(currentStack.Count != 0)
+            foreach (var item in currentStack.ToList())
             {
-                Card card = currentStack[0];
-                currentStack.Remove(card);
-                card.DestroyCard();
+                currentStack.Remove(item);
+                item.DestroyCard();
             }
         }
 
@@ -65,6 +62,16 @@ namespace CardSystem
                 currentStack.Remove(item);
                 yield return item;
             }
+        }
+
+        public void AddCard(Card card, int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetIndex(Card card)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -105,6 +105,34 @@ namespace Utils
             return listToRet;
         }
 
+        public string ParseParams(string text, List<string> parameters)
+        {
+            int count = 0;
+            foreach (var item in parameters)
+            {
+                text = text.Replace("{" + count + "}", item);
+                count++;
+            }
+            return text;
+        }
+
+    }
+
+    
+    public static class ShuffleClass
+    {
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = UnityEngine.Random.Range(0, n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
     }
 
     [Serializable]

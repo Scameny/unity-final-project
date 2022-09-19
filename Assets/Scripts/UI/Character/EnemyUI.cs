@@ -44,28 +44,19 @@ namespace UI.Character
 
         override public void OnNext(SignalData signalData)
         {
-            try
-            {
                 base.OnNext(signalData);
-                if (signalData.signal.Equals(GameSignal.CARD_USED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
-                {
-                    ShowCard((signalData as CombatCardSignalData).card);
-                }
-                else if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).resourceType.Equals(ResourceType.Health))
-                {
-                    resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
-                }
-                else if (signalData.signal.Equals(GameSignal.MAX_RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).resourceType.Equals(ResourceType.Health))
-                {
-                    resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
-                }
-            } 
-            catch (Exception e)
+            if (signalData.signal.Equals(GameSignal.CARD_USED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
             {
-                OnError(e);
+                ShowCard((signalData as CombatCardSignalData).card);
             }
-
-
+            else if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).resourceType.Equals(ResourceType.Health))
+            {
+                resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
+            }
+            else if (signalData.signal.Equals(GameSignal.CHARACTER_DIE) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject))
+            {
+                OnCompleted();
+            }
 
         }
     }

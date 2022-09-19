@@ -1,5 +1,7 @@
 using CardSystem;
-using Combat;
+using Combat.Character;
+using GameManagement;
+using System.Collections.Generic;
 using UI.Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,11 +10,9 @@ namespace UI
 {
     public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        HeroCombat player;
 
         private void Start()
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<HeroCombat>();
         }
 
         public void OnDrop(PointerEventData eventData)
@@ -21,13 +21,20 @@ namespace UI
             if (d != null)
             {
                 d.OnZoneDropExit();
-                try 
+                try
                 {
                     d.UseCard();
-                } catch
-                {
-                    d.GetComponent<Card>().CancelCardUse();
+                    return;
                 }
+                catch (NotEnoughResourceException e)
+                {
+                    UIManager.manager.SendData(new ErrorSignalData(GameSignal.NOT_ENOUGH_RESOURCES, new List<string>() { e.resource.ToString() }));
+                }
+                catch (NotYourTurnException)
+                {
+                    UIManager.manager.SendData(new ErrorSignalData(GameSignal.NOT_YOUR_TURN, new List<string>()));
+                }
+                d.GetComponent<Card>().CancelCardUse();
             }
         }
 

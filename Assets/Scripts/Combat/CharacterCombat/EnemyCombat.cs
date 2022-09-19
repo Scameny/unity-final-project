@@ -191,17 +191,12 @@ namespace Combat
             return null;
         }
 
-        protected override void InitDeck()
-        {
-            base.InitDeck();
-        }
-
         private Card SearchCardOfType(CardEffectType effectType)
         {
             Card cardSpecificEffect = null;
             Card cardWithMoreThanOneEffect = null;
 
-            foreach (var item in hand.GetCards())
+            foreach (var item in GetHand().GetCards())
             {
                 if (item.GetCardEffect().Any(e => e.Equals(effectType)))
                 {
@@ -217,7 +212,7 @@ namespace Combat
         private List<Card> SearchCardsOfType(CardEffectType effectType)
         {
             List<Card> cardsToRet = new List<Card>();
-            foreach (var item in hand.GetCards())
+            foreach (var item in GetHand().GetCards())
             {
                 if (item.GetCardEffect().Any(e => e.Equals(effectType)))
                 {
@@ -254,7 +249,7 @@ namespace Combat
                 }
             }
             yield return new WaitUntil(() => nextCardToPlay == null);
-            EndTurn();
+            EndOfTurn();
         }
 
         private void AddCardToQueue(Card card)

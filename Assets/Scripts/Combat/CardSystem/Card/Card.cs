@@ -1,4 +1,5 @@
 using Combat;
+using Combat.Character;
 using System.Collections.Generic;
 using UI.Combat;
 using UnityEngine;
@@ -12,9 +13,6 @@ namespace CardSystem
         Usable cardEffect;
         GameObject user;
         UICombatCard uiCard;
-
-        ICardContainer sourceUsed;
-
 
         public void InitializeCard(Usable cardUse, GameObject user, bool oneUse)
         {
@@ -37,17 +35,18 @@ namespace CardSystem
 
         public void UseCard()
         {
-            sourceUsed = transform.parent.GetComponent<ICardContainer>();
-            transform.parent.GetComponent<ICardContainer>().RemoveCard(this);
-            user.GetComponent<TurnCombat>().CardPlayed(this);
-            cardEffect.Use(user, CombatManager.combatManager.GetCharactersInCombat(), this);
+            if (!user.GetComponent<TurnCombat>().IsYourTurn())
+            {
+                throw new NotYourTurnException(user);
+            }
+            else
+            {
+                cardEffect.Use(user, CombatManager.combatManager.GetCharactersInCombat(), this);
+            }
         }
 
         public void CancelCardUse()
         {
-            sourceUsed.AddCard(this);
-            sourceUsed = null;
-            user.GetComponent<TurnCombat>().CancelCardPlayed(this);
             uiCard.CancelCardUse();
         }
 

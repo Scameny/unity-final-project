@@ -52,7 +52,17 @@ namespace GameManagement
 
         NONE,
         CARD_PLAYED,
-        CARD_PLAYED_CANCEL
+        CARD_PLAYED_CANCEL,
+
+        // error
+        NOT_ENOUGH_RESOURCES,
+        NOT_YOUR_TURN,
+
+
+        DECK_INITIALIZE,
+        SHUFFLE_DECK,
+        CARD_CREATED,
+        SEND_TO_STACK
     }
 
     public class SignalData
@@ -163,6 +173,18 @@ namespace GameManagement
     }
     }
 
+    public class CardContainerSignalData : SignalData 
+    {
+        public ICardContainer container;
+        public List<Card> cards;
+
+        public CardContainerSignalData(GameSignal signalType, ICardContainer container, IEnumerable<Card> cards) : base(signalType)
+        {
+            this.container = container;
+            this.cards = new List<Card>(cards);
+        }
+    }
+
     public class UISignalData : SignalData
     {
         public UIElement element;
@@ -183,6 +205,16 @@ namespace GameManagement
         {
             this.element = element;
             this.npc = npc;
+        }
+    }
+
+    public class ErrorSignalData : SignalData
+    {
+        public List<string> parameters;
+
+        public ErrorSignalData(GameSignal signalType, List<string> parameters) : base(signalType)
+        {
+            this.parameters = parameters;
         }
     }
 

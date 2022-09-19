@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +11,8 @@ namespace CardSystem
 
         public void AddCard(Card card);
 
+        public void AddCard(Card card, int index);
+
         public void CreateCard(GameObject user, Usable cardUse, bool oneUse,GameObject cardPrefab);
 
         public int GetCurrentCardsNumber();
@@ -21,6 +22,8 @@ namespace CardSystem
         public IEnumerable<Card> RemoveAllCards();
 
         public void ClearCards();
+
+        public int GetIndex(Card card);
     }
 
 }

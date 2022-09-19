@@ -3733,7 +3733,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.95689327, y: 0.043387134}
   m_AnchorMax: {x: 1, y: 0.95061296}
-  m_AnchoredPosition: {x: -0.868042, y: 2.4439993}
+  m_AnchoredPosition: {x: -0.868042, y: 2.443985}
   m_SizeDelta: {x: -0.84, y: -3.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &561374422
@@ -4715,7 +4715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.9621268, y: 0.08525189}
   m_AnchorMax: {x: 0.98323023, y: 0.25286344}
-  m_AnchoredPosition: {x: -1.088501, y: -3.5491028}
+  m_AnchoredPosition: {x: -1.088501, y: -3.5490723}
   m_SizeDelta: {x: 1.6161995, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5782167030656411670
@@ -9289,6 +9289,7 @@ GameObject:
   - component: {fileID: 1402373011}
   - component: {fileID: 1402373013}
   - component: {fileID: 1402373012}
+  - component: {fileID: 5710064687837357097}
   m_Layer: 5
   m_Name: Deck
   m_TagString: Untagged
@@ -9310,10 +9311,10 @@ RectTransform:
   m_Father: {fileID: 478900829}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.04240845, y: 0.30400002}
-  m_AnchorMax: {x: 0.088408455, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0, y: 0.0000076294}
+  m_AnchorMin: {x: 0.04240845, y: 0.344}
+  m_AnchorMax: {x: 0.08800001, y: 0.5391724}
+  m_AnchoredPosition: {x: 0, y: 2.7570038}
+  m_SizeDelta: {x: 0, y: 0.0000076293945}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1402373013
 MonoBehaviour:
@@ -9336,6 +9337,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402373010}
   m_CullTransparentMesh: 1
+--- !u!114 &5710064687837357097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402373010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc32ae42eca9164dace396de523ec79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardMovementDuration: 1
+  overlap: 6
 --- !u!1 &1404073639
 GameObject:
   m_ObjectHideFlags: 0
@@ -14729,7 +14744,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.62701416, y: 0}
+  m_AnchoredPosition: {x: 0.62701416, y: -0.000015258789}
   m_SizeDelta: {x: -1.254, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &650018900456324123
@@ -16880,10 +16895,10 @@ RectTransform:
   m_Father: {fileID: 478900829}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.047549304, y: 0.024}
-  m_AnchorMax: {x: 0.9543184, y: 0.25286344}
-  m_AnchoredPosition: {x: -3.1653137, y: 0.45150757}
-  m_SizeDelta: {x: -6.330799, y: 0.9029999}
+  m_AnchorMin: {x: 0.49553174, y: 0.13636942}
+  m_AnchorMax: {x: 0.49553174, y: 0.13636942}
+  m_AnchoredPosition: {x: -0.0025177002, y: 4.2519073}
+  m_SizeDelta: {x: 0.0050049, y: 8.5048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1710262763
 MonoBehaviour:
@@ -16910,11 +16925,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5957e45bf4874fa44a86da8d71132eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlappingPerCard: 5
+  overlappingPerCard: 10
   startingOverlap: 15
   quantityCardsToStartOverlapping: 5
   maxZCardRotation: 5
   maxYCardPosition: 16
+  secondsBetweenDrawingCards: 0
 --- !u!1 &5694446170366721556
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ namespace UI.Character
 
         public void OnError(Exception error)
         {
-            Debug.LogError("Character UI has an error:" + error.Message);
+            Debug.LogError("Character UI has an error:" + error.Message + " " + error.StackTrace);
         }
 
         virtual public void OnNext(SignalData signalData)

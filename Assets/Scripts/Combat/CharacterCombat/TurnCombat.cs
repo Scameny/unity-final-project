@@ -15,9 +15,9 @@ namespace Combat
     public class TurnCombat : MonoBehaviour
     {
         [Header("Card management")]
-        [SerializeField] protected Deck deck;
-        [SerializeField] protected Hand hand;
-        [SerializeField] protected CardSystem.Stack stack;
+        [SerializeField] Deck deck;
+        [SerializeField] Hand hand;
+        [SerializeField] CardSystem.Stack stack;
         public GameObject cardPrefab;
 
 
@@ -26,7 +26,7 @@ namespace Combat
         protected float turnSpeed;
         protected float turnTime;
         protected bool stopTurn;
-
+        bool yourTurn;
 
 
         virtual public void StartCombat()
@@ -57,13 +57,19 @@ namespace Combat
         }
 
         #region Card operations
-        virtual protected void InitDeck()
+        void InitDeck()
         {
+            int count = 0;
+            List<SignalData> toRet = new List<SignalData>();
             foreach (var item in character.GetUsableCards())
             {
                 deck.CreateCard(gameObject, item, false, cardPrefab);
+                toRet.Add(new CombatCardSignalData(GameSignal.CARD_CREATED,gameObject, CombatManager.combatManager.GetCharactersInCombat(), deck.GetCardInIndex(count)));
+                count++;
             }
             deck.ShuffleDeck();
+            toRet.Add(new CardContainerSignalData(GameSignal.DECK_INITIALIZE, deck, deck.GetCards()));
+            character.SendSignalData(toRet, true);
         }
 
         public List<SignalData> DrawCard(int numCards, bool sendUISignal = false)
@@ -71,42 +77,52 @@ namespace Combat
             List<SignalData> toRet = new List<SignalData>();
             for (int i = 0; i < numCards; i++)
             {
-                try
+                if (deck.GetCurrentCardsNumber() > 0)
                 {
                     Card card = deck.DrawCard();
-                    // TODO Maybe difference between draw and send to the hand/stack?
                     if (hand.GetCurrentCardsNumber() < 10)
+                    {
                         hand.AddCard(card);
+                        toRet.Add(new CombatCardSignalData(GameSignal.CARD_DRAWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+                    }
                     else
+                    {
                         stack.AddCard(card);
-                    toRet.Add(new CombatCardSignalData(GameSignal.CARD_DRAWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+                    }
                 }
-                catch (EmptyCardContainerException)
+                else
                 {
-                    RechargeDeck();
-                    toRet.Add(new CombatSignalData(GameSignal.RECHARGE_DECK, gameObject, CombatManager.combatManager.GetCharactersInCombat()));
+                    toRet.AddRange(RechargeDeck(sendUISignal));
                 }
             }
             character.SendSignalData(toRet, sendUISignal);
             return toRet;
         }
 
-        private void RechargeDeck()
+        private List<SignalData> RechargeDeck(bool sendUISignal = false)
         {
+            List<SignalData> toRet = new List<SignalData>();
             foreach (var item in stack.RemoveAllCards())
             {
                 deck.AddCard(item);
             }
+            toRet.Add(new CardContainerSignalData(GameSignal.RECHARGE_DECK, deck, deck.GetCards()));
+            character.SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
 
         /// <summary>
         /// Send to the stack a card, wherever it is
         /// </summary>
         /// <param name="card">The card that is gonna be  sent to the stack</param>
-        public void SendToStack(Card card)
+        public List<SignalData> SendToStack(Card card, bool sendUISignal = false)
         {
+            List<SignalData> toRet = new List<SignalData>();
             card.transform.parent.GetComponent<ICardContainer>().RemoveCard(card);
             stack.AddCard(card);
+            toRet.Add(new CombatCardSignalData(GameSignal.SEND_TO_STACK, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+            character.SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
 
         /// <summary>
@@ -115,21 +131,6 @@ namespace Combat
         public void AddNewCardToDeck(Usable usable, bool oneUse)
         {
             deck.CreateCard(gameObject, usable, oneUse, cardPrefab);
-        }
-
-        public void CardPlayed(Card card)
-        {
-            List<SignalData> toRet = new List<SignalData>();
-            toRet.Add(new CombatCardSignalData(GameSignal.CARD_PLAYED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
-            character.SendSignalData(toRet, true);
-        }
-
-        public void CancelCardPlayed(Card card)
-        {
-            List<SignalData> toRet = new List<SignalData>();
-            toRet.Add(new CombatCardSignalData(GameSignal.CARD_PLAYED_CANCEL, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
-            hand.AddCard(card);
-            character.SendSignalData(toRet, true);
         }
 
         protected void DrawInitialHand()
@@ -146,7 +147,7 @@ namespace Combat
             }
             else
             {
-                SendToStack(card);
+                SendToStack(card, true);
             }
         }
 
@@ -166,9 +167,9 @@ namespace Combat
             character.RemoveBuffs();
         }
 
-        protected void EvaluateTraits()
+        protected void EvaluateBuffs()
         {
-            character.ReduceTurnInTemporaryTraits();
+            character.ReduceTurnInTemporaryBuffs();
         }
         #endregion
 
@@ -199,14 +200,16 @@ namespace Combat
         {
             CombatManager.combatManager.PauseCombat();
             character.SendSignalData(new CombatSignalData(GameSignal.START_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
-            EvaluateTraits();
+            EvaluateBuffs();
             DrawCard(1, true);
+            yourTurn = true;
             turnTime = 0;
         }
 
-        virtual public void EndTurn()
+        virtual public void EndOfTurn()
         {
             character.SendSignalData(new CombatSignalData(GameSignal.END_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
+            yourTurn = false;
             CombatManager.combatManager.ResumeCombat();
         }
 
@@ -231,5 +234,20 @@ namespace Combat
             
         }
         #endregion
+
+        public bool IsYourTurn()
+        {
+            return yourTurn;
+        }
+
+        public Deck GetDeck()
+        {
+            return deck;
+        }
+
+        public Hand GetHand()
+        {
+            return hand;
+        }
     }
 }

@@ -51,14 +51,12 @@ namespace UI.Combat
                     if ((value as CombatSignalData).user.Equals(player))
                     {
                         endTurnButton.interactable = true;
-                        dropZone.gameObject.SetActive(true);
                     }
                     break;
                 case GameSignal.END_TURN:
                     if ((value as CombatSignalData).user.Equals(player))
                     {
                         endTurnButton.interactable = false;
-                        dropZone.gameObject.SetActive(false);
                     }
                     break;
                 case GameSignal.START_DRAGGING_CARD:

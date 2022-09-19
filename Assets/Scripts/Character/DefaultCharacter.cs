@@ -121,7 +121,7 @@ namespace Character.Character
             SendSignalData(traits.RemoveBuffs(gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }
 
-        public void ReduceTurnInTemporaryTraits()
+        public void ReduceTurnInTemporaryBuffs()
         {
             SendSignalData(traits.ReduceTurnInTemporaryBuffs(gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }

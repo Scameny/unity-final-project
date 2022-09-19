@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CardSystem
@@ -11,7 +12,6 @@ namespace CardSystem
         {
             if (currentHand.Remove(card))
             {
-                card.SetVisibility(false);
                 return true;
             }
             else
@@ -55,11 +55,10 @@ namespace CardSystem
 
         public void ClearCards()
         {
-            while (currentHand.Count != 0)
+            foreach (var item in currentHand.ToList())
             {
-                Card card = currentHand[0];
-                currentHand.Remove(card);
-                card.DestroyCard();
+                currentHand.Remove(item);
+                item.DestroyCard();
             }
         }
 
@@ -68,6 +67,15 @@ namespace CardSystem
             throw new System.NotImplementedException();
         }
 
+        public void AddCard(Card card, int index)
+        {
+            currentHand.Insert(index, card);
+        }
+
+        public int GetIndex(Card card)
+        {
+            return currentHand.IndexOf(card);
+        }
     }
 
 }
