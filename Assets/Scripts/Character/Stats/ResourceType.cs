@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Character.Stats
 {
     public enum ResourceType
@@ -10,6 +6,7 @@ namespace Character.Stats
         Health,
         Energy,
         Armor,
+
         None
     }
 }

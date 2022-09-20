@@ -1,8 +1,10 @@
+using Animations;
 using CardSystem;
-using Character.Character;
 using Combat;
 using GameManagement;
 using Sirenix.OdinInspector;
+using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,11 +13,15 @@ using Utils;
 
 namespace UI.Combat
 {
-    public class UICombatCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+    /// <summary>
+    /// Class that manages all the UI behaviours of the cards
+    /// </summary>
+    public class UICombatCard : MonoBehaviour, IObserver<SignalData>, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] Image cardImage, backImage;
+        [SerializeField] RawImage usableAura;
         [SerializeField] TextMeshProUGUI cardName, cardDescription;
-        [SerializeField] GameObject cost, usableAura;
+        [SerializeField] GameObject cost;
         [SerializeField] Vector3 scaleWhenMouseOver;
         [SerializeField] int YmoveWhenMouseOver;
 
@@ -23,14 +29,15 @@ namespace UI.Combat
         bool isDragging, onAnimation;
         int siblingIndex;
         ICardContainer sourceUsed;
-
+        IDisposable disposable;
         Card card;
-       
-        
+
+
         // Start is called before the first frame update
         void Start()
         {
             card = GetComponent<Card>();
+            disposable = UIManager.manager.Subscribe(this);
         }
 
         public void InitializeUICard(Usable cardUse, bool oneUse)
@@ -45,10 +52,11 @@ namespace UI.Combat
                 // TODO add change of resource background depending on resource type
             }
         }
-        
+
         public void UseCard()
         {
             isDragging = false;
+            usableAura.enabled = false;
             gameObject.SetActive(false);
             sourceUsed = transform.GetComponentInParent<ICardContainer>();
             siblingIndex = sourceUsed.GetIndex(card);
@@ -66,9 +74,9 @@ namespace UI.Combat
         {
             sourceUsed.AddCard(card, siblingIndex);
             sourceUsed = null;
+            usableAura.enabled = true;
             gameObject.SetActive(true);
             UIManager.manager.SendData(new CombatCardSignalData(GameSignal.CARD_PLAYED_CANCEL, card.GetUser(), CombatManager.combatManager.GetCharactersInCombat(), card));
-
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -78,7 +86,7 @@ namespace UI.Combat
             siblingIndex = transform.GetSiblingIndex();
             transform.SetAsLastSibling();
             transform.localScale = scaleWhenMouseOver;
-            transform.localPosition += new Vector3(0, YmoveWhenMouseOver); 
+            transform.localPosition += new Vector3(0, YmoveWhenMouseOver);
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -116,16 +124,18 @@ namespace UI.Combat
             UIManager.manager.SendData(new SignalData(GameSignal.END_DRAGGING_CARD));
         }
 
-        public void OnZoneDropEnter()
+        public IEnumerator ActivateAura()
         {
-            Color color = GetComponent<Image>().color;
-            GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0.6f);
-        }
-
-        public void OnZoneDropExit()
-        {
-            Color color = GetComponent<Image>().color;
-            GetComponent<Image>().color = new Color(color.r, color.g, color.b, 1);
+            if (card.CanBeUsed() && CanInteract() && card.GetUser().GetComponent<TurnCombat>().IsYourTurn())
+            {
+                usableAura.enabled = true;
+            } 
+            else
+            {
+                usableAura.enabled = false;
+            }
+            yield return null;
+            AnimationQueue.Instance.EndAnimation();
         }
 
 
@@ -173,11 +183,36 @@ namespace UI.Combat
         #endregion
 
 
+        #region Debug
 
         [Button]
         private void SetFrontCard()
         {
             SetCardBack(!backImage.IsActive());
+        }
+        #endregion
+
+        public void OnCompleted()
+        {
+            disposable.Dispose();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(SignalData value)
+        {
+            if ((value.signal.Equals(GameSignal.START_TURN) || value.signal.Equals(GameSignal.END_TURN) || value.signal.Equals(GameSignal.CARD_DRAWED) || value.signal.Equals(GameSignal.RESOURCE_MODIFY) || value.signal.Equals(GameSignal.CARD_PLAYED_CANCEL))
+                    && (value as CombatSignalData).user.Equals(card.GetUser()))
+            {
+                AnimationQueue.Instance.AddAnimationToQueue(ActivateAura());
+            } 
+            else if (value.signal.Equals(GameSignal.END_COMBAT))
+            {
+                disposable.Dispose();
+            }
         }
     }
 

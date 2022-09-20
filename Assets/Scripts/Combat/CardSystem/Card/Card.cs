@@ -1,3 +1,4 @@
+using Character.Character;
 using Combat;
 using Combat.Character;
 using System.Collections.Generic;
@@ -61,6 +62,11 @@ namespace CardSystem
             {
                 yield return item;
             }
+        }
+
+        public bool CanBeUsed()
+        {
+            return cardEffect.CanBeUsed(user.GetComponent<DefaultCharacter>().GetResources());
         }
 
         public List<ResourceCost> GetResourceCost()

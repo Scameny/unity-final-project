@@ -177,9 +177,11 @@ namespace GameManagement
     {
         public ICardContainer container;
         public List<Card> cards;
+        public GameObject user;
 
-        public CardContainerSignalData(GameSignal signalType, ICardContainer container, IEnumerable<Card> cards) : base(signalType)
+        public CardContainerSignalData(GameSignal signalType, GameObject user, ICardContainer container, IEnumerable<Card> cards) : base(signalType)
         {
+            this.user = user;
             this.container = container;
             this.cards = new List<Card>(cards);
         }

@@ -116,11 +116,12 @@ namespace CardSystem
         #endregion
 
         #region Resource operations
-        public bool CanBeUsed(List<ResourceType> userResources)
+        public bool CanBeUsed(List<Resource> userResources)
         {
             foreach(var resource in resourceCosts)
             {
-                if (!userResources.Contains(resource.resourceType))
+                Resource currentResource = userResources.Find(r => r.resourceType.Equals(resource.resourceType));
+                if (currentResource == null || currentResource.currentAmount < resource.amount)
                     return false;
             }
             return true;

@@ -51,6 +51,7 @@ namespace UI.Combat
             }
         }
 
+
         private IEnumerator DrawCardAnimation(Card card)
         {
             UICombatCard uiCard = card.GetComponent<UICombatCard>();

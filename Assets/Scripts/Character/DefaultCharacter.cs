@@ -55,11 +55,6 @@ namespace Character.Character
             InitializeResources();
         }
 
-        private void Update()
-        {
-
-        }
-
         #region Abilities operations
 
         public IEnumerable<Usable> GetAllClassAbilitiesAvaliable()
@@ -460,6 +455,11 @@ namespace Character.Character
 
         #endregion
 
+
+        public List<Resource> GetResources()
+        {
+            return resources;
+        }
     }
 
     public class Resource

@@ -65,9 +65,9 @@ namespace Combat
         private IEnumerator EndCombatCoroutine()
         {
             yield return new WaitUntil(() => AnimationQueue.Instance.DoingAnimations());
+            UIManager.manager.SendData(new SignalData(GameSignal.END_COMBAT));
             GameManager.gm.EndCombat();
             player.GetComponent<TurnCombat>().EndCombat();
-            UIManager.manager.SendData(new SignalData(GameSignal.END_COMBAT));
             charactersInCombat.Clear();
             ((Hero)player.GetCharacter()).AddExp(expStored);
             ((Hero)player.GetCharacter()).AddItems(itemsStored);

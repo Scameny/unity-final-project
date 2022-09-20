@@ -68,7 +68,7 @@ namespace Combat
                 count++;
             }
             deck.ShuffleDeck();
-            toRet.Add(new CardContainerSignalData(GameSignal.DECK_INITIALIZE, deck, deck.GetCards()));
+            toRet.Add(new CardContainerSignalData(GameSignal.DECK_INITIALIZE, gameObject, deck, deck.GetCards()));
             character.SendSignalData(toRet, true);
         }
 
@@ -106,7 +106,7 @@ namespace Combat
             {
                 deck.AddCard(item);
             }
-            toRet.Add(new CardContainerSignalData(GameSignal.RECHARGE_DECK, deck, deck.GetCards()));
+            toRet.Add(new CardContainerSignalData(GameSignal.RECHARGE_DECK, gameObject, deck, deck.GetCards()));
             character.SendSignalData(toRet, sendUISignal);
             return toRet;
         }

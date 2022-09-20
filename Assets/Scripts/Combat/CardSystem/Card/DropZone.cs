@@ -5,22 +5,20 @@ using System.Collections.Generic;
 using UI.Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UI
 {
     public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
-
-        private void Start()
-        {
-        }
+        [SerializeField] float alphaOfDropzone;
 
         public void OnDrop(PointerEventData eventData)
         {
             UICombatCard d = eventData.pointerDrag.GetComponent<UICombatCard>();
             if (d != null)
             {
-                d.OnZoneDropExit();
+                OnPointerExit(eventData);
                 try
                 {
                     d.UseCard();
@@ -45,10 +43,11 @@ namespace UI
             UICombatCard d = eventData.pointerDrag.GetComponent<UICombatCard>();
             if (d!= null)
             {
-                d.OnZoneDropEnter();
+                Color color = GetComponent<Image>().color;
+                GetComponent<Image>().color = new Color(color.r, color.g, color.b, alphaOfDropzone);
             }
-    
-    }
+        }
+
 
         public void OnPointerExit(PointerEventData eventData)
         {
@@ -57,7 +56,8 @@ namespace UI
             UICombatCard d = eventData.pointerDrag.GetComponent<UICombatCard>();
             if (d != null)
             {
-                d.OnZoneDropExit();
+                Color color = GetComponent<Image>().color;
+                GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0);
             }
         }
     }

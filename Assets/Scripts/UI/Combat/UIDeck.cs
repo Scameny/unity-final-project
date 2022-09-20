@@ -14,7 +14,7 @@ namespace UI.Combat
     /// </summary>
     public class UIDeck : MonoBehaviour, IObserver<SignalData>
     {
-        [SerializeField] float cardMovementDuration, timeBetweenCreatingCards, timeBetweenShufling;
+        [SerializeField] float cardMovementDuration, timeBetweenCreatingCards;
         [SerializeField] int overlap;
         
         IDisposable disposable;
