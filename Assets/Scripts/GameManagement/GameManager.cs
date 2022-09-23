@@ -62,6 +62,16 @@ namespace GameManagement
             currentGameState = GameState.Combat;
         }
 
+        public void OpenMenu()
+        {
+            currentGameState = GameState.OnMenu;
+        }
+
+        public void CloseMenu()
+        {
+            currentGameState = GameState.Moving;
+        }
+
         public void StartInteraction()
         {
             currentGameState = GameState.Interacting;
@@ -96,7 +106,7 @@ namespace GameManagement
 
     public enum GameState
     {
-        Combat, Interacting, Moving
+        Combat, Interacting, Moving, OnMenu
     }
 }
 

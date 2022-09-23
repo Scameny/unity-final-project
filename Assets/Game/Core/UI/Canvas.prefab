@@ -3864,7 +3864,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 660091712}
-  - component: {fileID: 1031547101}
+  - component: {fileID: 5615337973908571014}
   m_Layer: 5
   m_Name: CharacterMenuFrame
   m_TagString: Untagged
@@ -3894,7 +3894,7 @@ RectTransform:
   m_AnchoredPosition: {x: -1.3952942, y: 0.98631287}
   m_SizeDelta: {x: -2.7905998, y: -1.9727001}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1031547101
+--- !u!114 &5615337973908571014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3903,11 +3903,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 660091711}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c6968aaabeb9aa4badb5c0cc3b979e3, type: 3}
+  m_Script: {fileID: 11500000, guid: bff21456c9d7f0c498afcdba6fda5845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeSignals: 15000000
-  desactivateSignals: 160000000d000000
 --- !u!1 &661975682
 GameObject:
   m_ObjectHideFlags: 0
@@ -10536,7 +10534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.23235871, y: 0.15542114}
   m_AnchorMax: {x: 0.763, y: 0.6648683}
-  m_AnchoredPosition: {x: 0.83557, y: 0.5}
+  m_AnchoredPosition: {x: 0.8355713, y: 0.5}
   m_SizeDelta: {x: -1.6711, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2060130450180699997
@@ -13832,7 +13830,6 @@ GameObject:
   m_Component:
   - component: {fileID: 650018898811728066}
   - component: {fileID: 650018900456324123}
-  - component: {fileID: 204357305}
   m_Layer: 5
   m_Name: Deck
   m_TagString: Untagged
@@ -13873,30 +13870,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
---- !u!114 &204357305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 650018898811728067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337dec0472cd4fa44a09cebc90d01b82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
-  m_Constraint: 1
-  m_ConstraintCount: 3
 --- !u!1 &650018899167622208
 GameObject:
   m_ObjectHideFlags: 0
@@ -16099,6 +16072,13 @@ MonoBehaviour:
   - message: It's not your turn
     errorSignal: 36
     textColor: {r: 0.99059963, g: 1, b: 0.4198113, a: 0}
+    outlineColor:
+      serializedVersion: 2
+      rgba: 263423
+    outlineThickness: 0.2
+  - message: Not enough money
+    errorSignal: 36
+    textColor: {r: 0.9921569, g: 1, b: 0.41960788, a: 0}
     outlineColor:
       serializedVersion: 2
       rgba: 263423
