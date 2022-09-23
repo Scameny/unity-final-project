@@ -34,7 +34,7 @@ namespace UI.Character.NPC
         {
             foreach (var usable in player.GetPermanentCards())
             {
-                GameObject card = Instantiate(cardPrefab, content);
+                GameObject card = Instantiate(GetCardPrefab(), GetContentTransform());
                 card.GetComponent<UICard>().InitializeCard(usable);
             }
         }
@@ -43,7 +43,7 @@ namespace UI.Character.NPC
         {
             player.RemovePermanentCard(GetCardSelected());
             npc.RemoveCard();
-            cardSelection.SetActive(false);
+            GetCardSelection().gameObject.SetActive(false);
             RemoveUICards();
             if (!npc.CanRemoveCard())
             {

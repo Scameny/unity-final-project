@@ -56,7 +56,7 @@ namespace UI.Combat
         public void UseCard()
         {
             isDragging = false;
-            usableAura.enabled = false;
+            SetCardBack(true);
             gameObject.SetActive(false);
             sourceUsed = transform.GetComponentInParent<ICardContainer>();
             siblingIndex = sourceUsed.GetIndex(card);
@@ -73,8 +73,9 @@ namespace UI.Combat
         public void CancelCardUse()
         {
             sourceUsed.AddCard(card, siblingIndex);
+            SetCardBack(false);
+            ActivateAura();
             sourceUsed = null;
-            usableAura.enabled = true;
             gameObject.SetActive(true);
             UIManager.manager.SendData(new CombatCardSignalData(GameSignal.CARD_PLAYED_CANCEL, card.GetUser(), CombatManager.combatManager.GetCharactersInCombat(), card));
         }
@@ -124,16 +125,21 @@ namespace UI.Combat
             UIManager.manager.SendData(new SignalData(GameSignal.END_DRAGGING_CARD));
         }
 
-        public IEnumerator ActivateAura()
+        private void ActivateAura()
         {
             if (card.CanBeUsed() && CanInteract() && card.GetUser().GetComponent<TurnCombat>().IsYourTurn())
             {
                 usableAura.enabled = true;
-            } 
+            }
             else
             {
                 usableAura.enabled = false;
             }
+        }
+
+        private IEnumerator ActivateAuraCoroutine()
+        {
+            ActivateAura();
             yield return null;
             AnimationQueue.Instance.EndAnimation();
         }
@@ -207,7 +213,7 @@ namespace UI.Combat
             if ((value.signal.Equals(GameSignal.START_TURN) || value.signal.Equals(GameSignal.END_TURN) || value.signal.Equals(GameSignal.CARD_DRAWED) || value.signal.Equals(GameSignal.RESOURCE_MODIFY) || value.signal.Equals(GameSignal.CARD_PLAYED_CANCEL))
                     && (value as CombatSignalData).user.Equals(card.GetUser()))
             {
-                AnimationQueue.Instance.AddAnimationToQueue(ActivateAura());
+                AnimationQueue.Instance.AddAnimationToQueue(ActivateAuraCoroutine());
             } 
             else if (value.signal.Equals(GameSignal.END_COMBAT))
             {

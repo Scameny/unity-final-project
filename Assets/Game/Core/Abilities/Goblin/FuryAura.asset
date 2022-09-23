@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  sprite: {fileID: 21300000, guid: c46be55a65cb30e44b7c89e3c0d531da, type: 3}
+  sprite: {fileID: 21300000, guid: e993f7b8da257e04bb09d23b6e7b2bfe, type: 3}
   Name: Fury aura
   description: 
   signalDecoderStrategy:

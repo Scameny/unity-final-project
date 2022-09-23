@@ -52,7 +52,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  sprite: {fileID: 21300000, guid: 030d61925e2f98f4d86e171153ec39e1, type: 3}
+  sprite: {fileID: 21300000, guid: 9bbe63f16057ac64aa46609fae88431f, type: 3}
   Name: Tackle
   description: 
   animationType: 0

@@ -57,6 +57,7 @@ MonoBehaviour:
   description: '@PhysicDamage@ 2 points + @Strength@30% of your total Strength @PhysicDamage@of
     physic damage @break@.'
   animationType: 0
+  abilityType: 0
   filterStrategiesList:
     filterStrategies:
     - id: 0

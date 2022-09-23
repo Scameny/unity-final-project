@@ -12,6 +12,7 @@ namespace UI.Cards
         [SerializeField] Image cardImage;
         [SerializeField] TextMeshProUGUI cardName, cardDescription;
         [SerializeField] GameObject cost;
+        [SerializeField] float scaleWhenSelected;
 
         Usable usable;
         Vector3 initScale;
@@ -37,12 +38,17 @@ namespace UI.Cards
             return usable;
         }
 
+        public void SetScaleWhenSelected(float scale)
+        {
+            scaleWhenSelected = scale;
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (!interactable)
                 return;
             initScale = transform.localScale;
-            transform.localScale = 1.3f * initScale;
+            transform.localScale = scaleWhenSelected * initScale;
         }
 
         public void OnPointerExit(PointerEventData eventData)

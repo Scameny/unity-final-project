@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using DG.Tweening;
 using GameManagement;
 using UI.Cards;
-using System;
+using System.Collections;
+using Animations;
 
 namespace UI.Character
 {
@@ -29,7 +30,7 @@ namespace UI.Character
         }
 
 
-        private void ShowCard(Card card)
+        private IEnumerator ShowCard(Card card)
         {
             GameObject cardUI = Instantiate(cardPrefab, cardSlot.transform);
             cardUI.GetComponent<UICard>().InitializeCard(card.GetUsable());
@@ -39,7 +40,9 @@ namespace UI.Character
             cardUI.transform.DOMove(cardSlot.transform.position + Vector3.up, timeToFadeCardUsed).OnComplete(() =>
             {
                 Destroy(cardUI);
+                AnimationQueue.Instance.EndAnimation();
             });
+            yield return null;
         }
 
         override public void OnNext(SignalData signalData)
@@ -47,7 +50,7 @@ namespace UI.Character
                 base.OnNext(signalData);
             if (signalData.signal.Equals(GameSignal.CARD_USED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
             {
-                ShowCard((signalData as CombatCardSignalData).card);
+                AnimationQueue.Instance.AddAnimationToQueue(ShowCard((signalData as CombatCardSignalData).card));
             }
             else if (signalData.signal.Equals(GameSignal.RESOURCE_MODIFY) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject) && (signalData as CombatResourceSignalData).resourceType.Equals(ResourceType.Health))
             {

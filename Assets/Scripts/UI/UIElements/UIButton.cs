@@ -14,7 +14,8 @@ namespace UI
 
         private void Start()
         {
-            UIManager.manager.Subscribe(this);
+            if (activeSignals.Count > 0  || desactivateSignals.Count > 0)
+                UIManager.manager.Subscribe(this);
         }
 
         public void OnClick()

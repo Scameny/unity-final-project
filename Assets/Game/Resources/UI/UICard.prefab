@@ -700,6 +700,7 @@ MonoBehaviour:
   cardName: {fileID: 672692340727445097}
   cardDescription: {fileID: 1729640012966840865}
   cost: {fileID: 8732645475350465181}
+  scaleWhenSelected: 1.3
 --- !u!1 &4382903319170184602
 GameObject:
   m_ObjectHideFlags: 0

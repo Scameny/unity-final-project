@@ -1,5 +1,4 @@
 using GameManagement;
-using UI;
 using UnityEngine;
 
 namespace Interaction
