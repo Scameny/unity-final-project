@@ -77,6 +77,11 @@ namespace Interaction
             return itemsToBuy;
         }
 
+        public void OnSellItem(ItemToSell item)
+        {
+            itemsToBuy.Remove(item);
+        }
+
 
         private void OnValidate()
         {

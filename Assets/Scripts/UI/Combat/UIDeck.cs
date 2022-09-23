@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace UI.Combat
@@ -16,7 +17,8 @@ namespace UI.Combat
     {
         [SerializeField] float cardMovementDuration, timeBetweenCreatingCards;
         [SerializeField] int overlap;
-        
+        [SerializeField] GameObject deckCounter;
+
         IDisposable disposable;
         GameObject character;
         Deck deck;
@@ -42,16 +44,25 @@ namespace UI.Combat
         public void OnNext(SignalData value)
         {
 
-                if (value.signal.Equals(GameSignal.RECHARGE_DECK) && (value as CardContainerSignalData).container.Equals(deck))
-                {
-                    CardContainerSignalData data = value as CardContainerSignalData;
-                    AnimationQueue.Instance.AddAnimationToQueue(InitializeDeckAnimation(data.cards));
-                }
-                else if (value.signal.Equals(GameSignal.DECK_INITIALIZE) && (value as CardContainerSignalData).container.Equals(deck))
-                {
-                    CardContainerSignalData data = value as CardContainerSignalData;
-                    AnimationQueue.Instance.AddAnimationToQueue(InitializeDeckAnimation(data.cards));
-                }
+            if (value.signal.Equals(GameSignal.START_COMBAT))
+            {
+                deckCounter.gameObject.SetActive(true);
+                deckCounter.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            }
+            else if (value.signal.Equals(GameSignal.RECHARGE_DECK) && (value as CardContainerSignalData).container.Equals(deck))
+            {
+                CardContainerSignalData data = value as CardContainerSignalData;
+                AnimationQueue.Instance.AddAnimationToQueue(InitializeDeckAnimation(data.cards));
+            }
+            else if (value.signal.Equals(GameSignal.DECK_INITIALIZE) && (value as CardContainerSignalData).container.Equals(deck))
+            {
+                CardContainerSignalData data = value as CardContainerSignalData;
+                AnimationQueue.Instance.AddAnimationToQueue(InitializeDeckAnimation(data.cards));
+            }
+            else if (value.signal.Equals(GameSignal.CARD_DRAWED) && (value as CombatCardSignalData).user.Equals(character))
+            {
+                deckCounter.GetComponentInChildren<TextMeshProUGUI>().text = deck.GetCurrentCardsNumber().ToString();
+            }
         }
 
         private IEnumerator InitializeDeckAnimation(List<Card> cards)
@@ -69,6 +80,7 @@ namespace UI.Combat
                 card.gameObject.SetActive(true);
                 yield return new WaitForSeconds(timeBetweenCreatingCards);
             }
+            deckCounter.GetComponentInChildren<TextMeshProUGUI>().text = deck.GetCurrentCardsNumber().ToString();
             AnimationQueue.Instance.EndAnimation();
         }
 

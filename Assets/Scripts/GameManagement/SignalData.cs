@@ -57,6 +57,7 @@ namespace GameManagement
         // error
         NOT_ENOUGH_RESOURCES,
         NOT_YOUR_TURN,
+        NOT_ENOUGH_MONEY,
 
 
         DECK_INITIALIZE,

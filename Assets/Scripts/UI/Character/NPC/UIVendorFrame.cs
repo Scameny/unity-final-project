@@ -36,7 +36,7 @@ namespace UI.Character.NPC
             foreach (var item in npc.GetItemsToBuy())
             {
                 GameObject newItemRow = Instantiate(itemRow, content);
-                newItemRow.GetComponent<UIVendorItemRow>().InitializeRow(item, player);
+                newItemRow.GetComponent<UIVendorItemRow>().InitializeRow(item, player, npc);
             }
         }
 
