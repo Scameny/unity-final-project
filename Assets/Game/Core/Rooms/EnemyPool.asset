@@ -25,8 +25,6 @@ MonoBehaviour:
     hasMaxNumPerRoom: 1
     maxNumPerRoom: 2
     weigth: 10
-  boss:
-    gameObject: {fileID: 652534504946285583, guid: 426ec0794740e4e42a49eb316a4bc916, type: 3}
-    hasMaxNumPerRoom: 0
-    maxNumPerRoom: 0
-    weigth: 0
+  bosses:
+  - weigth: 10
+    gameObject: {fileID: 3949606729654543611, guid: 2d39d7d8364edff46ad879148dd91c23, type: 3}

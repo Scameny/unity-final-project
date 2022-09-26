@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FloorManagement
+namespace MapManagement.RoomManagement
 {
     public abstract class RoomManager : MonoBehaviour
     {

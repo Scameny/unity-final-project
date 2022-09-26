@@ -61,17 +61,3 @@ MonoBehaviour:
       newSlotsHand: 0
       expNextLevel: 0
       label: Level 2
-    - stats:
-        health: 5
-        strength: 1
-        agility: 1
-        defense: 1
-        intelect: 0
-        resources:
-        - resourceType: 2
-          amount: 2
-        abilities: []
-        passives: []
-      newSlotsHand: 1
-      expNextLevel: 0
-      label: Level 3

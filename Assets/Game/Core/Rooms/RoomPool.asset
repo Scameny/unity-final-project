@@ -35,7 +35,7 @@ MonoBehaviour:
     onlyOneWay: 0
     needKey: 0
   bossRoom:
-    roomGameObject: {fileID: 6245226342220383230, guid: ddc6f6d4b16dc2a4dacb7e1ed886cd94, type: 3}
+    roomGameObject: {fileID: 6245226342220383230, guid: 8e1e252780ece794f8da891d20bc68e9, type: 3}
     maxNumberOfRooms: 0
     weigth: 0
     heigth: 10

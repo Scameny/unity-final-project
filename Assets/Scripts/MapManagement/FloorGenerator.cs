@@ -2,8 +2,9 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Utils;
+using MapManagement.RoomManagement;
 
-namespace FloorManagement { 
+namespace MapManagement { 
     
     public class FloorGenerator : MonoBehaviour
     {
@@ -248,16 +249,18 @@ namespace FloorManagement {
                         for (int i = 0; i < numEnemies; i++)
                         {
                             EnemyInfo enemy = roomPool.GetEnemyPool().GetRandomEnemy();
-                            while (enemy.hasMaxNumPerRoom && enemyRoom.enemiesGenerated.Count(e => e.gameObject.name.Equals(enemy.gameObject.name)) == enemy.maxNumPerRoom)
+                            while (enemy.hasMaxNumPerRoom && enemyRoom.GetEnemies().Count(e => e.gameObject.name.Equals(enemy.gameObject.name)) == enemy.maxNumPerRoom)
                             {
                                 enemy = roomPool.GetEnemyPool().GetRandomEnemy();
                             }
-                            enemyRoom.enemiesGenerated.Add(enemy);
+                            enemyRoom.GetEnemies().Add(enemy.gameObject);
                         }
                         break;
                     case RoomType.InteractionRoom:
                         break;
                     case RoomType.BossRoom:
+                        BossRoomManager bossRoom = room as BossRoomManager;
+                        bossRoom.SetBossToGenerate(roomPool.GetEnemyPool().GetRandomBoss());
                         break;
                     case RoomType.initialRoom:
                         break;

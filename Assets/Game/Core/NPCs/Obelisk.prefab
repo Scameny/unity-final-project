@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 3790777058797178918}
   - component: {fileID: 1257352035}
   m_Layer: 0
-  m_Name: Obelisk_0
+  m_Name: Obelisk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

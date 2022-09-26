@@ -1,4 +1,5 @@
 using GameManagement;
+using UI;
 using UnityEngine;
 
 namespace Interaction
@@ -10,6 +11,7 @@ namespace Interaction
         {
             GameManager.gm.EnableSelectorInCurrentRoom(false);
             GameManager.gm.StartInteraction();
+            UIManager.manager.SendData(new SignalData(GameSignal.START_INTERACTION));
         }
 
         public abstract void Interact();
@@ -18,6 +20,7 @@ namespace Interaction
         {
             GameManager.gm.EnableSelectorInCurrentRoom(true);
             GameManager.gm.EndInteraction();
+            UIManager.manager.SendData(new SignalData(GameSignal.END_INTERACTION));
         }
 
     }

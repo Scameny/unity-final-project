@@ -1,4 +1,5 @@
-using FloorManagement;
+using MapManagement;
+using MapManagement.RoomManagement;
 using Sirenix.OdinInspector;
 using UI;
 using UnityEngine;
@@ -42,6 +43,17 @@ namespace GameManagement
             }
         }
 
+
+        [Button]
+        public void StartGame()
+        {
+            floorGenerator.GenerateFloor(8, roomPoolToTest);
+            currentGameState = GameState.Moving;
+            currentRoom = floorGenerator.GetBaseRoom();
+            UIManager.manager.SendData(new SignalData(GameSignal.START_GAME));
+        }
+
+        #region Room operations
         public void GoToRoom(Direction dir)
         {
             currentRoom = floorGenerator.GetRoom(currentRoom, dir);
@@ -52,6 +64,13 @@ namespace GameManagement
             currentRoom.EnterOnRoom(player);
         }
 
+        public RoomManager GetCurrentRoom()
+        {
+            return currentRoom;
+        }
+        #endregion
+
+        #region GameState operations
         public void EndCombat()
         {
             currentGameState = GameState.Moving;
@@ -75,33 +94,18 @@ namespace GameManagement
         public void StartInteraction()
         {
             currentGameState = GameState.Interacting;
-            UIManager.manager.SendData(new SignalData(GameSignal.START_INTERACTION));
         }
 
         public void EndInteraction()
         {
             currentGameState = GameState.Moving;
-            UIManager.manager.SendData(new SignalData(GameSignal.END_INTERACTION));
-        }
-
-        [Button]
-        public void StartGame()
-        {
-            floorGenerator.GenerateFloor(8, roomPoolToTest);
-            currentGameState = GameState.Moving;
-            currentRoom = floorGenerator.GetBaseRoom();
-            UIManager.manager.SendData(new SignalData(GameSignal.START_GAME));
-        }
-
-        public RoomManager GetCurrentRoom()
-        {
-            return currentRoom;
         }
 
         public GameState GetCurrentState()
         {
             return currentGameState;
         }
+        #endregion
     }
 
     public enum GameState

@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-namespace FloorManagement
+namespace MapManagement.RoomManagement
 {
     public class BaseRoomManager : RoomManager
     {

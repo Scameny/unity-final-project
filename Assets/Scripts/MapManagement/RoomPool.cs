@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace FloorManagement
+namespace MapManagement
 {
     [CreateAssetMenu(fileName = "RoomPool", menuName = "Map/Room pool")]
     public class RoomPool : ScriptableObject

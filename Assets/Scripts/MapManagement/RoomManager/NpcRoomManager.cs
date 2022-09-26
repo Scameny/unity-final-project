@@ -1,10 +1,9 @@
-using GameManagement;
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
 using Utils;
 
-namespace FloorManagement
+namespace MapManagement.RoomManagement
 {
     public class NpcRoomManager : RoomManager
     {

@@ -2,16 +2,13 @@ using Combat;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FloorManagement
+namespace MapManagement.RoomManagement
 {
     public class EnemyRoomManager : RoomManager
     {
-        public GameObject[] enemySlots = new GameObject[4];
-        [HideInInspector]
-        public List<GameObject> enemies = new List<GameObject>();
-        [HideInInspector]
-        public List<EnemyInfo> enemiesGenerated = new List<EnemyInfo>();
-        public GameObject bossSlot;
+        [SerializeField] GameObject[] enemySlots = new GameObject[4];
+        List<GameObject> enemies = new List<GameObject>();
+
 
         public override RoomType GetRoomType()
         {
@@ -21,7 +18,9 @@ namespace FloorManagement
         override public void OnCreate()
         {
             int count = 0;
-            foreach (var enemy in enemiesGenerated)
+            List<GameObject> enemiesToGenerate = new List<GameObject>(enemies);
+            enemies.Clear();
+            foreach (var enemy in enemiesToGenerate)
             {
                 enemies.Add(Instantiate(enemy.gameObject, enemySlots[count].transform.position, Quaternion.identity, transform));
                 count++;
@@ -33,6 +32,17 @@ namespace FloorManagement
             base.EnterOnRoom(player);
             if (enemies.Count > 0)
                 CombatManager.combatManager.StartCombat(enemies);
+        }
+
+        public void SetEnemies(List<GameObject> enemies)
+        {
+            this.enemies = enemies;
+        }
+
+        public List<GameObject> GetEnemies()
+        {
+            return enemies;
+
         }
     }
 }

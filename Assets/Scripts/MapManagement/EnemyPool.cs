@@ -1,13 +1,15 @@
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
+using Utils;
 
-namespace FloorManagement
+namespace MapManagement
 {
     [CreateAssetMenu(fileName = "EnemyPool", menuName = "Map/Enemy pool")]
     public class EnemyPool : ScriptableObject
     {
         [SerializeField] EnemyInfo[] enemies;
-        [SerializeField] EnemyInfo boss;
+        [SerializeField] List<PoolObject<GameObject>> bosses = new List<PoolObject<GameObject>>();
 
         public EnemyInfo GetRandomEnemy()
         {
@@ -29,7 +31,14 @@ namespace FloorManagement
             }
             return enemies[lastIndex];
         }
+
+        public GameObject GetRandomBoss()
+        {
+            return UtilsClass.instance.GetListFromPool(bosses, 1, true)[0];
+        }
     }
+
+    
 
 
 
