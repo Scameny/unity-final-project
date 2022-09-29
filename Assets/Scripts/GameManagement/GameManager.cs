@@ -1,3 +1,4 @@
+using GameManagement.HeroGenerator;
 using MapManagement;
 using MapManagement.RoomManagement;
 using Sirenix.OdinInspector;
@@ -23,16 +24,17 @@ namespace GameManagement
         FloorGenerator floorGenerator;
         GameObject player;
         RoomManager currentRoom;
-        bool isInCombat = false;
 
         private void Awake()
         {
             gm = this;
         }
+
         private void Start()
         {
-            floorGenerator = GetComponent<FloorGenerator>();
             player = GameObject.FindGameObjectWithTag("Player");
+            floorGenerator = GetComponent<FloorGenerator>();
+            StartGame();
         }
 
         public void EnableSelectorInCurrentRoom(bool enable)
@@ -43,6 +45,7 @@ namespace GameManagement
             }
         }
 
+        #region
 
         [Button]
         public void StartGame()
@@ -50,8 +53,14 @@ namespace GameManagement
             floorGenerator.GenerateFloor(8, roomPoolToTest);
             currentGameState = GameState.Moving;
             currentRoom = floorGenerator.GetBaseRoom();
+            currentRoom.EnterOnRoom(player);
             UIManager.manager.SendData(new SignalData(GameSignal.START_GAME));
         }
+
+        
+
+        #endregion
+
 
         #region Room operations
         public void GoToRoom(Direction dir)
@@ -83,7 +92,7 @@ namespace GameManagement
 
         public void OpenMenu()
         {
-            currentGameState = GameState.OnMenu;
+            currentGameState = GameState.OnGameMenu;
         }
 
         public void CloseMenu()
@@ -110,7 +119,7 @@ namespace GameManagement
 
     public enum GameState
     {
-        Combat, Interacting, Moving, OnMenu
+        Combat, Interacting, Moving, OnGameMenu, OnStartingMenu
     }
 }
 

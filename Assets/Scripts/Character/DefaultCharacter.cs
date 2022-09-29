@@ -456,10 +456,12 @@ namespace Character.Character
         #endregion
 
 
+        #region setter y getters
         public List<Resource> GetResources()
         {
             return resources;
         }
+        #endregion
     }
 
     public class Resource

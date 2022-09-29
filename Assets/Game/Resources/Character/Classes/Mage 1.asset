@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c10956617e4de4fb9af1d535043050, type: 3}
+  m_Name: Mage 1
+  m_EditorClassIdentifier: 
+  Name: Mage
+  progression:
+    baseStats:
+      stats:
+        health: 10
+        strength: 0
+        agility: 1
+        defense: 1
+        intelect: 2
+        resources:
+        - resourceType: 0
+          amount: 10
+        abilities:
+        - usable: {fileID: 11400000, guid: 7b66a80b75f1c514a9c9d74c5e1a4902, type: 2}
+          quantity: 3
+        - usable: {fileID: 11400000, guid: 6b91e06bea894914587f3a8cc01fdd86, type: 2}
+          quantity: 2
+        - usable: {fileID: 11400000, guid: 1f65ded39f6fdc541897813503c9763c, type: 2}
+          quantity: 2
+        passives:
+        - passiveAbility: {fileID: 11400000, guid: 93da82b90579c9f4784b280529b8f267, type: 2}
+        - passiveAbility: {fileID: 11400000, guid: 3f2c677ea232b2c41bb4dd114e1642a9, type: 2}
+      maxCards: 3
+    progression:
+    - stats:
+        health: 2
+        strength: 0
+        agility: 0
+        defense: 1
+        intelect: 1
+        resources:
+        - resourceType: 0
+          amount: 0
+        abilities: []
+        passives: []
+      newSlotsHand: 0
+      expNextLevel: 20
+      label: Level 1
+    - stats:
+        health: 3
+        strength: 0
+        agility: 1
+        defense: 0
+        intelect: 2
+        resources:
+        - resourceType: 0
+          amount: 4
+        abilities:
+        - usable: {fileID: 11400000, guid: ef524300efb6ad046851336b2f800589, type: 2}
+          quantity: 1
+        - usable: {fileID: 11400000, guid: 3c9691759db820648a8fcc499bc940a4, type: 2}
+          quantity: 1
+        - usable: {fileID: 11400000, guid: c9c01f576422eb04492fb17725a9939d, type: 2}
+          quantity: 1
+        passives: []
+      newSlotsHand: 1
+      expNextLevel: 40
+      label: Level 2
+    - stats:
+        health: 3
+        strength: 1
+        agility: 0
+        defense: 1
+        intelect: 2
+        resources:
+        - resourceType: 0
+          amount: 3
+        abilities: []
+        passives: []
+      newSlotsHand: 0
+      expNextLevel: 60
+      label: Level 3
+    - stats:
+        health: 6
+        strength: 0
+        agility: 1
+        defense: 1
+        intelect: 2
+        resources:
+        - resourceType: 0
+          amount: 4
+        abilities: []
+        passives: []
+      newSlotsHand: 1
+      expNextLevel: 80
+      label: Level 4

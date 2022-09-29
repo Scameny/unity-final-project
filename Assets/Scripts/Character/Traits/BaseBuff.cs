@@ -158,6 +158,13 @@ namespace Character.Buff
             return cards;
         }
 
+        public void SetTooltipText(SimpleTooltip tooltip)
+        {
+            string leftTooltipText = name;
+            leftTooltipText += "\n" + description;
+            tooltip.infoLeft = leftTooltipText;
+        }
+
         #endregion
 
         #region Object operations

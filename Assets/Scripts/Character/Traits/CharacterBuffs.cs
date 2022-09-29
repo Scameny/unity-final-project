@@ -175,9 +175,7 @@ namespace Character.Buff
         public void SetTooltipText(SimpleTooltip tooltip)
         {
             tooltip.infoRight = buff.IsTemporary() ? remainingTurns.ToString() + " remaining turns" : "Permanent";
-            string leftTooltipText = buff.GetName();
-            leftTooltipText += "\n" + buff.GetDescription();
-            tooltip.infoLeft = leftTooltipText;
+            buff.SetTooltipText(tooltip);
         }
     }
 }

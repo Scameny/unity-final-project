@@ -2,6 +2,7 @@ using Character.Stats;
 using Character.Character;
 using CardSystem;
 using GameManagement;
+using UnityEngine;
 
 namespace Combat 
 {
@@ -14,6 +15,7 @@ namespace Combat
         
         private void Start()
         {
+            InitializeCardCotainers(GameObject.Find("Deck").GetComponent<Deck>(), GameObject.Find("Hand").GetComponentInChildren<Hand>(), GameObject.Find("Stack").GetComponentInChildren<Stack>());
             turnSpeed = character.GetStatistic(StatType.Agility);
         }
 

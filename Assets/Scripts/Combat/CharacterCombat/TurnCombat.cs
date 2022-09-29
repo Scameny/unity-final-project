@@ -15,9 +15,9 @@ namespace Combat
     public class TurnCombat : MonoBehaviour
     {
         [Header("Card management")]
-        [SerializeField] Deck deck;
-        [SerializeField] Hand hand;
-        [SerializeField] CardSystem.Stack stack;
+        Deck deck;
+        Hand hand;
+        CardSystem.Stack stack;
         public GameObject cardPrefab;
 
 
@@ -248,6 +248,13 @@ namespace Combat
         public Hand GetHand()
         {
             return hand;
+        }
+
+        public void InitializeCardCotainers(Deck deck, Hand hand, CardSystem.Stack stack)
+        {
+            this.deck = deck;
+            this.hand = hand;
+            this.stack = stack;
         }
     }
 }

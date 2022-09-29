@@ -12,10 +12,13 @@ namespace UI.Combat
         Button endTurnButton;
         IDisposable disposable;
 
+        private void Awake()
+        {
+            disposable = UIManager.manager.Subscribe(this);
+        }
 
         private void Start()
         {
-            disposable = UIManager.manager.Subscribe(this);
             player = GameObject.FindGameObjectWithTag("Player");
             dropZone = GetComponentInChildren<DropZone>();
             endTurnButton = GetComponentInChildren<Button>();

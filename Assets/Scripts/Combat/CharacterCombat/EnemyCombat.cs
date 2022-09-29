@@ -25,6 +25,7 @@ namespace Combat
 
         private void Start()
         {
+            InitializeCardCotainers(GetComponentInChildren<Deck>(), GetComponentInChildren<Hand>(), GetComponentInChildren<CardSystem.Stack>());
             player = GameObject.FindGameObjectWithTag("Player");
             turnSpeed = character.GetStatistic(StatType.Agility);
         }

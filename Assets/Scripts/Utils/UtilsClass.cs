@@ -147,5 +147,4 @@ namespace Utils
         public int weigth;
         public T gameObject;
     }
-
 }

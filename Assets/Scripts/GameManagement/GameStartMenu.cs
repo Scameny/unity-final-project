@@ -9,7 +9,7 @@ namespace GameManagement
 
         public void StartGame()
         {
-            SceneManager.LoadScene(gameStartScene);
+            SceneManager.LoadSceneAsync(gameStartScene);
         }
     }
 
