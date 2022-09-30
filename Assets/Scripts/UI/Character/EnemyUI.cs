@@ -25,8 +25,6 @@ namespace UI.Character
         {
             base.Start();
             resourceSlider = GetComponentInChildren<Slider>();
-            resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
-            resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
         }
 
 
@@ -47,8 +45,13 @@ namespace UI.Character
 
         override public void OnNext(SignalData signalData)
         {
-                base.OnNext(signalData);
-            if (signalData.signal.Equals(GameSignal.CARD_USED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
+            base.OnNext(signalData);
+            if (signalData.signal.Equals(GameSignal.START_COMBAT))
+            {
+                resourceSlider.maxValue = GetCharacter().GetMaxValueOfResource(ResourceType.Health);
+                resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
+            }
+            else if (signalData.signal.Equals(GameSignal.CARD_USED) && (signalData as CombatCardSignalData).user.Equals(GetCharacter().gameObject))
             {
                 AnimationQueue.Instance.AddAnimationToQueue(ShowCard((signalData as CombatCardSignalData).card));
             }

@@ -1,4 +1,4 @@
-using GameManagement.HeroGenerator;
+using GameManagemenet.GameConfiguration;
 using MapManagement;
 using MapManagement.RoomManagement;
 using Sirenix.OdinInspector;
@@ -12,7 +12,7 @@ namespace GameManagement
     {
         // current floor
 
-
+        [SerializeField] GamePreferences preferences;
         public RoomPool roomPoolToTest;
         public float combatTurnWait { private set; get; } = 0.1f;
 

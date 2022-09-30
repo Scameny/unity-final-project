@@ -605,6 +605,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 2abb42cdfb93e4341b086ec5bdcb45eb, type: 2}
     - target: {fileID: 4224398015135914646, guid: 25f02b35be445614d9c47b6e8a7bad03, type: 3}
+      propertyPath: preferences
+      value: 
+      objectReference: {fileID: 11400000, guid: 786490ce84cf99f4d922a052c522c091, type: 2}
+    - target: {fileID: 4224398015135914646, guid: 25f02b35be445614d9c47b6e8a7bad03, type: 3}
       propertyPath: roomPoolToTest
       value: 
       objectReference: {fileID: 11400000, guid: 3e9812cfbbbc04248b6f8a512f22bb20, type: 2}
