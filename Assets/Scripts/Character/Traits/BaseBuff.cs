@@ -29,6 +29,7 @@ namespace Character.Buff
         [SerializeField] int maxStacks;
         [TextArea(4, 14)]
         [SerializeField] string description;
+        [SerializeField] bool trait;
 
         [HorizontalGroup("Middle")]
 
@@ -156,6 +157,11 @@ namespace Character.Buff
         public IEnumerable<UsableCard> GetCards()
         {
             return cards;
+        }
+
+        public bool IsTrait()
+        {
+            return trait;
         }
 
         public void SetTooltipText(SimpleTooltip tooltip)

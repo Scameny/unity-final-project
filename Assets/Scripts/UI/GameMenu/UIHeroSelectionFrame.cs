@@ -13,9 +13,8 @@ namespace UI.GameMenu
     public class UIHeroSelectionFrame : MonoBehaviour
     {
         [SerializeField] Image heroSprite;
-        [SerializeField] TextMeshProUGUI className, itemsTittle, traitsTittle;
-        [SerializeField] List<GameObject> itemsRow;
-        [SerializeField] List<GameObject> traitsRow;
+        [SerializeField] TextMeshProUGUI className;
+        [SerializeField] List<GameObject> rows;
 
         public void SetVariables(List<Item> items, List<BaseBuff> traits, PlayerClass heroClass, Sprite classSprite, GameObject prefab)
         {
@@ -23,27 +22,24 @@ namespace UI.GameMenu
             SimpleTooltipStyle tooltipStyle = UIManager.manager.GetTooltipStyle();
             className.text = heroClass.GetName();
             int count = 0;
-            itemsTittle.gameObject.SetActive(items.Count > 0);
             foreach (var item in items)
             {
-                itemsRow[count].SetActive(true);
-                itemsRow[count].transform.Find("Icon").GetComponent<Image>().sprite = item.GetSprite();
-                itemsRow[count].GetComponentInChildren<TextMeshProUGUI>().text = UtilsClass.instance.ConvertTextWithStyles(item.GetName(), tooltipStyle);
-                itemsRow[count].GetComponent<SimpleTooltip>().simpleTooltipStyle = tooltipStyle;
-                itemsRow[count].GetComponent<SimpleTooltip>().enabled = true;
-                item.SetTooltipText(itemsRow[count].GetComponent<SimpleTooltip>());
+                rows[count].SetActive(true);
+                rows[count].transform.Find("Icon").GetComponent<Image>().sprite = item.GetSprite();
+                rows[count].GetComponentInChildren<TextMeshProUGUI>().text = UtilsClass.instance.ConvertTextWithStyles(item.GetName(), tooltipStyle);
+                rows[count].GetComponent<SimpleTooltip>().simpleTooltipStyle = tooltipStyle;
+                rows[count].GetComponent<SimpleTooltip>().enabled = true;
+                item.SetTooltipText(rows[count].GetComponent<SimpleTooltip>());
                 count++;
             }
-            count = 0;
-            traitsTittle.gameObject.SetActive(traits.Count > 0);
             foreach (var item in traits)
             {
-                traitsRow[count].SetActive(true);
-                traitsRow[count].transform.Find("Icon").GetComponent<Image>().sprite = item.GetIcon();
-                traitsRow[count].GetComponentInChildren<TextMeshProUGUI>().text = UtilsClass.instance.ConvertTextWithStyles(item.GetName(), tooltipStyle);
-                traitsRow[count].GetComponent<SimpleTooltip>().enabled = true;
-                traitsRow[count].GetComponent<SimpleTooltip>().simpleTooltipStyle = tooltipStyle;
-                item.SetTooltipText(traitsRow[count].GetComponent<SimpleTooltip>());
+                rows[count].SetActive(true);
+                rows[count].transform.Find("Icon").GetComponent<Image>().sprite = item.GetIcon();
+                rows[count].GetComponentInChildren<TextMeshProUGUI>().text = UtilsClass.instance.ConvertTextWithStyles(item.GetName(), tooltipStyle);
+                rows[count].GetComponent<SimpleTooltip>().enabled = true;
+                rows[count].GetComponent<SimpleTooltip>().simpleTooltipStyle = tooltipStyle;
+                item.SetTooltipText(rows[count].GetComponent<SimpleTooltip>());
                 count++;
             }
 

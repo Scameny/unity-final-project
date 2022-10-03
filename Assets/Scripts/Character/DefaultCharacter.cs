@@ -47,11 +47,11 @@ namespace Character.Character
         private void Awake()
         {
             traits = GetComponent<CharacterBuffs>();
+            passiveManager = new PassiveManager();
         }
 
         virtual protected void Start()
         {
-            passiveManager = new PassiveManager();
             InitializeResources();
         }
 
@@ -111,7 +111,7 @@ namespace Character.Character
         #endregion
 
         #region Traits operations
-        public void RemoveBuffs()
+        public void RemoveCombatBuffs()
         {
             SendSignalData(traits.RemoveBuffs(gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }

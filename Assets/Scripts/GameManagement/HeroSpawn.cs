@@ -1,3 +1,4 @@
+using Character.Character;
 using GameManagement.HeroGenerator;
 using UnityEngine;
 
@@ -12,9 +13,25 @@ namespace GameManagemenet
         {
             LoadHero();
         }
+
+        private void Start()
+        {
+            LoadItemsAndBuffs();
+        }
+
         private void LoadHero()
         {
             Instantiate(heroData.prefab);
+        }
+
+        private void LoadItemsAndBuffs()
+        {
+            GameObject hero = GameObject.FindGameObjectWithTag("Player");
+            hero.GetComponent<Hero>().AddItems(heroData.items);
+            foreach (var trait in heroData.traits)
+            {
+                hero.GetComponent<Hero>().AddNewTrait(trait);
+            }
         }
 
     }

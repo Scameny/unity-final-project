@@ -164,7 +164,7 @@ namespace Combat
 
         protected void RemoveBuffs()
         {
-            character.RemoveBuffs();
+            character.RemoveCombatBuffs();
         }
 
         protected void EvaluateBuffs()

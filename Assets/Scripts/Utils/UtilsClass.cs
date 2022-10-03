@@ -70,6 +70,8 @@ namespace Utils
         /// <returns></returns>
         public List<T> GetListFromPool<T>(List<PoolObject<T>> pool, int n, bool removeOnceSelected = true)
         {
+            if (removeOnceSelected & n > pool.Count)
+                throw new NotSupportedException();
             int totalWeigth = 0;
             List<PoolObject<T>> copyOfPool = new List<PoolObject<T>>(pool); 
             List<T> listToRet = new List<T>(); 
@@ -77,13 +79,13 @@ namespace Utils
             {
                 totalWeigth += item.weigth;
             }
-            for (int i = 0; i < pool.Count; i++)
+            for (int i = 0; i < n; i++)
             {
                 int randomNum = UnityEngine.Random.Range(0, totalWeigth);
                 int aux = 0;
                 int indexItemSelected = 0;
 
-                for (int j = 0; j < n; j++)
+                for (int j = 0; j < copyOfPool.Count; j++)
                 {
                     if (randomNum < copyOfPool[j].weigth + aux)
                     {
@@ -98,7 +100,6 @@ namespace Utils
                 listToRet.Add(copyOfPool[indexItemSelected].gameObject);
                 if (removeOnceSelected)
                 {
-             
                     copyOfPool.RemoveAt(indexItemSelected);
                 }
             }

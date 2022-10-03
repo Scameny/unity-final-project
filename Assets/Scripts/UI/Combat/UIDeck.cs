@@ -91,6 +91,7 @@ namespace UI.Combat
             foreach(Transform card in transform)
             {
                 card.position = transform.position + new Vector3(count * overlap, 0,0);
+                card.rotation = Quaternion.identity;
                 count++;
             }
         }

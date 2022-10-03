@@ -16,13 +16,11 @@ namespace GameManagement.HeroGenerator
 {
     public class HeroGenerator : MonoBehaviour
     {
-        [ValueDropdown("CustomAddClassesButton", IsUniqueList = true, DrawDropdownForListElements = false, DropdownTitle = "StartingItems")]
+        [ValueDropdown("CustomAddClassesButton", DrawDropdownForListElements = false, DropdownTitle = "Classes")]
         [ListDrawerSettings(DraggableItems = false, Expanded = true)]
-        [SerializeField] List<HeroInitialVariables> heroVariables = new List<HeroInitialVariables>();
+        [SerializeField] List<PoolObject<HeroDataForGenerator>> possibleHeroes = new List<PoolObject<HeroDataForGenerator>>();
         [SerializeField] List<GameObject> heroFrames;
 
-        List<Item> items;
-        List<BaseBuff> traits;
 
         public static HeroGenerator Instance;
 
@@ -43,36 +41,12 @@ namespace GameManagement.HeroGenerator
         [Button]
         private void GenerateHeroes()
         {
-            List<PlayerClass> allClasses = new List<PlayerClass>(Resources.FindObjectsOfTypeAll<PlayerClass>());
-            List<PlayerClass> heroClasses = new List<PlayerClass>();
-            for (int i = 0; i < heroFrames.Count; i++)
-            {
-                heroClasses.Add(allClasses[UnityEngine.Random.Range(0, allClasses.Count)]);
-            }
+            List<HeroDataForGenerator> heroes = UtilsClass.instance.GetListFromPool(possibleHeroes, 3, true);
 
             int count = 0;
-            foreach (var heroClass in heroClasses)
+            foreach (var hero in heroes)
             {
-                HeroInitialVariables heroInitialVariables = heroVariables.Find(h => h.GetHeroClass().Equals(heroClass));
-                int numOfItems = UnityEngine.Random.Range(0, heroInitialVariables.GetMaxNumOfItems() + 1);
-                if (numOfItems > 0)
-                {
-                    items = UtilsClass.instance.GetListFromPool(heroInitialVariables.GetItems(), numOfItems, true);
-                } 
-                else
-                {
-                    items = new List<Item>();
-                }
-                int numOfTraits = UnityEngine.Random.Range(0, heroInitialVariables.GetMaxNumOfTraits() + 1);
-                if (numOfTraits > 0)
-                {
-                    traits = UtilsClass.instance.GetListFromPool(heroInitialVariables.GetBaseTraits(), numOfTraits, true);
-                }
-                else
-                {
-                    traits = new List<BaseBuff>();
-                }
-                heroFrames[count].GetComponent<UIHeroSelectionFrame>().SetVariables(items, traits, heroClass, heroInitialVariables.GetSprite(), heroInitialVariables.GetPrefab());
+                heroFrames[count].GetComponent<UIHeroSelectionFrame>().SetVariables(hero.GetItems(), hero.GetBaseTraits(), hero.GetHeroClass(), hero.GetSprite(), hero.GetPrefab());
                 count++;
             }
         }
@@ -100,39 +74,36 @@ namespace GameManagement.HeroGenerator
         {
             List<PlayerClass> allClasses = new List<PlayerClass>(Resources.FindObjectsOfTypeAll<PlayerClass>());
             return allClasses
-                .Except(heroVariables.Select(x => x.GetHeroClass()))
-                .Select(x => new HeroInitialVariables(x))
-                .AppendWith(this.heroVariables)
-                .Select(x => new ValueDropdownItem(x.GetHeroClass().ToString(), x));
+                .Select(x => new PoolObject<HeroDataForGenerator>(0, new HeroDataForGenerator(x)))
+                .AppendWith(this.possibleHeroes)
+                .Select(x => new ValueDropdownItem(x.gameObject.GetHeroClass().ToString(), x));
         }
 
 
         [Serializable]
-        class HeroInitialVariables
+        class HeroDataForGenerator
         {
-            public HeroInitialVariables(PlayerClass heroClass)
+            public HeroDataForGenerator(PlayerClass heroClass)
             {
                 this.heroClass = heroClass;
             }
 
             [SerializeField] PlayerClass heroClass;
-            [SerializeField] int maxNumOfItems;
             [SerializeField] Sprite sprite;
             [SerializeField] GameObject prefab;
-            [SerializeField] List<PoolObject<Item>> items = new List<PoolObject<Item>>();
-            [SerializeField] int maxNumOfTraits;
-            [SerializeField] List<PoolObject<BaseBuff>> baseTraits = new List<PoolObject<BaseBuff>>();
+            [SerializeField] List<Item> items = new List<Item>();
+            [SerializeField] List<BaseBuff> baseTraits = new List<BaseBuff>();
 
             public PlayerClass GetHeroClass()
             {
                 return heroClass;
             }
-            public List<PoolObject<Item>> GetItems()
+            public List<Item> GetItems()
             {
                 return items;
             }
             
-            public List<PoolObject<BaseBuff>> GetBaseTraits()
+            public List<BaseBuff> GetBaseTraits()
             {
                 return baseTraits;
             }
@@ -140,16 +111,6 @@ namespace GameManagement.HeroGenerator
             public Sprite GetSprite()
             {
                 return sprite;
-            }
-
-            public int GetMaxNumOfItems()
-            {
-                return maxNumOfItems;
-            }
-
-            public int GetMaxNumOfTraits()
-            {
-                return maxNumOfTraits;
             }
 
             public GameObject GetPrefab()

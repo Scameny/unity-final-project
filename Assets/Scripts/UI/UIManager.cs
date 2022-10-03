@@ -19,10 +19,6 @@ namespace UI
         private void Awake()
         {
             manager = this;
-        }
-
-        private void Start()
-        {
             tooltipStyle = Resources.Load<SimpleTooltipStyle>("UI/TooltipStyle");
         }
 
@@ -59,6 +55,8 @@ namespace UI
 
         public SimpleTooltipStyle GetTooltipStyle()
         {
+            if (tooltipStyle == null)
+                tooltipStyle = Resources.Load<SimpleTooltipStyle>("UI/TooltipStyle");
             return tooltipStyle;
         }
     }

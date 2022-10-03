@@ -6,6 +6,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Character.Buff
@@ -81,7 +82,7 @@ namespace Character.Buff
             foreach (var key in keys)
             {
                 BaseBuff buff = currentBuffs[key].buff;
-                if (RemoveBuff(key))
+                if (!buff.IsTrait() && RemoveBuff(key))
                 {
                     toRet.Add(new TraitCombatSignalData(GameSignal.REMOVE_TRAIT, user, charactersInCombat, buff));
                 }
@@ -91,9 +92,8 @@ namespace Character.Buff
 
         public List<SignalData> ReduceTurnInTemporaryBuffs(GameObject user, IEnumerable<GameObject> charactersInCombat)
         {
-            List<string> keys = new List<string>(currentBuffs.Keys);
             List<SignalData> toRet = new List<SignalData>();
-            foreach (var key in keys)
+            foreach (var key in currentBuffs.Keys.ToList())
             {
                 if (currentBuffs[key].buff.IsTemporary())
                 {
@@ -106,6 +106,16 @@ namespace Character.Buff
                             toRet.Add(new TraitCombatSignalData(GameSignal.REMOVE_TRAIT, gameObject, charactersInCombat, buffInfo.buff));
                     }
                 }
+            }
+            return toRet;
+        }
+
+        public List<BaseBuff> GetTraits()
+        {
+            List<BaseBuff> toRet = new List<BaseBuff>();
+            foreach (var key in currentBuffs.Keys.ToList())
+            {
+                toRet.Add(currentBuffs[key].buff);
             }
             return toRet;
         }
