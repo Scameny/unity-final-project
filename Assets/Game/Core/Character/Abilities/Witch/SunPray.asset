@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c948812536d4a4b9ded0590b3d76d1, type: 3}
+  m_Name: SunPray
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: targetingStrategy
+      Entry: 7
+      Data: 0|Strategies.TargetingStrategies.SelfUseTargeting, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: resourceCosts
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[CardSystem.ResourceCost, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: CardSystem.ResourceCost, Assembly-CSharp
+    - Name: resourceType
+      Entry: 3
+      Data: 5
+    - Name: amount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  sprite: {fileID: 21300000, guid: 6cd6e4616daef7149ab309c6f9cf3f57, type: 3}
+  Name: Sun pray
+  description: Buff the player with +2 of nature damage for 1 turn. Gives 10 sun
+    energy points.
+  animationType: 1
+  abilityType: 5
+  filterStrategiesList:
+    filterStrategies: []
+  effectStrategiesList:
+    effectStrategies:
+    - id: 0
+    - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: ApplyBuffEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 2
+        trait:
+          name: Sun pray
+          temporary: 1
+          turns: 1
+          icon: {fileID: 21300000, guid: 6cd6e4616daef7149ab309c6f9cf3f57, type: 3}
+          maxStacks: 1
+          description: Gives +4 of nature damage
+          trait: 0
+          statList:
+            stats: []
+          secondaryStatList:
+            stats:
+            - statType: 11
+              amount: 2
+          cards: []
+          passiveList: []
+    00000001:
+      type: {class: ResourceGainEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 2
+        resourceType: 5
+        amount: 10
+    00000002:
+      type: {class: , ns: , asm: }

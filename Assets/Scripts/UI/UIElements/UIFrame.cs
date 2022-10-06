@@ -33,7 +33,7 @@ namespace UI.UIElements
             }
         }
 
-        void Start()
+        void Awake()
         {
             disposable = UIManager.manager.Subscribe(this);
         }

@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: targetingStrategy
       Entry: 7
-      Data: 0|SelfUseTargeting, Assembly-CSharp
+      Data: 0|Strategies.TargetingStrategies.SelfUseTargeting, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 

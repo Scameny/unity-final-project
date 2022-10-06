@@ -1,0 +1,113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72c948812536d4a4b9ded0590b3d76d1, type: 3}
+  m_Name: LunarRitual
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: targetingStrategy
+      Entry: 7
+      Data: 0|Strategies.TargetingStrategies.SelfUseTargeting, Assembly-CSharp
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: resourceCosts
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[CardSystem.ResourceCost, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: CardSystem.ResourceCost, Assembly-CSharp
+    - Name: resourceType
+      Entry: 3
+      Data: 4
+    - Name: amount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  sprite: {fileID: 21300000, guid: 97d883871e0c31a40b63f20fff00a957, type: 3}
+  Name: Lunar ritual
+  description: Avoid the next offensive spell used on the user and gives 10 lunar
+    points.
+  animationType: 1
+  abilityType: 5
+  filterStrategiesList:
+    filterStrategies: []
+  effectStrategiesList:
+    effectStrategies:
+    - id: 0
+    - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: ApplyBuffEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 2
+        trait:
+          name: Lunar ritual
+          temporary: 0
+          turns: 0
+          icon: {fileID: 21300000, guid: 97d883871e0c31a40b63f20fff00a957, type: 3}
+          maxStacks: 1
+          description: Avoid the next offensive spell used on the user.
+          trait: 0
+          statList:
+            stats: []
+          secondaryStatList:
+            stats:
+            - statType: 0
+              amount: 999
+            - statType: 1
+              amount: 999
+            - statType: 2
+              amount: 999
+            - statType: 3
+              amount: 999
+            - statType: 4
+              amount: 999
+            - statType: 5
+              amount: 999
+          cards: []
+          passiveList:
+          - passiveAbility: {fileID: 11400000, guid: 76f0e29a24da1e940ab9cb671b18c8c9, type: 2}
+    00000001:
+      type: {class: ResourceGainEffect, ns: Strategies.EffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 3
+        resourceType: 4
+        amount: 10
+    00000002:
+      type: {class: TargetSpellAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
+      data:
+        particles: {fileID: 5555700961651305609, guid: 8a6fe09790452bc4b8de8ec258f851d2, type: 3}
+    00000003:
+      type: {class: , ns: , asm: }

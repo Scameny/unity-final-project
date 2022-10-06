@@ -21,7 +21,7 @@ namespace Character.Character
 
         [TabGroup("Gear")]
         [HideLabel]
-        [SerializeField] protected Gear gear;
+        [SerializeField] Gear gear;
 
 
         override protected void Start()
@@ -111,9 +111,9 @@ namespace Character.Character
         public void AddExp(float expEarned)
         {
             exp += expEarned;
-            if (level == ((PlayerClass)characterClass).GetMaxLevel())
+            if (level == (GetClass() as PlayerClass).GetMaxLevel())
                 return;
-            int expNeededToLvlUp = ((PlayerClass)characterClass).GetExpForNextLevel(level + 1);
+            int expNeededToLvlUp = (GetClass() as PlayerClass).GetExpForNextLevel(level + 1);
             if (expNeededToLvlUp < exp)
             {
                 exp -= expNeededToLvlUp;
@@ -128,13 +128,13 @@ namespace Character.Character
             toRet.Add(new SignalData(GameSignal.LEVEL_UP));
             foreach (var item in resources)
             {
-                toRet.Add(new ResourceSignalData(GameSignal.MAX_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.maxResource));
-                toRet.Add(new ResourceSignalData(GameSignal.OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY, gameObject, item.resourceType, characterClass.GetMaxResourceAmount(level, item.resourceType), item.currentAmount));
-                item.maxResource = characterClass.GetMaxResourceAmount(level, item.resourceType);
-                item.currentAmount = characterClass.GetMaxResourceAmount(level, item.resourceType);
+                toRet.Add(new ResourceSignalData(GameSignal.MAX_RESOURCE_MODIFY, gameObject, item.resourceType, GetClass().GetMaxResourceAmount(level, item.resourceType), item.maxResource));
+                toRet.Add(new ResourceSignalData(GameSignal.OUT_OF_COMBAT_CURRENT_RESOURCE_MODIFY, gameObject, item.resourceType, GetClass().GetMaxResourceAmount(level, item.resourceType), item.currentAmount));
+                item.maxResource = GetClass().GetMaxResourceAmount(level, item.resourceType);
+                item.currentAmount = GetClass().GetMaxResourceAmount(level, item.resourceType);
             }
-            AddAbilityCards(characterClass.GetAbilitiesOnLevel(level));
-            AddPassiveAbilities(characterClass.GetPassiveAbilitiesOnLevel(level));
+            AddAbilityCards(GetClass().GetAbilitiesOnLevel(level));
+            AddPassiveAbilities(GetClass().GetPassiveAbilitiesOnLevel(level));
             SendSignalData(toRet, true);
         }
         #endregion
@@ -201,6 +201,15 @@ namespace Character.Character
             return inventory.GetCurrentCoins();
         }
 
+
+        #endregion
+
+        #region
+
+        public int GetLevel()
+        {
+            return level;
+        }
 
         #endregion
 

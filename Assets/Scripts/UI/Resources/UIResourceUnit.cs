@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.CharacterResources
 {
-    public class ResourceUnit : MonoBehaviour, IObserver<SignalData>
+    public class UIResourceUnit : MonoBehaviour, IObserver<SignalData>
     {
         public ResourceType resourceType;
 
@@ -21,13 +21,10 @@ namespace UI.CharacterResources
         {
             resourceSlider = GetComponentInChildren<Slider>();
             textElement = transform.Find("ResourceUnit").GetComponentInChildren<TextMeshProUGUI>();
+            disposable = UIManager.manager.Subscribe(this);
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<DefaultCharacter>();
         }
 
-        private void Start()
-        {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<DefaultCharacter>();
-            disposable = UIManager.manager.Subscribe(this);
-        }
 
         public void OnCompleted()
         {
@@ -43,9 +40,17 @@ namespace UI.CharacterResources
         {
             if (value.signal.Equals(GameSignal.START_GAME))
             {
-                resourceSlider.maxValue = player.GetMaxValueOfResource(resourceType);
-                resourceSlider.value = player.GetCurrentResource(resourceType);
-                textElement.text = resourceSlider.value.ToString() + "/" + resourceSlider.maxValue.ToString();
+                if (player.HasResource(resourceType))
+                {
+                    gameObject.SetActive(true);
+                    resourceSlider.maxValue = player.GetMaxValueOfResource(resourceType);
+                    resourceSlider.value = player.GetCurrentResource(resourceType);
+                    textElement.text = resourceSlider.value.ToString() + "/" + resourceSlider.maxValue.ToString();
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
             }
             else if (value.signal.Equals(GameSignal.RESOURCE_MODIFY) && (value as CombatResourceSignalData).user.Equals(player.gameObject) &&
                 (value as CombatResourceSignalData).resourceType.Equals(resourceType))
@@ -63,6 +68,10 @@ namespace UI.CharacterResources
             {
                 resourceSlider.maxValue = player.GetMaxValueOfResource(resourceType);
                 textElement.text = resourceSlider.value.ToString() + "/" + resourceSlider.maxValue.ToString();
+            }
+            else if (value.signal.Equals(GameSignal.ADD_RESOURCE) || value.signal.Equals(GameSignal.REMOVE_RESOURCE))
+            {
+                gameObject.SetActive(player.HasResource(resourceType));
             }
         }
     }

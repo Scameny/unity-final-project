@@ -250,6 +250,11 @@ namespace Combat
             return hand;
         }
 
+        public CardSystem.Stack GetStack()
+        {
+            return stack;
+        }
+
         public void InitializeCardCotainers(Deck deck, Hand hand, CardSystem.Stack stack)
         {
             this.deck = deck;

@@ -22,7 +22,7 @@ namespace Strategies.PassiveEffectStrategies
             {
                 if ((passiveData as CombatCardSignalData).card.GetUsable().GetAbilityType().Equals(abilityType))
                 {
-                    BuffInfo traitInfo = passiveData.user.GetComponent<DefaultCharacter>().GetTrait(traitName);
+                    BuffInfo traitInfo = passiveData.user.GetComponent<DefaultCharacter>().GetBuff(traitName);
                     return passiveData.user.GetComponent<DefaultCharacter>().TakeDamage(traitInfo.stacks * damagePerStack, damageType);
                 }
             } 

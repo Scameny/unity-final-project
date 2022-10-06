@@ -59,7 +59,7 @@ namespace UI.Character
             {
                 resourceSlider.value = GetCharacter().GetCurrentResource(ResourceType.Health);
             }
-            else if (signalData.signal.Equals(GameSignal.CHARACTER_DIE) && (signalData as CombatResourceSignalData).user.Equals(GetCharacter().gameObject))
+            else if (signalData.signal.Equals(GameSignal.CHARACTER_DIE) && (signalData as CombatSignalData).user.Equals(GetCharacter().gameObject))
             {
                 OnCompleted();
             }

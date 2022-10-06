@@ -12,6 +12,11 @@ namespace Strategies.EffectStrategies
         [LabelWidth(120)]
         [SerializeField] public int healing;
 
+        public override int GetTotalHeal(GameObject user)
+        {
+            return healing;
+        }
+
         override protected List<SignalData> StartEffect(GameObject user, IEnumerable<GameObject> targets)
         {
             List<SignalData> signalDatas = new List<SignalData>();

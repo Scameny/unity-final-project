@@ -48,7 +48,8 @@ namespace UI.Combat
             if (cardUse.GetResourceCosts().Count > 0)
             {
                 //TODO add support to more than one resource cost
-                cost.GetComponentInChildren<TextMeshProUGUI>().text = cardUse.GetResourceCosts()[0].amount.ToString();
+                if (cardUse.GetResourceCosts()[0].amount > 0)
+                    cost.GetComponentInChildren<TextMeshProUGUI>().text = cardUse.GetResourceCosts()[0].amount.ToString();
                 // TODO add change of resource background depending on resource type
             }
         }
@@ -144,6 +145,12 @@ namespace UI.Combat
             AnimationQueue.Instance.EndAnimation();
         }
 
+        private IEnumerator ReinitializeCard(Usable cardUse, bool oneUse)
+        {
+            InitializeUICard(cardUse, oneUse);
+            yield return null;
+            AnimationQueue.Instance.EndAnimation();
+        }
 
         private bool CanInteract()
         {
@@ -214,11 +221,17 @@ namespace UI.Combat
                     && (value as CombatSignalData).user.Equals(card.GetUser()))
             {
                 AnimationQueue.Instance.AddAnimationToQueue(ActivateAuraCoroutine());
-            } 
+            }
+            else if (value.signal.Equals(GameSignal.CARD_EVOLVED) && (value as EvolveCardSignalData).cardToSwap.gameObject.Equals(gameObject))
+            {
+                EvolveCardSignalData data = value as EvolveCardSignalData;
+                AnimationQueue.Instance.AddAnimationToQueue(ReinitializeCard(data.swapCard, data.cardToSwap.IsOneUse()));
+            }
             else if (value.signal.Equals(GameSignal.END_COMBAT))
             {
                 disposable.Dispose();
-            }
+            } 
+            
         }
     }
 

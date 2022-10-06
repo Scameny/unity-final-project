@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d97ad759c03f1349ac7724eca524012, type: 3}
   m_Name: HeroData
   m_EditorClassIdentifier: 
-  heroClass: {fileID: 0}
+  prefab: {fileID: 9089602404094763275, guid: cdcd1dfe85a434f41ba15eec96dffdca, type: 3}
+  heroClass: {fileID: 11400000, guid: 945e505cd888ee447aeb99ba209064f4, type: 2}
   items: []
   traits: []

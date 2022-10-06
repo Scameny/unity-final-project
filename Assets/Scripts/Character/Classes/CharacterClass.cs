@@ -62,6 +62,10 @@ namespace Character.Classes
             return progression.GetResourceQuantityOnLevel(level, resourceType);
         }
 
+        public bool IsRechargeResource(ResourceType resourceType)
+        {
+            return progression.IsRechargeResource(resourceType);
+        }
         public string GetName()
         {
             return Name;

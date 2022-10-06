@@ -17,11 +17,11 @@ namespace Character.Character
 {
     public class DefaultCharacter : SerializedMonoBehaviour, ICardGiver
     {
-        [SerializeField] protected CharacterClass characterClass;
+        [SerializeField] CharacterClass characterClass;
 
-        protected Resource health;
+        Resource health;
 
-        protected Resource armor;
+        Resource armor;
 
         [TabGroup("General")]
         [SerializeField] protected List<Resource> resources = new List<Resource>();
@@ -153,15 +153,31 @@ namespace Character.Character
         {
             List<SignalData> toRet = new List<SignalData>();
             if (traits.RemoveBuff(trait.GetName()))
+            {
                 toRet.Add(new TraitCombatSignalData(GameSignal.REMOVE_TRAIT, gameObject, CombatManager.combatManager.GetCharactersInCombat(), trait));
-            toRet.AddRange(trait.GetSignalDatas(gameObject));
+                toRet.AddRange(trait.GetSignalDatas(gameObject));
+            }
             SendSignalData(toRet, sendUISignal);
             return toRet;
         }
 
-        public BuffInfo GetTrait(string traitName)
+        public List<SignalData> RemoveTrait(string buffName, bool sendUISignal = false)
         {
-            return traits.GetBuff(traitName);
+            List<SignalData> toRet = new List<SignalData>();
+            try
+            {
+                BaseBuff buffToRemove = traits.GetBuff(buffName).buff;
+                toRet.AddRange(RemoveTrait(buffToRemove, sendUISignal));
+            }
+            catch
+            {
+            }
+            return toRet;
+        }
+
+        public BuffInfo GetBuff(string traitBuff)
+        {
+            return traits.GetBuff(traitBuff);
         }
 
         #endregion
@@ -254,7 +270,7 @@ namespace Character.Character
             return toRet;
         }
 
-        protected void InitializeResources()
+        void InitializeResources()
         {
             health = new Resource();
             health.resourceType = ResourceType.Health;
@@ -266,21 +282,77 @@ namespace Character.Character
             armor.maxResource = 999;
             armor.currentAmount = 0;
             armor.temporaryResource = true;
+            List<SignalData> signals = new List<SignalData>();
             foreach (var item in characterClass.GetResourceTypes())
             {
-                Resource resource = new Resource();
-                resource.resourceType = item;
-                resource.maxResource = characterClass.GetMaxResourceAmount(level, item);
-                resource.currentAmount = resource.maxResource;
-                resources.Add(resource);
+                int maxResourceAmount = characterClass.GetMaxResourceAmount(level, item);
+                if (characterClass.IsRechargeResource(item))
+                    signals.AddRange(AddResource(item, maxResourceAmount));
+                else
+                    signals.AddRange(AddResource(item, maxResourceAmount, maxResourceAmount));
             }
+            SendSignalData(signals, true);
             resources.Add(health);
             resources.Add(armor);
         }
 
         public bool HaveEnoughResource(int resourceAmount, ResourceType resourceType)
         {
-            return GetResourceByResourceType(resourceType).currentAmount >= resourceAmount;
+            try
+            {
+                return GetResourceByResourceType(resourceType).currentAmount >= resourceAmount;
+            } 
+            catch (NotResourceTypeClassException)
+            {
+                return false;
+            }
+        }
+
+        public List<SignalData> RemoveResource(ResourceType resourceType, bool sendUISignal = false)
+        {
+            List<SignalData> toRet = new List<SignalData>();
+            foreach (var item in resources.ToList())
+            {
+                if (item.resourceType.Equals(resourceType))
+                {
+                    resources.Remove(item);
+                    toRet.Add(new SignalData(GameSignal.REMOVE_RESOURCE));
+                }
+            }
+            SendSignalData(toRet, sendUISignal);
+            return toRet;
+        }
+
+        public bool HasResource(ResourceType resourceType)
+        {
+            foreach (var item in resources.ToList())
+            {
+                if (item.resourceType.Equals(resourceType))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public List<SignalData> AddResource(ResourceType resourceType, int maxAmount, int initialAmount = 0, bool sendUISignal = false)
+        {
+            List<SignalData> toRet = new List<SignalData>();
+            foreach (var item in resources.ToList())
+            {
+                if (item.resourceType.Equals(resourceType))
+                {
+                    return toRet;
+                }
+            }
+            Resource resource = new Resource();
+            resource.resourceType = resourceType;
+            resource.maxResource = maxAmount;
+            resource.currentAmount = initialAmount;
+            resources.Add(resource);
+            toRet.Add(new SignalData(GameSignal.ADD_RESOURCE));
+            SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
 
 
@@ -295,6 +367,8 @@ namespace Character.Character
             Resource resource = GetResourceByResourceType(resourceType);
             resource.currentAmount += amount;
             resource.currentAmount = Mathf.Min(resource.currentAmount, resource.maxResource);
+            if (resource.currentAmount < 0)
+                resource.currentAmount = 0;
             SignalData resourceSignal = new CombatResourceSignalData(GameSignal.RESOURCE_MODIFY, gameObject, CombatManager.combatManager.GetCharactersInCombat(), resourceType, amount, resource.currentAmount);
             toRet.Add(resourceSignal);
             SendSignalData(toRet, sendUISignal);
@@ -455,11 +529,15 @@ namespace Character.Character
 
         #endregion
 
-
         #region setter y getters
         public List<Resource> GetResources()
         {
             return resources;
+        }
+
+        public CharacterClass GetClass()
+        {
+            return characterClass;
         }
         #endregion
     }

@@ -1,7 +1,6 @@
 using Abilities.Passive;
 using CardSystem;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities.Editor;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -79,6 +78,11 @@ namespace Character.Stats
                     yield return ability;
                 }
             }
+        }
+
+        public bool IsRechargeResource(ResourceType resourceType)
+        {
+            return baseStats.stats.IsRechargeResource(resourceType);
         }
 
         public int GetMaxResourceQuantity(int level, ResourceType resourceType)
@@ -205,6 +209,17 @@ namespace Character.Stats
                     yield return item.resourceType;
                 }
             }
+
+
+            public bool IsRechargeResource(ResourceType resourceType)
+            {
+                foreach (var item in resources)
+                {
+                    if (item.resourceType.Equals(resourceType))
+                        return item.rechargeResource;
+                }
+                return false;
+            }
         }
 
         [System.Serializable]
@@ -237,14 +252,17 @@ namespace Character.Stats
         [System.Serializable]
         public struct ResourceAmount
         {
-            public ResourceAmount(ResourceType resourceType)
+            public ResourceAmount(ResourceType resourceType, bool rechargeResource= false)
             {
                 this.resourceType = resourceType;
                 amount = 0;
+                this.rechargeResource = rechargeResource;
+                
             }
 
             public ResourceType resourceType;
             public int amount;
+            public bool rechargeResource;
         }
     }
 

@@ -1,6 +1,7 @@
 using GameManagement;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Combat
 { 
@@ -30,7 +31,7 @@ namespace Combat
 
         public void SendData(SignalData passiveData)
         {
-            foreach (var item in observers)
+            foreach (var item in observers.ToList())
             {
                 item.OnNext(passiveData);
             }

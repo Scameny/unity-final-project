@@ -17,7 +17,7 @@ namespace UI.Combat
 
         public void InitializeBuff(BaseBuff baseBuff, GameObject user)
         {
-            buffInfo = user.GetComponent<DefaultCharacter>().GetTrait(baseBuff.GetName());
+            buffInfo = user.GetComponent<DefaultCharacter>().GetBuff(baseBuff.GetName());
             this.user = user;
             transform.Find("Icon").GetComponent<Image>().sprite = buffInfo.buff.GetIcon();
             GetComponentInChildren<TextMeshProUGUI>().text = buffInfo.stacks.ToString();

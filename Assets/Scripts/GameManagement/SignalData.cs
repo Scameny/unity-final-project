@@ -63,7 +63,10 @@ namespace GameManagement
         DECK_INITIALIZE,
         SHUFFLE_DECK,
         CARD_CREATED,
-        SEND_TO_STACK
+        SEND_TO_STACK,
+        CARD_EVOLVED,
+        REMOVE_RESOURCE,
+        ADD_RESOURCE
     }
 
     public class SignalData
@@ -218,6 +221,18 @@ namespace GameManagement
         public ErrorSignalData(GameSignal signalType, List<string> parameters) : base(signalType)
         {
             this.parameters = parameters;
+        }
+    }
+
+    public class EvolveCardSignalData : SignalData
+    {
+        public Card cardToSwap;
+        public Usable swapCard;
+
+        public EvolveCardSignalData(GameSignal signalType, Card cardToSwap, Usable swapCard) : base(signalType)
+        {
+            this.cardToSwap = cardToSwap;
+            this.swapCard = swapCard;
         }
     }
 

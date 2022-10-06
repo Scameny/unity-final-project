@@ -24,12 +24,12 @@ namespace OdinEditor
             tree.Config.DrawSearchToolbar = true;
 
             tree.Selection.SupportsMultiSelect = false;
-            tree.AddAllAssetsAtPath("Player Classes", "Assets/Game/Resources/Character/Classes", typeof(PlayerClass), true);
-            tree.AddAllAssetsAtPath("Enemy Classes", "Assets/Game/Resources/Character/EnemiesClasses", typeof(NPCClass), true);
-            tree.AddAllAssetsAtPath("Abilities", "Assets/Game/Resources/Character/Abilities", typeof(Ability), true)
+            tree.AddAllAssetsAtPath("Player Classes", "Assets/Game/Core/Character/Classes", typeof(PlayerClass), true);
+            tree.AddAllAssetsAtPath("Enemy Classes", "Assets/Game/Core/Character/EnemiesClasses", typeof(NPCClass), true);
+            tree.AddAllAssetsAtPath("Abilities", "Assets/Game/Core/Character/Abilities", typeof(Ability), true)
                 .ForEach(this.AddDragHandles);
-            tree.AddAllAssetsAtPath("Items", "Assets/Game/Resources/Items", typeof(Item), true);
-            tree.AddAllAssetsAtPath("PassiveAbilities", "Assets/Game/Resources/Character/Abilities", typeof(PassiveAbility), true)
+            tree.AddAllAssetsAtPath("Items", "Assets/Game/Core/Items", typeof(Item), true);
+            tree.AddAllAssetsAtPath("PassiveAbilities", "Assets/Game/Core/Character/Abilities", typeof(PassiveAbility), true)
                 .ForEach(this.AddDragHandles);
 
             // Add icons to characters and items.

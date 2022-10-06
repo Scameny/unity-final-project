@@ -56,6 +56,12 @@ namespace CardSystem
             user.GetComponent<TurnCombat>().CardUsed(this);
         }
 
+       
+        public bool CanBeUsed()
+        {
+            return cardEffect.CanBeUsed(user.GetComponent<DefaultCharacter>());
+        }
+
         public IEnumerable<CardEffectType> GetCardEffect()
         {
             foreach (var item in cardEffect.GetCardEffectTypes())
@@ -64,11 +70,12 @@ namespace CardSystem
             }
         }
 
-        public bool CanBeUsed()
+        public void ReinitializeCard(Usable newCardUse)
         {
-            return cardEffect.CanBeUsed(user.GetComponent<DefaultCharacter>().GetResources());
+            cardEffect = newCardUse;
         }
 
+        #region getters and setters
         public List<ResourceCost> GetResourceCost()
         {
             return cardEffect.GetResourceCosts();
@@ -88,5 +95,7 @@ namespace CardSystem
         {
             return user;
         }
+
+        #endregion
     }
 }

@@ -6,6 +6,8 @@ namespace Character.Stats
         Health,
         Energy,
         Armor,
+        LunarPoints,
+        SunPoints,
 
         None
     }
