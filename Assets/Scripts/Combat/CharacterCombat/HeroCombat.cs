@@ -1,9 +1,9 @@
-using Character.Stats;
 using Character.Character;
 using CardSystem;
 using GameManagement;
 using UnityEngine;
 using System.Collections;
+using Animations;
 
 namespace Combat 
 {
@@ -17,7 +17,6 @@ namespace Combat
         private void Start()
         {
             InitializeCardCotainers(GameObject.Find("Deck").GetComponent<Deck>(), GameObject.Find("Hand").GetComponentInChildren<Hand>(), GameObject.Find("Stack").GetComponentInChildren<CardSystem.Stack>());
-            turnSpeed = character.GetStatistic(StatType.Agility);
         }
 
         public override void StartCombat()
@@ -50,6 +49,16 @@ namespace Combat
             base.CardUsed(card);
         }
 
+        protected override void StartOfTurn()
+        {
+            StartCoroutine(StartOfTurnCoroutine());
+        }
+
+        IEnumerator StartOfTurnCoroutine()
+        {
+            yield return new WaitUntil(() => !AnimationQueue.Instance.DoingAnimations());
+            base.StartOfTurn();
+        }
     }
 
 }

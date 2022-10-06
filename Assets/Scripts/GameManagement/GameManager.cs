@@ -37,6 +37,10 @@ namespace GameManagement
             StartGame();
         }
 
+
+
+        #region Room operations
+
         public void EnableSelectorInCurrentRoom(bool enable)
         {
             if (currentRoom.GetRoomType().Equals(RoomType.InteractionRoom))
@@ -44,25 +48,6 @@ namespace GameManagement
                 (currentRoom as NpcRoomManager).EnableSelectors(enable);
             }
         }
-
-        #region
-
-        [Button]
-        public void StartGame()
-        {
-            floorGenerator.GenerateFloor(8, roomPoolToTest);
-            currentGameState = GameState.Moving;
-            currentRoom = floorGenerator.GetBaseRoom();
-            currentRoom.EnterOnRoom(player);
-            UIManager.manager.SendData(new SignalData(GameSignal.START_GAME));
-        }
-
-        
-
-        #endregion
-
-
-        #region Room operations
         public void GoToRoom(Direction dir)
         {
             currentRoom = floorGenerator.GetRoom(currentRoom, dir);
@@ -80,9 +65,31 @@ namespace GameManagement
         #endregion
 
         #region GameState operations
+
+        private void EndGame()
+        {
+            OpenMenu();
+            UIManager.manager.SendData(new SignalData(GameSignal.END_GAME));
+        }
+
+        [Button]
+        public void StartGame()
+        {
+            floorGenerator.GenerateFloor(8, roomPoolToTest);
+            currentGameState = GameState.Moving;
+            currentRoom = floorGenerator.GetBaseRoom();
+            currentRoom.EnterOnRoom(player);
+            UIManager.manager.SendData(new SignalData(GameSignal.START_GAME));
+        }
+
+
         public void EndCombat()
         {
             currentGameState = GameState.Moving;
+            if (currentRoom.GetRoomType().Equals(RoomType.BossRoom))
+            {
+                EndGame();
+            }
         }
 
         public void StartCombat()

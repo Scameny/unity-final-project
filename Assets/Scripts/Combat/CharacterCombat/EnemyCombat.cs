@@ -6,6 +6,7 @@ using UI;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Animations;
 
 namespace Combat
 {
@@ -27,7 +28,6 @@ namespace Combat
         {
             InitializeCardCotainers(GetComponentInChildren<Deck>(), GetComponentInChildren<Hand>(), GetComponentInChildren<CardSystem.Stack>());
             player = GameObject.FindGameObjectWithTag("Player");
-            turnSpeed = character.GetStatistic(StatType.Agility);
         }
 
         // Update is called once per frame
@@ -249,7 +249,7 @@ namespace Combat
                         cardsQueue.Dequeue();
                 }
             }
-            yield return new WaitUntil(() => nextCardToPlay == null);
+            yield return new WaitUntil(() => !AnimationQueue.Instance.DoingAnimations());
             EndOfTurn();
         }
 

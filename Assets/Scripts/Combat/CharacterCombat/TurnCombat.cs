@@ -4,6 +4,7 @@ using Character.Character;
 using CardSystem;
 using GameManagement;
 using System.Collections.Generic;
+using Character.Stats;
 
 namespace Combat
 {
@@ -23,10 +24,11 @@ namespace Combat
 
         protected DefaultCharacter character;
 
-        protected float turnSpeed;
         protected float turnTime;
         protected bool stopTurn;
         bool yourTurn;
+        float turnSpeed;
+
 
 
         virtual public void StartCombat()
@@ -51,10 +53,18 @@ namespace Combat
         {
         }
 
-        public DefaultCharacter GetCharacter()
+        public void InitializeCardCotainers(Deck deck, Hand hand, CardSystem.Stack stack)
         {
-            return character;
+            this.deck = deck;
+            this.hand = hand;
+            this.stack = stack;
         }
+
+        public float GetTurnSpeed()
+        {
+            return Mathf.Max(1, character.GetStatistic(StatType.Agility)) * CombatManager.combatManager.GetCombatSpeed();
+        }
+
 
         #region Card operations
         void InitDeck()
@@ -198,7 +208,6 @@ namespace Combat
 
         virtual protected void StartOfTurn()
         {
-            CombatManager.combatManager.PauseCombat();
             character.SendSignalData(new CombatSignalData(GameSignal.START_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
             EvaluateBuffs();
             DrawCard(1, true);
@@ -222,10 +231,11 @@ namespace Combat
                 {
                     if (turnTime < 100.0)
                     {
-                        turnTime += turnSpeed;
+                        turnTime += GetTurnSpeed();
                     }
                     else if (!CombatManager.combatManager.IsTurnPaused())
                     {
+                        CombatManager.combatManager.PauseCombat();
                         StartOfTurn();
                     }
                 }
@@ -235,9 +245,14 @@ namespace Combat
         }
         #endregion
 
+        #region Getters and setters
         public bool IsYourTurn()
         {
             return yourTurn;
+        }
+        public DefaultCharacter GetCharacter()
+        {
+            return character;
         }
 
         public Deck GetDeck()
@@ -255,11 +270,7 @@ namespace Combat
             return stack;
         }
 
-        public void InitializeCardCotainers(Deck deck, Hand hand, CardSystem.Stack stack)
-        {
-            this.deck = deck;
-            this.hand = hand;
-            this.stack = stack;
-        }
+        #endregion
+
     }
 }

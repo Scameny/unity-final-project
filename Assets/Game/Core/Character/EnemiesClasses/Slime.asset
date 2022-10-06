@@ -24,11 +24,14 @@ MonoBehaviour:
         resources:
         - resourceType: 2
           amount: 8
+          rechargeResource: 0
         abilities:
         - usable: {fileID: 11400000, guid: dc788ccf9ad61554d8f081d65a11d63e, type: 2}
-          quantity: 3
+          quantity: 2
         - usable: {fileID: 11400000, guid: 166c469d5033da24c8f68360fcf91c42, type: 2}
-          quantity: 5
+          quantity: 4
+        - usable: {fileID: 11400000, guid: 8346a835b499eff428232fa46615c13d, type: 2}
+          quantity: 3
         passives: []
       maxCards: 3
     progression:

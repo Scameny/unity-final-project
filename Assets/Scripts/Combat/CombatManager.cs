@@ -20,10 +20,10 @@ namespace Combat
         public List<GameObject> enemiesForTest = new List<GameObject>();
 
         [SerializeField] float timeToResumeCombat = 0.5f;
+        [SerializeField] float combatSpeed = 0.5f;
 
-        protected List<GameObject> enemies = new List<GameObject>();
-        protected List<GameObject> charactersInCombat = new List<GameObject>();
-
+        List<GameObject> enemies = new List<GameObject>();
+        List<GameObject> charactersInCombat = new List<GameObject>();
         bool turnPaused;
         List<Item> itemsStored = new List<Item>();
         int expStored;
@@ -64,13 +64,13 @@ namespace Combat
 
         private IEnumerator EndCombatCoroutine()
         {
-            yield return new WaitUntil(() => AnimationQueue.Instance.DoingAnimations());
+            yield return new WaitUntil(() => !AnimationQueue.Instance.DoingAnimations());
             UIManager.manager.SendData(new SignalData(GameSignal.END_COMBAT));
-            GameManager.gm.EndCombat();
             player.GetComponent<TurnCombat>().EndCombat();
             charactersInCombat.Clear();
             ((Hero)player.GetCharacter()).AddExp(expStored);
             ((Hero)player.GetCharacter()).AddItems(itemsStored);
+            GameManager.gm.EndCombat();
         }
 
 
@@ -123,8 +123,20 @@ namespace Combat
 
         public void HeroDeath()
         {
-            // Lose
+
+            StartCoroutine(HeroDeathCoroutine());
             GameDebug.Instance.Log(Color.red, "You lose");
+        }
+        
+        private IEnumerator HeroDeathCoroutine()
+        {
+            yield return new WaitUntil(() => !AnimationQueue.Instance.DoingAnimations());
+            foreach (GameObject character in charactersInCombat)
+            {
+                character.GetComponent<TurnCombat>().EndCombat();
+            }
+            charactersInCombat.Clear();
+            UIManager.manager.SendData(new SignalData(GameSignal.END_COMBAT));
         }
 
         public List<GameObject> GetCharactersInCombat()
@@ -154,6 +166,11 @@ namespace Combat
         #endregion
 
         #region Getters
+
+        public float GetCombatSpeed()
+        {
+            return combatSpeed;
+        }
 
         #endregion
 

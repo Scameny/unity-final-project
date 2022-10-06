@@ -204,7 +204,7 @@ namespace Character.Character
 
         #endregion
 
-        #region
+        #region Getters and setters
 
         public int GetLevel()
         {

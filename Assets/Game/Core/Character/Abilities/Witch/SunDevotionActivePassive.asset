@@ -30,7 +30,6 @@ MonoBehaviour:
     effectStrategies:
     - id: 1
     - id: 2
-    - id: 3
   references:
     version: 1
     00000000:
@@ -43,7 +42,7 @@ MonoBehaviour:
       type: {class: EvolveCardsPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
       data:
         spellAnimation:
-          id: 4
+          id: 3
         cardSwaps:
         - baseCard: {fileID: 11400000, guid: c601adce1d0b29545962749a40332669, type: 2}
           improvedCard: {fileID: 11400000, guid: e023687f0e6c0ca4298d12b8634ba428, type: 2}
@@ -52,17 +51,10 @@ MonoBehaviour:
         - baseCard: {fileID: 11400000, guid: 4247f7571966d074fb31a1ac120ecb6a, type: 2}
           improvedCard: {fileID: 11400000, guid: 9c60b37a97e9d354bad9f7b63d1a2681, type: 2}
     00000002:
-      type: {class: ResourceTypeAddPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
-      data:
-        spellAnimation:
-          id: 4
-        resourceType: 4
-        initialAmount: 0
-    00000003:
       type: {class: RemoveBuffPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
       data:
         spellAnimation:
-          id: 4
+          id: 3
         buffName: Sun devotion
-    00000004:
+    00000003:
       type: {class: , ns: , asm: }

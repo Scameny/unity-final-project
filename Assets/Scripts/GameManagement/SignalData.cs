@@ -66,7 +66,8 @@ namespace GameManagement
         SEND_TO_STACK,
         CARD_EVOLVED,
         REMOVE_RESOURCE,
-        ADD_RESOURCE
+        ADD_RESOURCE,
+        END_GAME
     }
 
     public class SignalData

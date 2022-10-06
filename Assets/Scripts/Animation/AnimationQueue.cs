@@ -42,7 +42,7 @@ namespace Animations
 
         public bool DoingAnimations()
         {
-            return (queue.Count == 0 && animationCoroutine == null);
+            return (queue.Count > 0 || animationCoroutine != null);
         }
     }
 
