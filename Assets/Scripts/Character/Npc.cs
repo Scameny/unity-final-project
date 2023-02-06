@@ -3,31 +3,33 @@ using Character.Reward;
 using System.Collections.Generic;
 using Items;
 using CardSystem;
+using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace Character.Character
 {
     public class Npc : DefaultCharacter {
 
-        public NpcReward reward;
+        [SerializeField] NpcReward reward;
+        [MinValue(0.1), MaxValue(1.0)]
+        [SerializeField] float iaPercentageForHealing = 0.2f;
 
         public bool isDead { get; private set; }
 
-        private void Start()
+        override protected void Start()
         {
-            currentHealth = GetStatistic(StatType.Health);
-            maxHealth = currentHealth;
+            base.Start();
+            LoadAbilities();
         }
 
-        override public float GetStatistic(StatType type)
+        override public int GetStatistic(StatType type)
         {
-            // Falta añadir traits
-            return characterClass.GetStatistic(type, level) + gear.GetAdditiveModifier(type);
+            return base.GetStatistic(type);
         }
 
-        override public float GetSecondaryStatistic(DamageTypeStat type)
+        override public int GetSecondaryStatistic(DamageTypeStat type)
         {
-            // Falta añadir traits
-            return gear.GetAdditiveModifier(type);
+            return base.GetSecondaryStatistic(type);
         }
 
         public int GetRewardExp()
@@ -39,5 +41,27 @@ namespace Character.Character
         {
             return reward.GetLoot();
         }
+
+        public void LoadAbilities()
+        {
+
+            foreach (var item in GetAllClassAbilitiesAvaliable())
+            {
+                permanentCards.Add(item);
+            }
+            foreach (var item in GetClassPasiveAbilitiesAvaliable())
+            {
+                permanentPassiveAbilities.Add(item);
+            }
+        }
+
+        #region Getters
+
+        public float GetIAPercentageForHealing()
+        {
+            return iaPercentageForHealing;
+        }
+
+        #endregion
     }
 }

@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f86dc407779b94f99d34113e9a1e3a, type: 3}
+  m_Name: FireSoul
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  sprite: {fileID: 21300000, guid: 8ec5b52b09d90074a83d61c1334190f9, type: 3}
+  Name: Fire soul
+  description: Every time you use a fire spell you gain one stack of Fire soul and
+    deals 2 damage * per stack to the user (Max 5 stacks). Each stack also amplifies
+    your fire damage doing + 5 fire damage
+  signalDecoderStrategy:
+    id: 0
+  passiveEffectStrategyList:
+    effectStrategies:
+    - id: 1
+    - id: 2
+  references:
+    version: 1
+    00000000:
+      type: {class: SingleSignalEvaluation, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
+      data:
+        passiveSignal: 5
+    00000001:
+      type: {class: FlatDamagePerStackDebuffEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 3
+        traitName: Fire soul
+        damagePerStack: 2
+        damageType: 1
+        abilityType: 1
+    00000002:
+      type: {class: StackBuffEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 4
+        buff:
+          name: Fire soul
+          temporary: 0
+          turns: 0
+          icon: {fileID: 21300000, guid: 8ec5b52b09d90074a83d61c1334190f9, type: 3}
+          maxStacks: 5
+          description: Every time you use a fire card you receive 2 damage per stack.
+            Each stack also gives +5 fire damage.
+          statList:
+            stats: []
+          secondaryStatList:
+            stats:
+            - statType: 7
+              amount: 5
+          cards: []
+          passiveList: []
+        abilityType: 1
+        noneAbilityTypeCount: 0
+    00000003:
+      type: {class: SelfPassiveEffectAnimation, ns: Animations.Ability, asm: Assembly-CSharp}
+      data:
+        particles: {fileID: 5555700961651305609, guid: 8a6fe09790452bc4b8de8ec258f851d2, type: 3}
+    00000004:
+      type: {class: , ns: , asm: }

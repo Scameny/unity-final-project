@@ -1,45 +1,63 @@
-using Combat;
-using Items;
+using GameManagement;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using UI.Character;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IObservable<SignalData>
     {
+
+        private List<IObserver<SignalData>> observers = new List<IObserver<SignalData>>();
+
         public static UIManager manager;
-        public GameObject combatMenu;
-        public GameObject characterMenu, inventory, openCharacterMenuButton, closeCharacterMenuButton;
+
+        SimpleTooltipStyle tooltipStyle;
 
         private void Awake()
         {
             manager = this;
+            tooltipStyle = Resources.Load<SimpleTooltipStyle>("UI/TooltipStyle");
         }
-
-        public void ActivateCombatUI(bool enable)
-        {
-            Debug.Log("Combat UI enabled: " + enable);
-            combatMenu.SetActive(enable);
-        }
-
 
         public void ChangeSceneToSelection(IEnumerable<GameObject> targets, bool selection)
         {
-            foreach(var character in targets)
+            foreach (var character in targets)
             {
-                character.GetComponent<TurnCombat>().selector.SetActive(selection);
+                character.GetComponentInChildren<CharacterUI>().EnableSelector(selection);
             }
         }
 
-        public void ActiveCharacterMenu(bool enable)
+        public IDisposable Subscribe(IObserver<SignalData> observer)
         {
-            characterMenu.SetActive(enable);
-            inventory.SetActive(enable);
-            openCharacterMenuButton.SetActive(!enable);
-            closeCharacterMenuButton.SetActive(enable);
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber(observers, observer);
         }
 
-    }
+        public void SendData(SignalData uiData)
+        {
+            foreach (var item in observers.ToList())
+            {
+                item.OnNext(uiData);
+            }
+        }
 
+        public void SendData(List<SignalData> listOfUIData)
+        {
+            foreach (var item in listOfUIData)
+            {
+                SendData(item);
+            }
+        }
+
+        public SimpleTooltipStyle GetTooltipStyle()
+        {
+            if (tooltipStyle == null)
+                tooltipStyle = Resources.Load<SimpleTooltipStyle>("UI/TooltipStyle");
+            return tooltipStyle;
+        }
+    }
 }

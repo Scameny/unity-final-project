@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CardSystem
@@ -8,16 +8,36 @@ namespace CardSystem
     {
         [SerializeField] protected List<Card> currentHand = new List<Card>();
 
-        virtual public void AddCard(Card card)
+        virtual public bool RemoveCard(Card card)
         {
-            currentHand.Add(card);
-            card.SetVisibility(true);
-            card.transform.SetParent(transform);
+            if (currentHand.Remove(card))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        public Card GetNextCard()
+        {
+            if (currentHand.Count > 0)
+            {
+                Card card = currentHand[currentHand.Count - 1];
+                return card;
+            }
+            throw new EmptyCardContainerException(GetType().Name);
         }
 
-        public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab)
+        public void AddCard(Card card)
         {
-            throw new System.NotImplementedException();
+            currentHand.Add(card);
+        }
+
+        public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
+        {
+            GameObject cardGameObject = Instantiate(cardPrefab, transform);
+            Card card = cardGameObject.GetComponent<Card>();
+            card.InitializeCard(cardUse, user, oneUse);
+            card.SetVisibility(true);
         }
 
         public int GetCurrentCardsNumber()
@@ -25,31 +45,36 @@ namespace CardSystem
             return currentHand.Count;
         }
 
-        virtual public Card RemoveCard(Card card)
+        public IEnumerable<Card> GetCards()
         {
-            if (currentHand.Remove(card))
+            foreach (var item in currentHand)
             {
-                card.SetVisibility(false);
-                return card;
+                yield return item;
             }
-            else
-                throw new NotValidOperationException("", GetType().Name);
         }
 
-        public Card GetNextCard()
+        public void ClearCards()
         {
-            Card card = currentHand[0];
-            return card;
+            foreach (var item in currentHand.ToList())
+            {
+                currentHand.Remove(item);
+                item.DestroyCard();
+            }
         }
 
-        virtual public bool UseCard(Card card)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Card RemoveNextCard()
+        public IEnumerable<Card> RemoveAllCards()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void AddCard(Card card, int index)
+        {
+            currentHand.Insert(index, card);
+        }
+
+        public int GetIndex(Card card)
+        {
+            return currentHand.IndexOf(card);
         }
     }
 

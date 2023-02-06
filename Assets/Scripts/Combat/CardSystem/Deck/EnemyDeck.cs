@@ -6,13 +6,7 @@ namespace CardSystem
 {
     public class EnemyDeck : Deck
     {
-        override public void RechargeDeck(List<Card> cards)
-        {
-            // Animation
-            currentDeck.Clear();
-            currentDeck.AddRange(cards);
-            currentDeck.Shuffle();
-        }
+
     }
 
 }

@@ -1,147 +1,197 @@
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine;
 using Character.Character;
 using CardSystem;
+using GameManagement;
 using System.Collections.Generic;
+using Character.Stats;
 
 namespace Combat
 {
     /// <summary>
     /// Class that should inherit every script that manage combat.
+    /// It's in charge of Card system in combat and turn base system
     /// When enabled, it starts the turn based system.
     /// </summary>
     public class TurnCombat : MonoBehaviour
     {
         [Header("Card management")]
-        [SerializeField] protected Deck deck;
-        [SerializeField] protected Hand hand;
-        [SerializeField] protected CardSystem.Stack stack;
+        Deck deck;
+        Hand hand;
+        CardSystem.Stack stack;
         public GameObject cardPrefab;
 
-        [Header("UI Elements")]
-        public Slider healthBar;
-        public GameObject selector;
 
-        [HideInInspector]
-        protected DefaultCharacter character = null;
-        
-        
-        protected bool prepared = false;
-        protected float turnSpeed;
+        protected DefaultCharacter character;
+
         protected float turnTime;
         protected bool stopTurn;
+        bool yourTurn;
+        float turnSpeed;
 
 
 
-        private void OnEnable()
+        virtual public void StartCombat()
         {
-            TurnPreparationStart();
-            EnableHealthBar(true);
             InitDeck();
             DrawInitialHand();
+            TurnPreparationStart();
+            character.ActivePassiveAbilities();
         }
 
-        private void OnDisable()
+        virtual public void EndCombat()
         {
-            EnableHealthBar(false);
-            TurnPreparationStop();
-            RefillPermanentDeck();
+            StopAllCoroutines();
+            character.ResetTemporaryResources();
+            character.DisposePassiveAbilities();
+            RemoveBuffs();
+            ClearCards();
         }
 
-        public DefaultCharacter GetCharacter()
+
+        virtual protected void Update()
         {
-            return character;
         }
 
-        #region Health operations
-        public void TakeDamage(float damage, DamageType type)
+        public void InitializeCardCotainers(Deck deck, Hand hand, CardSystem.Stack stack)
         {
-            character.TakeDamage(damage, type);
+            this.deck = deck;
+            this.hand = hand;
+            this.stack = stack;
         }
-        #endregion
+
+        public float GetTurnSpeed()
+        {
+            return Mathf.Max(1, character.GetStatistic(StatType.Agility)) * CombatManager.combatManager.GetCombatSpeed();
+        }
+
 
         #region Card operations
-        virtual protected void InitDeck()
+        void InitDeck()
         {
-            deck.InitDeck();
+            int count = 0;
+            List<SignalData> toRet = new List<SignalData>();
+            foreach (var item in character.GetUsableCards())
+            {
+                deck.CreateCard(gameObject, item, false, cardPrefab);
+                toRet.Add(new CombatCardSignalData(GameSignal.CARD_CREATED,gameObject, CombatManager.combatManager.GetCharactersInCombat(), deck.GetCardInIndex(count)));
+                count++;
+            }
+            deck.ShuffleDeck();
+            toRet.Add(new CardContainerSignalData(GameSignal.DECK_INITIALIZE, gameObject, deck, deck.GetCards()));
+            character.SendSignalData(toRet, true);
         }
 
-        public void DrawCard()
+        public List<SignalData> DrawCard(int numCards, bool sendUISignal = false)
         {
-            if (deck.GetCurrentCardsNumber() != 0)
+            List<SignalData> toRet = new List<SignalData>();
+            for (int i = 0; i < numCards; i++)
             {
-                Card card = deck.DrawCard();
-                hand.AddCard(card);
+                if (deck.GetCurrentCardsNumber() > 0)
+                {
+                    Card card = deck.DrawCard();
+                    if (hand.GetCurrentCardsNumber() < 10)
+                    {
+                        hand.AddCard(card);
+                        toRet.Add(new CombatCardSignalData(GameSignal.CARD_DRAWED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+                    }
+                    else
+                    {
+                        stack.AddCard(card);
+                    }
+                }
+                else
+                {
+                    toRet.AddRange(RechargeDeck(sendUISignal));
+                }
             }
-            else if (hand.GetCurrentCardsNumber() == 0)
-            {
-                RechargeDeck();
-            }
+            character.SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
-        private void RechargeDeck()
+
+        private List<SignalData> RechargeDeck(bool sendUISignal = false)
         {
-            List<Card> cards = new List<Card>();
-            while (stack.GetCurrentCardsNumber() > 0)
+            List<SignalData> toRet = new List<SignalData>();
+            foreach (var item in stack.RemoveAllCards())
             {
-                cards.Add(stack.RemoveNextCard());
+                deck.AddCard(item);
             }
-            deck.RechargeDeck(cards);
-            TurnPreparationResume();
+            toRet.Add(new CardContainerSignalData(GameSignal.RECHARGE_DECK, gameObject, deck, deck.GetCards()));
+            character.SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
 
         /// <summary>
         /// Send to the stack a card, wherever it is
         /// </summary>
         /// <param name="card">The card that is gonna be  sent to the stack</param>
-        public void SendToStack(Card card)
+        public List<SignalData> SendToStack(Card card, bool sendUISignal = false)
         {
+            List<SignalData> toRet = new List<SignalData>();
             card.transform.parent.GetComponent<ICardContainer>().RemoveCard(card);
             stack.AddCard(card);
+            toRet.Add(new CombatCardSignalData(GameSignal.SEND_TO_STACK, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card));
+            character.SendSignalData(toRet, sendUISignal);
+            return toRet;
         }
 
         /// <summary>
         /// Create a new card for the deck. If temporary is true, only for the current deck otherwise for both current and permanent deck
         /// </summary>
-        public void AddNewCardToDeck(IUsable usable, bool temporary)
+        public void AddNewCardToDeck(Usable usable, bool oneUse)
         {
-            deck.CreateCard(gameObject, usable, temporary, cardPrefab);
-        }
-
-        /// <summary>
-        /// Send all the permanent cards to the permanent deck.
-        /// </summary>
-        public void RefillPermanentDeck()
-        {
-            deck.RefillPermanentDeck();
+            deck.CreateCard(gameObject, usable, oneUse, cardPrefab);
         }
 
         protected void DrawInitialHand()
         {
-            for (int i = 0; i < character.GetMaxCardsInHand(); i++)
+            DrawCard(character.GetMaxCardsInHand(), true);
+        }
+
+        virtual public void CardUsed(Card card)
+        {
+            character.SendSignalData(new CombatCardSignalData(GameSignal.CARD_USED, gameObject, CombatManager.combatManager.GetCharactersInCombat(), card), true);
+            if (card.IsOneUse())
             {
-                Debug.Log("Robamos carta");
-                DrawCard();
+                card.DestroyCard();
+            }
+            else
+            {
+                SendToStack(card, true);
             }
         }
+
+        protected void ClearCards()
+        {
+            deck.ClearCards();
+            stack.ClearCards();
+            hand.ClearCards();
+        }
+
         #endregion
 
         #region Traits operation
-        protected void EvaluateTraits()
+
+        protected void RemoveBuffs()
         {
-            character.ReduceTurnInTemporaryTraits();
+            character.RemoveCombatBuffs();
+        }
+
+        protected void EvaluateBuffs()
+        {
+            character.ReduceTurnInTemporaryBuffs();
         }
         #endregion
 
         #region Turn management
-        public void TurnPreparationStart()
+        virtual public void TurnPreparationStart()
         {
             turnTime = 0.0f;
             stopTurn = false;
             StartCoroutine(nameof(TurnPreparation));
         }
 
-        public virtual void TurnPreparationResume()
+        public void TurnPreparationResume()
         {
             stopTurn = false;
         }
@@ -156,6 +206,22 @@ namespace Combat
             StopCoroutine(nameof(TurnPreparation));
         }
 
+        virtual protected void StartOfTurn()
+        {
+            character.SendSignalData(new CombatSignalData(GameSignal.START_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
+            EvaluateBuffs();
+            DrawCard(1, true);
+            yourTurn = true;
+            turnTime = 0;
+        }
+
+        virtual public void EndOfTurn()
+        {
+            character.SendSignalData(new CombatSignalData(GameSignal.END_TURN, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
+            yourTurn = false;
+            CombatManager.combatManager.ResumeCombat();
+        }
+
         protected IEnumerator TurnPreparation()
         {
             turnTime = 0;
@@ -165,36 +231,46 @@ namespace Combat
                 {
                     if (turnTime < 100.0)
                     {
-                        turnTime += turnSpeed;
+                        turnTime += GetTurnSpeed();
                     }
-                    else
+                    else if (!CombatManager.combatManager.IsTurnPaused())
                     {
-                        prepared = true;
-                        stopTurn = true;
-                        turnTime = 0;
+                        CombatManager.combatManager.PauseCombat();
+                        StartOfTurn();
                     }
                 }
-                yield return new WaitForSeconds(0.05f);                
+                yield return new WaitForSeconds(GameManager.gm.combatTurnWait);                
             }
             
         }
         #endregion
 
-        #region UI Management
-        protected void EnableHealthBar(bool enable)
+        #region Getters and setters
+        public bool IsYourTurn()
         {
-            healthBar.gameObject.SetActive(true);
+            return yourTurn;
+        }
+        public DefaultCharacter GetCharacter()
+        {
+            return character;
         }
 
-
-        protected void UpdateHealthBar()
+        public Deck GetDeck()
         {
-            healthBar.maxValue = character.GetMaxHealth();
-            healthBar.value = character.GetCurrentHealth();
+            return deck;
+        }
+
+        public Hand GetHand()
+        {
+            return hand;
+        }
+
+        public CardSystem.Stack GetStack()
+        {
+            return stack;
         }
 
         #endregion
 
     }
-
 }

@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f86dc407779b94f99d34113e9a1e3a, type: 3}
+  m_Name: SunDevotion
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  sprite: {fileID: 21300000, guid: 4a9d6f89033f6ea4bbbdf8dc8d498c39, type: 3}
+  Name: Sun devotion
+  description: 
+  signalDecoderStrategy:
+    id: 0
+  passiveEffectStrategyList:
+    effectStrategies:
+    - id: 1
+    - id: 2
+  references:
+    version: 1
+    00000000:
+      type: {class: ResourceModifySignalDecoder, ns: Strategies.SignalDecoderStrategy, asm: Assembly-CSharp}
+      data:
+        passiveSignal: 8
+        resourceType: 5
+        quantity: 100
+    00000001:
+      type: {class: EvolveCardsPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 3
+        cardSwaps:
+        - baseCard: {fileID: 11400000, guid: e023687f0e6c0ca4298d12b8634ba428, type: 2}
+          improvedCard: {fileID: 11400000, guid: c601adce1d0b29545962749a40332669, type: 2}
+        - baseCard: {fileID: 11400000, guid: d40fd3f05fe79d540bc3083b3c31438f, type: 2}
+          improvedCard: {fileID: 11400000, guid: 3546539ad7fa0624ca7ef0ac1ea6874f, type: 2}
+        - baseCard: {fileID: 11400000, guid: 9c60b37a97e9d354bad9f7b63d1a2681, type: 2}
+          improvedCard: {fileID: 11400000, guid: 4247f7571966d074fb31a1ac120ecb6a, type: 2}
+    00000002:
+      type: {class: AddBuffPassiveEffect, ns: Strategies.PassiveEffectStrategies, asm: Assembly-CSharp}
+      data:
+        spellAnimation:
+          id: 3
+        buff:
+          name: Sun devotion
+          temporary: 0
+          turns: 0
+          icon: {fileID: 21300000, guid: 4a9d6f89033f6ea4bbbdf8dc8d498c39, type: 3}
+          maxStacks: 1
+          description: 
+          trait: 0
+          statList:
+            stats: []
+          secondaryStatList:
+            stats: []
+          cards: []
+          passiveList:
+          - passiveAbility: {fileID: 11400000, guid: 82fe699c1d0f0d44aa21bf42dffa2bd2, type: 2}
+    00000003:
+      type: {class: , ns: , asm: }

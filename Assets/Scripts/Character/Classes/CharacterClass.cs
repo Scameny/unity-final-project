@@ -1,26 +1,43 @@
 using UnityEngine;
 using Character.Stats;
 using System.Collections.Generic;
-using Abilities.ability;
 using CardSystem;
+using Abilities.Passive;
 
 namespace Character.Classes
 {
     public abstract class CharacterClass : ScriptableObject
     {
-        [SerializeField] protected Progression progression = null;
+        [SerializeField] string Name;
+        [SerializeField] protected Progression progression;
 
-        public float GetStatistic(StatType type, int level)
+        public int GetStatistic(StatType type, int level)
         {
             return progression.GetStatistic(type, level);
         }
 
-        public List<AbilityCard> GetAllAbilitesAvaliable(int level)
+        public IEnumerable<Passive> GetPassiveAbilitiesOnLevel(int level)
+        {
+            foreach (var item in progression.GetPassiveAbilitiesOnLevel(level))
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<Passive> GetAllPassiveAbilitiesAvaliable(int level)
+        {
+            foreach (var item in progression.GetAllPassiveAbilitiesAvaliable(level))
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<Usable> GetAllAbilitesAvaliable(int level)
         {
             return progression.GetAllAbilitesAvaliable(level);
         }
 
-        public AbilityCard[] GetAbilitiesOnLevel(int level)
+        public IEnumerable<Usable> GetAbilitiesOnLevel(int level)
         {
             return progression.GetAbilitiesOnLevel(level);
         }
@@ -28,6 +45,30 @@ namespace Character.Classes
         public int GetMaxCardsHand(int level)
         {
             return progression.GetMaxCardsHand(level);
+        }
+
+        public IEnumerable<ResourceType> GetResourceTypes()
+        {
+            return progression.GetResourceTypes();
+        }
+
+        public int GetMaxResourceAmount(int level, ResourceType resourceType)
+        {
+            return progression.GetMaxResourceQuantity(level, resourceType);
+        }
+
+        public int GetResourceAmount(int level, ResourceType resourceType)
+        {
+            return progression.GetResourceQuantityOnLevel(level, resourceType);
+        }
+
+        public bool IsRechargeResource(ResourceType resourceType)
+        {
+            return progression.IsRechargeResource(resourceType);
+        }
+        public string GetName()
+        {
+            return Name;
         }
     }
 }

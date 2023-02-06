@@ -1,67 +1,43 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Utils;
 
 namespace CardSystem
 {
     public abstract class Deck : MonoBehaviour, ICardContainer
     {
         [SerializeField] protected List<Card> currentDeck = new List<Card>();
-        [SerializeField] protected List<Card> permanentDeck = new List<Card>();
-
-
-        virtual public void RechargeDeck(List<Card> cards)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void InitDeck()
-        {
-            Debug.Log("Initializing deck");
-            foreach (var card in permanentDeck)
-            {
-                AddCard(card);
-            }
-            currentDeck.Shuffle();
-        }
-
-        public void RefillPermanentDeck()
-        {
-            foreach (var item in permanentDeck)
-            {
-                item.transform.SetParent(transform);
-                item.SetVisibility(false);
-            }
-        }
-
-        virtual public Card DrawCard()
-        {
-            Card card = currentDeck[currentDeck.Count - 1];
-            currentDeck.RemoveAt(currentDeck.Count - 1);
-            return card;
-        }
 
         virtual public void AddCard(Card card)
         {
-            currentDeck.Add(card);
             card.transform.SetParent(transform);
+            currentDeck.Add(card);
         }
 
-        public Card RemoveCard(Card card)
+        public bool RemoveCard(Card card)
         {
-            throw new System.NotImplementedException();
+            return currentDeck.Remove(card);
+        }
+        public Card GetNextCard()
+        {
+            if (currentDeck.Count > 0)
+            {
+                Card card = currentDeck[currentDeck.Count];
+                currentDeck.Remove(card);
+                return card;
+            }
+            throw new EmptyCardContainerException(GetType().Name);
         }
 
-        virtual public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab)
+        virtual public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
         {
             GameObject cardGameObject = Instantiate(cardPrefab, transform);
             Card card = cardGameObject.GetComponent<Card>();
-            card.InitializeCard(cardUse, user, temporary);
+            card.InitializeCard(cardUse, user, oneUse);
             card.SetVisibility(false);
-            if (temporary)
-                currentDeck.Add(card);
-            else
-                permanentDeck.Add(card);
+            currentDeck.Add(card);
         }
 
         public int GetCurrentCardsNumber()
@@ -69,24 +45,57 @@ namespace CardSystem
             return currentDeck.Count;
         }
 
-        public Card RemoveNextCard()
+        public void ShuffleDeck()
+        {
+            currentDeck.Shuffle();
+        }
+
+        public Card DrawCard()
+        {
+            if (currentDeck.Count > 0)
+            {
+                Card card = currentDeck[currentDeck.Count - 1];
+                currentDeck.Remove(card);
+                return card;
+            }
+            throw new EmptyCardContainerException(GetType().Name);
+        }
+
+        public IEnumerable<Card> GetCards()
+        {
+            foreach (var item in currentDeck)
+            {
+                yield return item;
+            }
+        }
+
+        public void ClearCards()
+        {
+            foreach (var item in currentDeck.ToList())
+            {
+                currentDeck.Remove(item);
+                item.DestroyCard();
+            }
+        }
+
+        public IEnumerable<Card> RemoveAllCards()
         {
             throw new System.NotImplementedException();
         }
-    }
-    static class ShuffleClass
-    {
-        public static void Shuffle<T>(this IList<T> list)
+
+        public void AddCard(Card card, int index)
         {
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = Random.Range(0, n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+            throw new NotImplementedException();
+        }
+
+        public int GetIndex(Card card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Card GetCardInIndex(int index)
+        {
+            return currentDeck[index];
         }
     }
 

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c25a7ab77c01842a3927144be6dd0d, type: 3}
+  m_Name: Goblin
+  m_EditorClassIdentifier: 
+  Name: Goblin
+  progression:
+    baseStats:
+      stats:
+        health: 6
+        strength: 1
+        agility: 1
+        defense: 1
+        intelect: 0
+        resources:
+        - resourceType: 2
+          amount: 8
+        abilities:
+        - usable: {fileID: 11400000, guid: 97fb4a0d9fff4d7439758848291beab9, type: 2}
+          quantity: 8
+        passives:
+        - passiveAbility: {fileID: 11400000, guid: 099a479f13df6df41b9b242f8d91bf48, type: 2}
+      maxCards: 3
+    progression:
+    - stats:
+        health: 0
+        strength: 1
+        agility: 0
+        defense: 1
+        intelect: 0
+        resources:
+        - resourceType: 2
+          amount: 0
+        abilities: []
+        passives: []
+      newSlotsHand: 0
+      expNextLevel: 0
+      label: Level 1
+    - stats:
+        health: 4
+        strength: 2
+        agility: 0
+        defense: 1
+        intelect: 0
+        resources:
+        - resourceType: 2
+          amount: 3
+        abilities:
+        - usable: {fileID: 11400000, guid: 39672ac5156b49c4e9d613bd088077cb, type: 2}
+          quantity: 2
+        passives: []
+      newSlotsHand: 0
+      expNextLevel: 0
+      label: Level 2

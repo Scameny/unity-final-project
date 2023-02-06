@@ -1,12 +1,12 @@
 using Items;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Character.Reward {
 
-    [CreateAssetMenu(fileName = "Reward", menuName = "NPC/Npc Reward", order = 1)]
-    public class NpcReward : ScriptableObject
+    [System.Serializable]
+    public class NpcReward
     {
         public int exp;
         [MaxValue(100.0f)]

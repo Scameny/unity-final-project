@@ -1,21 +1,14 @@
-using System;
-using UnityEngine;
-using Character.Stats;
-using System.Collections;
-using UI;
 using Character.Character;
-using Utils;
 using CardSystem;
-using NaughtyAttributes;
+using GameManagement;
+using UnityEngine;
+using System.Collections;
+using Animations;
 
 namespace Combat 
 {
     public class HeroCombat : TurnCombat
     {
-        [HideInInspector]
-        public int targetIndex;
-
-
         private void Awake()
         {
             character = GetComponent<Hero>();
@@ -23,56 +16,49 @@ namespace Combat
         
         private void Start()
         {
-            targetIndex = 0;
-            turnSpeed = character.GetStatistic(StatType.Agility);
-        }
-        public void StartCoroutine(Action<IEnumerator> coroutine)
-        {
-            StartCoroutine(coroutine);
+            InitializeCardCotainers(GameObject.Find("Deck").GetComponent<Deck>(), GameObject.Find("Hand").GetComponentInChildren<Hand>(), GameObject.Find("Stack").GetComponentInChildren<CardSystem.Stack>());
         }
 
-        private void Update()
+        public override void StartCombat()
+        {
+            base.StartCombat();
+        }
+
+        public override void EndCombat()
+        {
+            character.SendSignalData(new CombatSignalData(GameSignal.END_COMBAT, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
+            base.EndCombat();
+        }
+
+        override protected void Update()
         {
             if (character.IsDead())
             {
                 CombatManager.combatManager.HeroDeath();
             }
-            else if (prepared)
-            {
-                prepared = false;
-                DrawCard();
-                UIManager.manager.ActivateCombatUI(true);
-                CombatManager.combatManager.PauseCombat();
-            }
-            UpdateHealthBar();
+            base.Update();
         }
 
-
-        override public void TurnPreparationResume()
+        public override void TurnPreparationStart()
         {
-            stopTurn = false;
-            CombatManager.combatManager.ResumeCombat();
+            base.TurnPreparationStart();
+            character.SendSignalData(new CombatSignalData(GameSignal.TURN_PREPARATION_START, gameObject, CombatManager.combatManager.GetCharactersInCombat()), true);
         }
-
-        #region Debug
-        [Button]
-        public void LoadAbilities()
+        public override void CardUsed(Card card)
         {
-
-            foreach (var item in character.GetAllClassAbilitiesAvaliable())
-            {
-                for (int i = 0; i < item.quantity; i++)
-                {
-                    deck.CreateCard(gameObject, item.usable, false, cardPrefab);
-                }
-            }
-            for (int i = 0; i < character.GetItemBySlot(Items.GearSlot.weapon).attackDamage.basicAttack.quantity; i++)
-            {
-                deck.CreateCard(gameObject, character.GetItemBySlot(Items.GearSlot.weapon).attackDamage.basicAttack.usable, false, cardPrefab);
-            }
+            base.CardUsed(card);
         }
-        #endregion
 
+        protected override void StartOfTurn()
+        {
+            StartCoroutine(StartOfTurnCoroutine());
+        }
+
+        IEnumerator StartOfTurnCoroutine()
+        {
+            yield return new WaitUntil(() => !AnimationQueue.Instance.DoingAnimations());
+            base.StartOfTurn();
+        }
     }
 
 }

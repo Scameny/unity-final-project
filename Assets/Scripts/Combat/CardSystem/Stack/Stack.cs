@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CardSystem
@@ -10,13 +10,30 @@ namespace CardSystem
 
         virtual public void AddCard(Card card)
         {
-            card.transform.SetParent(transform);
             currentStack.Add(card);
         }
-
-        virtual public void CreateCard(GameObject user, IUsable cardUse, bool temporary, GameObject cardPrefab)
+        virtual public bool RemoveCard(Card card)
         {
-            throw new System.NotImplementedException();
+            return currentStack.Remove(card);
+        }
+
+        public Card GetNextCard()
+        {
+            if (currentStack.Count > 0)
+            {
+                Card card = currentStack[currentStack.Count];
+                currentStack.Remove(card);
+                return card;
+            }
+            return null;
+        }
+
+        virtual public void CreateCard(GameObject user, Usable cardUse, bool oneUse, GameObject cardPrefab)
+        {
+            GameObject cardGameObject = Instantiate(cardPrefab, transform);
+            Card card = cardGameObject.GetComponent<Card>();
+            card.InitializeCard(cardUse, user, oneUse);
+            card.SetVisibility(false);
         }
 
         public int GetCurrentCardsNumber()
@@ -24,26 +41,37 @@ namespace CardSystem
             return currentStack.Count;
         }
 
-        virtual public Card RemoveCard(Card card)
+        public void ClearCards()
         {
-            if (currentStack.Remove(card))
-                return card;
-            else
-                throw new NotValidOperationException("", GetType().Name);
+            foreach (var item in currentStack.ToList())
+            {
+                currentStack.Remove(item);
+                item.DestroyCard();
+            }
         }
 
-        public Card RemoveNextCard()
+        public IEnumerable<Card> GetCards()
         {
-            if (GetCurrentCardsNumber() > 0)
+            return currentStack;
+        }
+
+        public IEnumerable<Card> RemoveAllCards()
+        {
+            foreach (var item in currentStack.ToList())
             {
-                Card card = currentStack[0];
-                currentStack.RemoveAt(0);
-                return card;
+                currentStack.Remove(item);
+                yield return item;
             }
-            else
-            {
-                throw new NotValidOperationException("", GetType().Name);
-            }
+        }
+
+        public void AddCard(Card card, int index)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetIndex(Card card)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
