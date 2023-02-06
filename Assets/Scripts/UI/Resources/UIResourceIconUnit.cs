@@ -3,12 +3,13 @@ using Character.Stats;
 using GameManagement;
 using System;
 using TMPro;
+using UI.Combat;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.CharacterResources
 {
-    public class ResourceIconUnit : MonoBehaviour, IObserver<SignalData>
+    public class UIResourceIconUnit : MonoBehaviour, IObserver<SignalData>
     {
         public ResourceType resourceType;
 
@@ -60,6 +61,7 @@ namespace UI.CharacterResources
             if (value.signal.Equals(GameSignal.START_COMBAT) || value.signal.Equals(GameSignal.START_GAME))
             {
                 UpdateResourceUnit();
+                GetComponentInParent<UIBuffMenu>().ResizeElement(gameObject);
             }
             else if (value.signal.Equals(GameSignal.RESOURCE_MODIFY) && (value as CombatResourceSignalData).user.Equals(player.gameObject) &&
                 (value as CombatResourceSignalData).resourceType.Equals(resourceType))

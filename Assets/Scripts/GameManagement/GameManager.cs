@@ -13,6 +13,7 @@ namespace GameManagement
         // current floor
 
         [SerializeField] GamePreferences preferences;
+        [SerializeField] GameConstants gameConstants;
         public RoomPool roomPoolToTest;
         public float combatTurnWait { private set; get; } = 0.1f;
 
@@ -120,6 +121,11 @@ namespace GameManagement
         public GameState GetCurrentState()
         {
             return currentGameState;
+        }
+
+        public GameConstants GetGameConstants()
+        {
+            return gameConstants;
         }
         #endregion
     }

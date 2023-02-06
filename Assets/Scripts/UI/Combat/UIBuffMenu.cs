@@ -3,6 +3,7 @@ using GameManagement;
 using System;
 using UI.Character;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Combat
 {
@@ -44,7 +45,17 @@ namespace UI.Combat
                 TraitCombatSignalData data = value as TraitCombatSignalData;
                 GameObject newBuff = Instantiate(buffElement, transform);
                 newBuff.GetComponent<UIBuff>().InitializeBuff(data.trait, data.user);
+                ResizeElement(newBuff);
             }
+            
+        }
+
+        public void ResizeElement(GameObject newBuff) 
+        {
+            HorizontalLayoutGroup layout = GetComponent<HorizontalLayoutGroup>();
+            float width = (GetComponent<RectTransform>().rect.width - (layout.padding.left + layout.padding.right))/GameManager.gm.GetGameConstants().GetMaxNumberOfBuffs();
+            RectTransform childTransform = newBuff.GetComponent<RectTransform>();
+            childTransform.sizeDelta = new Vector2(width, width);    
         }
     }
 

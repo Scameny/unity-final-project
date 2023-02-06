@@ -8,7 +8,7 @@ namespace UI.UIElements
     public class UIFrame : MonoBehaviour, IObserver<SignalData>
     {
         [SerializeField] List<GameSignal> activeSignals;
-        [SerializeField] List<GameSignal> desactivateSignals;
+        [SerializeField] List<GameSignal> deactivateSignals;
         IDisposable disposable;
 
         public void OnCompleted()
@@ -21,9 +21,9 @@ namespace UI.UIElements
             throw new NotImplementedException();
         }
 
-        public void OnNext(SignalData value)
+        virtual public void OnNext(SignalData value)
         {
-            if (desactivateSignals.Exists(s => s.Equals(value.signal)))
+            if (deactivateSignals.Exists(s => s.Equals(value.signal)))
             {
                 gameObject.SetActive(false);
             }
@@ -37,6 +37,19 @@ namespace UI.UIElements
         {
             disposable = UIManager.manager.Subscribe(this);
         }
+
+        #region getters and setters
+        public List<GameSignal> GetActiveSignals()
+        {
+            return activeSignals;
+        }
+
+        public List<GameSignal> GetDeactiveSignals()
+        {
+            return deactivateSignals;
+        }
+
+        #endregion
 
     }
 }

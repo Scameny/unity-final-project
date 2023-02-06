@@ -24,7 +24,7 @@ namespace UI.Combat
                 {
                     Destroy(gameObject);
                 }
-                );
+            );
         }
 
         public void SetValues(ResourceType type, int value)

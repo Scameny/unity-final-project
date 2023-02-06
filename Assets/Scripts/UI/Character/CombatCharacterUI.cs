@@ -56,7 +56,8 @@ namespace UI.Character
                 (signalData as CombatResourceSignalData).user.Equals(character.gameObject))
             {
                 CombatResourceSignalData resourceSignalData = signalData as CombatResourceSignalData;
-                StartCoroutine(CreateResourceFloatingText(resourceSignalData.resourceType, resourceSignalData.resourceAmount, resourceSignalData.user, timeToSpawnNextFloatingText));
+                if (resourceSignalData.resourceAmount > 0)
+                    StartCoroutine(CreateResourceFloatingText(resourceSignalData.resourceType, resourceSignalData.resourceAmount, resourceSignalData.user, timeToSpawnNextFloatingText));
             }
             else if ((signalData.signal.Equals(GameSignal.NEW_TRAIT) || signalData.signal.Equals(GameSignal.TRAIT_RENEWED) || signalData.signal.Equals(GameSignal.TRAIT_EXPIRED) || signalData.signal.Equals(GameSignal.REMOVE_TRAIT)) && (signalData as TraitCombatSignalData).user.Equals(character.gameObject))
             {
